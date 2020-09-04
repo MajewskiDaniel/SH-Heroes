@@ -1,0 +1,14 @@
+@import './common/reset.scss';
+@import '~antd/dist/antd.css';
+
+body {
+  margin: 12px;
+}
+
+.App {
+  text-align: center;
+
+  h1 {
+    font-size: 24px;
+  }
+}
