@@ -5,13 +5,20 @@ export interface IEmployee {
   evaluationDate?: string;
   projectName?: string;
   tags?: string[];
-  level: EmployeeLevel;
-  position: string;
-  photo?: string;
+  level: SeniorityLevel;
+  position: EmployeePosition;
+  photo: string;
 }
 
-export enum EmployeeLevel {
+export enum SeniorityLevel {
   Junior = "junior",
   Mid = "mid",
   Senior = "senior",
+}
+
+export enum EmployeePosition {
+  SoftwareDev = "software developer",
+  ProjectManager = "project manager",
+  Tester = "tester",
+  GraphicDesigner = "graphic designer",
 }
