@@ -11,7 +11,7 @@ export interface IHeader {
 }
 
 export const MainHeader: React.FC<IHeader> = ({collapsed, toggle}) => (
-  <Header className="site-layout-background" >
+  <Header  >
     {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
       className: 'trigger',
       onClick: toggle

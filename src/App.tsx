@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import HomePage from './pages/Home/HomePage';
-import SkillsetsPage from "./pages/Skillsets/SkillsetsPage";
+import SkillListPage from "./pages/SkillList/SkillListPage";
 import EditorPage from './pages/Editor/EditorPage';
-import ListPage from './pages/List/ListPage';
+import EmployeeListPage from './pages/EmployeeList/EmployeeListPage';
 import NotFoundPage from "./pages/NotFound/NotFoundPage.";
 import { Sidenav } from "./components/Sidenav/Sidenav";
 import { MainHeader } from "./components/MainHeader/MainHeader";
@@ -29,8 +29,8 @@ export const App = () => {
           <Content>
               <Switch>
                 <Route exact path="/" component={HomePage} />
-                <Route exact path="/skillsets" component={SkillsetsPage} />
-                <Route path="/employees" component={ListPage} />
+                <Route exact path="/skill-list" component={SkillListPage} />
+                <Route path="/employee-list" component={EmployeeListPage} />
                 <Route path="/edit" component={EditorPage} />
                 <Route component={NotFoundPage} />
               </Switch>
@@ -42,3 +42,9 @@ export const App = () => {
 };
 
 export default App;
+
+
+
+
+
+

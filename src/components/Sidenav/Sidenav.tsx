@@ -13,16 +13,18 @@ export interface ISidenav {
 export const Sidenav: React.FC<ISidenav> = ({collapsed}) => {
   return (
     <Sider trigger={null} collapsible collapsed={collapsed}>
-      <div className={styles.logo} />
+      <div className={styles.logo} >
+        SkillMetrix
+      </div>
       <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
           <Menu.Item key="1" icon={<TableOutlined />}>
             <Link to="/">Home</Link>
           </Menu.Item>
           <Menu.Item key="2" icon={<FileOutlined />}>
-            <Link to="/skillsets">Skillsets</Link>
+            <Link to="/skill-list">Skillsets</Link>
           </Menu.Item>
           <Menu.Item key="3" icon={<PieChartOutlined />}>
-            <Link to="/employees">Employees</Link>
+            <Link to="/employee-list">Employees</Link>
           </Menu.Item>
       </Menu>
     </Sider>
