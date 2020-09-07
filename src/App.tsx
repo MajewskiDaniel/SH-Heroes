@@ -1,12 +1,22 @@
 import React, { useState } from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from "react-router-dom";
 import logo from './logo.svg';
 import { DemoButton } from './components/DemoButton/DemoButton';
+import HomePage from './pages/Home/HomePage';
+import EditorPage from './pages/Editor/EditorPage';
+import ListPage from './pages/List/ListPage';
+import NotFoundPage from "./pages/NotFound/NotFoundPage.";
 import { Button, Popover, Modal } from 'antd';
 import './App.scss';
 
 export const App = () => {
   const [modalShown, setModalShown] = useState<boolean>(false);
   return (
+    <Router>
     <div className="App">
       <header className="App-header">
         <h1>Praktyki!</h1>
@@ -33,7 +43,14 @@ export const App = () => {
         </Modal>
         <Button onClick={() => setModalShown(true)}>Pokaż modal</Button>
       </div>
+      <Switch>
+        <Route exact path="/" component={HomePage} />
+        <Route path="/edit" component={EditorPage} />
+        <Route path="/list" component={ListPage} />
+        <Route component={NotFoundPage} />
+      </Switch>
     </div>
+    </Router>
   );
 };
 
