@@ -1,0 +1,23 @@
+.tableNameField {
+  display: flex;
+  flex-direction: row;
+  height: 30px;
+  border: 1px solid lightgrey;
+  max-width: 20%;
+  .avatar {
+    width: 10%;
+    text-align: left;
+    padding: 3px;
+    img {
+      max-height: 100%;
+    }
+  }
+  .name {
+    width: 90%;
+    text-align: left;
+    span {
+      line-height: 28px;
+      font-weight: bold;
+    }
+  }
+}

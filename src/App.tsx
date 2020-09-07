@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import logo from './logo.svg';
-import { DemoButton } from './components/DemoButton/DemoButton';
-import { Button, Popover, Modal } from 'antd';
-import './App.scss';
+import React, { useState } from "react";
+import logo from "./logo.svg";
+import { DemoButton } from "./components/DemoButton/DemoButton";
+import { Button, Popover, Modal } from "antd";
+import "./App.scss";
 
 export const App = () => {
   const [modalShown, setModalShown] = useState<boolean>(false);
