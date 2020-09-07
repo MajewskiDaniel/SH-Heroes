@@ -1,9 +1,10 @@
 import React from 'react';
-import { Layout, Menu } from 'antd';
-import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
+import { Layout, Input } from 'antd';
+import { MenuUnfoldOutlined, MenuFoldOutlined, } from '@ant-design/icons';
 import styles from './MainHeader.module.scss';
 
 const { Header } = Layout;
+const { Search } = Input;
 
 export interface IHeader {
   collapsed: boolean
@@ -11,10 +12,15 @@ export interface IHeader {
 }
 
 export const MainHeader: React.FC<IHeader> = ({collapsed, toggle}) => (
-  <Header  >
+  < Header className="ant-layout-header">
     {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
       className: 'trigger',
       onClick: toggle
     })}
+    <Search
+      placeholder="Search employee"
+      onSearch={value => console.log(value)}
+      style={{ width: 200 }}
+    />
   </Header>
 );
