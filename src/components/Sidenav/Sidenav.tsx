@@ -13,8 +13,8 @@ export interface ISidenav {
 export const Sidenav: React.FC<ISidenav> = ({collapsed}) => {
   return (
     <Sider trigger={null} collapsible collapsed={collapsed}>
-      <div className={styles.logo} >
-        SkillMetrix
+      <div className={collapsed ? styles.inactive : styles.logo}>
+        <span className={collapsed ? styles.inactiveText : styles.logoText}>SkillMetrix</span>
       </div>
       <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
           <Menu.Item key="1" icon={<TableOutlined />}>

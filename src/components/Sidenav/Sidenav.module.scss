@@ -1,6 +1,21 @@
  .logo {
-   height: 32px;
-   padding: 32px;
-   color: white;
-   border-bottom: 1px solid white;
+   width: auto;
+    height: 32px;
+    padding: 32px;
+    color: white;
+    border-bottom: 1px solid white;
 }
+
+ .inactive {
+    height: 32px;
+    padding: 32px;
+    border-bottom: 1px solid white;
+ }
+
+ .inactiveText {
+    display: none;
+ }
+
+ .logoText {
+    display: block;
+ }
