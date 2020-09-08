@@ -22,7 +22,7 @@ export const App = () => {
 
   return (
     <Router>
-      <Layout>
+      <Layout className="app-container">
         <Sidenav collapsed={collapsed}></Sidenav>
         <Layout>
           <MainHeader toggle={toggle} collapsed={collapsed}></MainHeader>
