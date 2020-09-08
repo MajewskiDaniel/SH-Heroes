@@ -1,52 +1,78 @@
 import React, { PropsWithChildren } from "react";
-// import styles from "./EmployeeList.module.scss";
+import styles from "./EmployeeList.module.scss";
 import { IEmployee } from "../../models/employee";
-import { Table } from "antd";
+import { Table, Avatar, Tag } from "antd";
 
 export const EmployeeList: React.FC<PropsWithChildren<{
   employees: IEmployee[];
 }>> = ({ employees }) => {
+  const sortedEmployees = employees.sort(
+    (a, b) => parseFloat(a.startingYear) - parseFloat(b.startingYear)
+  );
   const columns = [
+    {
+      title: "Photo",
+      dataIndex: "photo",
+      key: "photo",
+      render: (photo: string) => (
+        <Avatar src={photo} size={64} shape="square" />
+      ),
+      width: 50,
+      height: 50,
+    },
     {
       title: "First Name",
       dataIndex: "firstName",
+      key: "firstName",
     },
     {
       title: "Last Name",
       dataIndex: "lastName",
-      render: (text: string) => <a>{text}</a>,
+      key: "lastName",
+      // render: (text: string) => <a>{text}</a>,
     },
     {
       title: "Starting Year",
       dataIndex: "startingYear",
+      key: "startingYear",
     },
     {
       title: "Last Evaluation Date",
       dataIndex: "lastEvaluationDate",
+      key: "lastEvaluationDate",
     },
     {
       title: "Actual Project",
       dataIndex: "projectName",
+      key: "projectName",
     },
     {
       title: "Tags",
       dataIndex: "tags",
+      key: "tags",
+      render: (tags: string[]) => (
+        <>
+          {tags.map((tag) => {
+            return (
+              <Tag color="blue" key={tag}>
+                {tag.toUpperCase()}
+              </Tag>
+            );
+          })}
+        </>
+      ),
     },
     {
       title: "Seniority Level",
       dataIndex: "level",
+      key: "level",
     },
     {
       title: "Position",
       dataIndex: "position",
+      key: "position",
     },
-    {
-      title: "Photo",
-      dataIndex: "photo",
-      render: (photo: string) => <img src={photo} />,
-      width: 100,
-      height: 100,
-    },
+
     // {
     //   title: "Action",
     //   key: "action",
@@ -61,7 +87,11 @@ export const EmployeeList: React.FC<PropsWithChildren<{
 
   return (
     <div>
-      <Table columns={columns} dataSource={employees} size="middle" />
+      <Table
+        columns={columns}
+        dataSource={sortedEmployees}
+        pagination={{ pageSize: 5 }}
+      />
     </div>
   );
 };
