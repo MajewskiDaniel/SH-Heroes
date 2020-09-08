@@ -1,43 +1,39 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import HomePage from "./pages/Home/HomePage";
-import SkillListPage from "./pages/SkillList/SkillListPage";
-import EditorPage from "./pages/Editor/EditorPage";
-import EmployeeListPage from "./pages/EmployeeList/EmployeeListPage";
-import NotFoundPage from "./pages/NotFound/NotFoundPage.";
-import { Sidenav } from "./components/Sidenav/Sidenav";
-import { MainHeader } from "./components/MainHeader/MainHeader";
-import { Layout } from "antd";
-
-import "./App.scss";
-
-const { Content } = Layout;
+import React, { useState } from 'react';
+import logo from './logo.svg';
+import { DemoButton } from './components/DemoButton/DemoButton';
+import { Button, Popover, Modal } from 'antd';
+import './App.scss';
 
 export const App = () => {
-  const [collapsed, setCollapsed] = useState<boolean>(false);
-
-  const toggle = () => {
-    setCollapsed(!collapsed);
-  };
-
+  const [modalShown, setModalShown] = useState<boolean>(false);
   return (
-    <Router>
-      <Layout className="app-container">
-        <Sidenav collapsed={collapsed}></Sidenav>
-        <Layout>
-          <MainHeader toggle={toggle} collapsed={collapsed}></MainHeader>
-          <Content>
-            <Switch>
-              <Route exact path="/" component={HomePage} />
-              <Route exact path="/skill-list" component={SkillListPage} />
-              <Route path="/employee-list" component={EmployeeListPage} />
-              <Route path="/edit" component={EditorPage} />
-              <Route component={NotFoundPage} />
-            </Switch>
-          </Content>
-        </Layout>
-      </Layout>
-    </Router>
+    <div className="App">
+      <header className="App-header">
+        <h1>Praktyki!</h1>
+        <img width={40} alt="" src={logo} />
+      </header>
+      <hr />
+      Komponent testowy:
+      <div>
+        <DemoButton>This is a test!</DemoButton>
+      </div>
+      <hr />
+      Komponenty antd:
+      <div>
+        <Button>Antd Button</Button>
+      </div>
+      <div>
+        <Popover content={<strong>siemka</strong>}>
+          <Button>Siema</Button>
+        </Popover>
+      </div>
+      <div>
+        <Modal onCancel={() => setModalShown(false)} visible={modalShown}>
+          Jestem modalem
+        </Modal>
+        <Button onClick={() => setModalShown(true)}>Pokaż modal</Button>
+      </div>
+    </div>
   );
 };
 
