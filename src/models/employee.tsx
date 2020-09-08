@@ -11,14 +11,14 @@ export interface IEmployee {
 }
 
 export enum SeniorityLevel {
-  Junior = "junior",
-  Mid = "mid",
-  Senior = "senior",
+  JUNIOR = "junior",
+  MID = "mid",
+  SENIOR = "senior",
 }
 
 export enum EmployeePosition {
-  SoftwareDev = "software developer",
-  ProjectManager = "project manager",
-  Tester = "tester",
-  GraphicDesigner = "graphic designer",
+  SOFTWARE_DEV = "software developer",
+  PROJECT_MANAGER = "project manager",
+  TESTER = "tester",
+  GRAPHIC_DESIGNER = "graphic designer",
 }
