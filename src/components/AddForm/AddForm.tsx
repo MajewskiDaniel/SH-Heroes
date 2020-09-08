@@ -1,23 +1,34 @@
 import React, {useState} from 'react';
-import { Form, Formik, FormikHelpers } from 'formik';
-import { Input, DatePicker, Select, SubmitButton  } from 'formik-antd';
-import { Upload, message } from 'antd';
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import {Form, Formik, FormikHelpers} from 'formik';
+import {DatePicker, Input, Select, SubmitButton} from 'formik-antd';
+import {Upload} from 'antd';
+import {LoadingOutlined, PlusOutlined} from '@ant-design/icons';
+import * as yup from 'yup';
 
-import { Tags } from '../Tags/Tags';
-import { EmployeeLevel, IEmployee } from "../../models/employee";
+import {Tags} from '../Tags/Tags';
+import {EmployeePosition, IEmployee, SeniorityLevel} from "../../models/employee";
 import styles from './AddForm.module.scss';
+
+const AddSchema = yup.object().shape({
+  firstName: yup.string().required(),
+  lastName: yup.string().required(),
+  startingYear: yup.string().required(),
+  lastEvaluationDate: yup.string().required(),
+  tags: yup.array(),
+  level: yup.mixed().oneOf(["junior", "mid","senior"]).required(),
+  position: yup.mixed().oneOf(["software developer", "project manager", "tester","graphic designer",]).required(),
+});
 
 export const AddForm: React.FC = () => {
   const initialValues: IEmployee = {
-    firstname: "",
+    firstName: "",
     lastName: "",
     startingYear: "",
-    evaluationDate: "",
+    lastEvaluationDate: "",
     projectName: "",
     tags: [],
-    level: EmployeeLevel.Junior,
-    position: "software developer",
+    level: SeniorityLevel.JUNIOR,
+    position: EmployeePosition.SOFTWARE_DEV,
     photo: ""
   };
 
@@ -40,6 +51,7 @@ export const AddForm: React.FC = () => {
   return (
     <Formik
       initialValues={initialValues}
+      // validationSchema={AddSchema}
       onSubmit={(
         values: IEmployee,
         { setSubmitting }: FormikHelpers<IEmployee>
@@ -47,6 +59,7 @@ export const AddForm: React.FC = () => {
         const newValues = {...values, tags: tagsValues};
         setFormValues(newValues);
         alert(JSON.stringify(newValues, null, 2));
+        console.log()
         setSubmitting(false);
       }}
     >
@@ -70,16 +83,17 @@ export const AddForm: React.FC = () => {
 
         <label htmlFor="level" className={styles.Label}>Level</label>
         <Select name="level">
-          <option value={EmployeeLevel.Junior}>Junior</option>
-          <option value={EmployeeLevel.Mid}>Mid</option>
-          <option value={EmployeeLevel.Senior}>Senior</option>
+          <option value={SeniorityLevel.JUNIOR}>Junior</option>
+          <option value={SeniorityLevel.MID}>Mid</option>
+          <option value={SeniorityLevel.SENIOR}>Senior</option>
         </Select>
 
         <label htmlFor="position" className={styles.Label}>Position</label>
         <Select  name="position" >
-          <option value="software developer">software developer</option>
-          <option value="QA">QA</option>
-          <option value="project manager">project manager</option>
+          <option value={EmployeePosition.SOFTWARE_DEV}>Software developer</option>
+          <option value={EmployeePosition.GRAPHIC_DESIGNER}>Graphic designer</option>
+          <option value={EmployeePosition.PROJECT_MANAGER}>Project manager</option>
+          <option value={EmployeePosition.TESTER}>Tester</option>
         </Select>
 
         <label htmlFor="photo" className={styles.Label}>Photo</label>
