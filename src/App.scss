@@ -2,7 +2,8 @@
 @import '~antd/dist/antd.css';
 
 body {
-  margin: 12px;
+  margin: 0;
+  padding: 0;
 }
 
 .App {
@@ -11,4 +12,30 @@ body {
   h1 {
     font-size: 24px;
   }
+
 }
+
+.app-container {
+  height: 100vh;
+}
+.ant-layout-header {
+  background: white;
+  padding: 0 20px;
+}
+
+.ant-input-affix-wrapper {
+  margin-left: 30px;
+}
+
+.ant-input-search-icon::before {
+  border-left: none;
+}
+
+.ant-input-affix-wrapper {
+  background: #f5f5f5;
+}
+
+.ant-input {
+  background: #f5f5f5;
+}
+
