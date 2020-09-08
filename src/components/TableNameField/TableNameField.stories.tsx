@@ -15,6 +15,5 @@ export const ExampleTableNameField = Template.bind({});
 ExampleTableNameField.args = {
   firstName: "Arnold",
   lastName: "Schwarzenegger",
-  avatar:
-    "https://vignette.wikia.nocookie.net/polski-dubbing/images/3/37/Arnold_Schwarzenegger.jpg/revision/latest?cb=20190901112218&path-prefix=pl",
+  avatar: "https://tiny.pl/7jw83",
 };

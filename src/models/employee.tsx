@@ -1,8 +1,8 @@
 export interface IEmployee {
-  firstname: string;
+  firstName: string;
   lastName: string;
   startingYear: string;
-  evaluationDate?: string;
+  lastEvaluationDate?: string;
   projectName?: string;
   tags?: string[];
   level: SeniorityLevel;
