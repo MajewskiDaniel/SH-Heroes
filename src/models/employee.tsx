@@ -10,15 +10,25 @@ export interface IEmployee {
   photo: string;
 }
 
-export enum SeniorityLevel {
-  JUNIOR = "junior",
-  MID = "mid",
-  SENIOR = "senior",
+export enum EmployeePosition {
+  SOFTWARE_DEV,
+  PROJECT_MANAGER,
+  TESTER,
+  GRAPHIC_DESIGNER,
 }
 
-export enum EmployeePosition {
-  SOFTWARE_DEV = "software developer",
-  PROJECT_MANAGER = "project manager",
-  TESTER = "tester",
-  GRAPHIC_DESIGNER = "graphic designer",
+export enum SeniorityLevel {
+  JUNIOR,
+  MID,
+  SENIOR,
+  TECH_LEAD,
 }
+
+// w modelach możemy zrobić mapę
+
+export const enumMap = {
+  [SeniorityLevel.JUNIOR]: "Junior",
+  [SeniorityLevel.MID]: "Mid",
+  [SeniorityLevel.SENIOR]: "Senior",
+  [SeniorityLevel.TECH_LEAD]: "Tech Lead",
+};
