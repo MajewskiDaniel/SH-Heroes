@@ -1,8 +1,7 @@
-import React, {useState, useRef} from "react";
+import React, {useState} from "react";
 import { Input } from 'antd';
 import { Tag } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import styles from './Tags.module.scss';
 import {FieldInputProps} from "formik";
 
 
@@ -13,7 +12,7 @@ export const Tags: React.FC<ITags> = ({onChange, value, name}) => {
 
   const [inputVisible,  setInputVisible] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
-  const inputEl = useRef(null);
+  // const inputEl = useRef(null);
 
 
   const handleClose = (removedTag: string) => {
@@ -69,7 +68,7 @@ export const Tags: React.FC<ITags> = ({onChange, value, name}) => {
         </div>
         {inputVisible && (
           <Input
-            ref={inputEl}
+            // ref={inputEl}
             type="text"
             size="small"
             style={{ width: 78 }}

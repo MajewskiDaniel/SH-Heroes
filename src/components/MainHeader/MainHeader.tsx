@@ -1,7 +1,6 @@
 import React from 'react';
 import { Layout, Input } from 'antd';
 import { MenuUnfoldOutlined, MenuFoldOutlined, } from '@ant-design/icons';
-import styles from './MainHeader.module.scss';
 
 const { Header } = Layout;
 const { Search } = Input;

@@ -16,7 +16,6 @@ export const PhotoPicker: React.FC<IPhotoPicker> = ({onChange, value, name}) => 
     }
     if (info.file.status === 'done') {
       getBase64(info.file.originFileObj, (imageUrl: string) => {
-        // setPhoto(imageUrl);
         setLoading(false);
         onChange({ target: { name, value: imageUrl }});
       });
