@@ -51,6 +51,17 @@ app.delete("/employees/:id", async (req, res) => {
   }
 });
 
+//update employee by id
+app.put("/employees/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    await Employee.findByIdAndUpdate(id, req.body, { new: true });
+    res.status(200).send(`employee nr: ${id} updated`);
+  } catch (e) {
+    res.status(404).send(e.message);
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`[server]: Server is running at port: ${PORT}`);
 });
