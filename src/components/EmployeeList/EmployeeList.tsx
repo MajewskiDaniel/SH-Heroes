@@ -84,7 +84,6 @@ export const EmployeeList: React.FC<PropsWithChildren<{
     //   ),
     // },
   ];
-
   return (
     <div>
       <Table
