@@ -16,7 +16,6 @@ export const PhotoPicker: React.FC<IPhotoPicker> = ({ onLoad }) => {
       return;
     }
     if (info.file.status === 'done') {
-      // Get this url from response in real world.
       getBase64(info.file.originFileObj, (imageUrl: string) => {
         setPhoto(imageUrl);
         setLoading(false);
@@ -54,12 +53,14 @@ function getBase64(img: any, callback: any) {
 }
 
 function beforeUpload(file: any) {
+  console.log(file.type, file.size)
   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
   if (!isJpgOrPng) {
     // message.error('You can only upload JPG/PNG file!');
     console.log('You can only upload JPG/PNG file!')
   }
   const isLt2M = file.size / 1024 / 1024 < 2;
+  console.log(isLt2M)
   if (!isLt2M) {
     // message.error('Image must smaller than 2MB!');
     console.log('Image must smaller than 2MB!')

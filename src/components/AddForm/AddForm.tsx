@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Form, Formik, FormikHelpers} from 'formik';
+import {Field, FieldProps, Form, Formik, FormikHelpers} from 'formik';
 import {DatePicker, FormItem, Input, Select, SubmitButton} from 'formik-antd';
 import * as yup from 'yup';
 import moment from 'moment';
@@ -34,12 +34,6 @@ export const AddForm: React.FC = () => {
   };
 
   const [formValues, setFormValues] = useState<IEmployee>(initialValues);
-  const [tagsValues, setTagsValues] = useState<string[]>([]);
-  const [photoString, setPhotoString] = useState<string>('');
-
-  const addTags = (newTags: string[]) => {
-    setTagsValues(newTags);
-  };
 
   const disabledStartDate = (current: any) => {
     return current && current > moment().endOf("day");
@@ -59,7 +53,6 @@ export const AddForm: React.FC = () => {
         values: IEmployee,
         { setSubmitting }: FormikHelpers<IEmployee>
       ) => {
-        // const newValues = {...values, tags: tagsValues};
         setFormValues(values);
         alert(JSON.stringify(values, null, 2));
         setSubmitting(false);
@@ -97,10 +90,9 @@ export const AddForm: React.FC = () => {
           </FormItem>
 
           <FormItem name="tags">
-            <Tags propsSetTags={(tags)=> {
-              props.values.tags = [...tags];
-              addTags(tags);
-            }}></Tags>
+            <Field name="tags">
+            {({field}: FieldProps<string[]>) =>  <Tags {...field} />
+            }</Field>
           </FormItem>
 
           <label htmlFor="level" className={styles.Label}>Level</label>
@@ -122,9 +114,12 @@ export const AddForm: React.FC = () => {
                 </Select>
           </FormItem>
 
-                <label htmlFor="photo" className={styles.Label}>Photo</label>
+          <label htmlFor="photo" className={styles.Label}>Photo</label>
           <FormItem name="photo">
-            <PhotoPicker onLoad={(url)=>props.values.photo = url} ></PhotoPicker>
+            <PhotoPicker onLoad={(url)=>{
+              props.values.photo = url;
+              delete props.errors.photo;
+            }} />
           </FormItem>
           <SubmitButton>Submit</SubmitButton >
         </Form>
