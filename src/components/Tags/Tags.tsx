@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from "react";
+import React, {useState, useRef} from "react";
 import { Input } from 'antd';
 import { Tag } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
@@ -13,6 +13,7 @@ export const Tags: React.FC<ITags> = ({propsSetTags}) => {
   const [inputVisible,  setInputVisible] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
   const inputEl = useRef(null);
+
 
   const handleClose = (removedTag: string) => {
     const newTags = tags.filter(tag => tag !== removedTag);
@@ -33,7 +34,6 @@ export const Tags: React.FC<ITags> = ({propsSetTags}) => {
     if (inputValue && tags.indexOf(inputValue) === -1) {
       newTags = [...tags, inputValue];
     }
-    console.log(newTags);
     setTags(newTags);
     propsSetTags(newTags);
     setInputValue('');
@@ -45,12 +45,13 @@ export const Tags: React.FC<ITags> = ({propsSetTags}) => {
       <span key={tag} style={{ display: 'inline-block' }}>
          <Tag
            closable
+           color="cyan"
            onClose={(e: any) => {
              e.preventDefault();
              handleClose(tag);
            }}
          >
-        {tag}
+        # {tag}
       </Tag>
       </span>
     );
