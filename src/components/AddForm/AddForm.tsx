@@ -34,6 +34,8 @@ export const AddForm: React.FC = () => {
   };
 
   const [formValues, setFormValues] = useState<IEmployee>(initialValues);
+  const [customSubmitCount, setCustomSubmitCount] = useState<number>(0);
+  // const value = new Map().set()
 
   const disabledStartDate = (current: any) => {
     return current && current > moment().endOf("day");
@@ -47,8 +49,8 @@ export const AddForm: React.FC = () => {
     <Formik
       initialValues={initialValues}
       validationSchema={AddSchema}
-      // validateOnChange={false}
-      validateOnBlur={false}
+      validateOnChange={customSubmitCount > 0 ? true : false}
+      validateOnBlur={customSubmitCount > 0  ? true : false}
       onSubmit={(
         values: IEmployee,
         { setSubmitting }: FormikHelpers<IEmployee>
@@ -58,9 +60,8 @@ export const AddForm: React.FC = () => {
         setSubmitting(false);
       }}
       render={(props)=>{
+        setCustomSubmitCount(props.submitCount);
         console.log(props);
-        props.submitCount > 0 &&  (props.validateOnBlur = true);
-        // props.submitCount > 0 &&  (props.validateOnChange = true);
 
         return (
         <Form className={styles.Form}>
@@ -91,8 +92,8 @@ export const AddForm: React.FC = () => {
 
           <FormItem name="tags">
             <Field name="tags">
-            {({field}: FieldProps<string[]>) =>  <Tags {...field} />
-            }</Field>
+              {({field}: FieldProps<string[]>) =>  <Tags {...field} />}
+            </Field>
           </FormItem>
 
           <label htmlFor="level" className={styles.Label}>Level</label>
@@ -116,10 +117,9 @@ export const AddForm: React.FC = () => {
 
           <label htmlFor="photo" className={styles.Label}>Photo</label>
           <FormItem name="photo">
-            <PhotoPicker onLoad={(url)=>{
-              props.values.photo = url;
-              delete props.errors.photo;
-            }} />
+            <Field name="photo">
+              {({field}: FieldProps<string>) =>  <PhotoPicker {...field} />}
+            </Field>
           </FormItem>
           <SubmitButton>Submit</SubmitButton >
         </Form>

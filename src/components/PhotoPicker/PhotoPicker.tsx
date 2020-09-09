@@ -1,13 +1,12 @@
 import React, {useState} from 'react';
 import {Upload} from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import {FieldInputProps} from "formik";
 
-export interface IPhotoPicker {
-  onLoad: (url: string)=>void
+export interface IPhotoPicker extends FieldInputProps<string>{
 }
 
-export const PhotoPicker: React.FC<IPhotoPicker> = ({ onLoad }) => {
-  const [photo, setPhoto] = useState<any>('');
+export const PhotoPicker: React.FC<IPhotoPicker> = ({onChange, value, name}) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleChange = (info: any) => {
@@ -17,9 +16,9 @@ export const PhotoPicker: React.FC<IPhotoPicker> = ({ onLoad }) => {
     }
     if (info.file.status === 'done') {
       getBase64(info.file.originFileObj, (imageUrl: string) => {
-        setPhoto(imageUrl);
+        // setPhoto(imageUrl);
         setLoading(false);
-        onLoad(imageUrl);
+        onChange({ target: { name, value: imageUrl }});
       });
     };
     }
@@ -41,7 +40,7 @@ export const PhotoPicker: React.FC<IPhotoPicker> = ({ onLoad }) => {
       beforeUpload={beforeUpload}
       onChange={handleChange}
     >
-      {photo ? <img src={photo} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+      {value ? <img src={value} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
     </Upload>
   )
 }
@@ -53,16 +52,12 @@ function getBase64(img: any, callback: any) {
 }
 
 function beforeUpload(file: any) {
-  console.log(file.type, file.size)
   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
   if (!isJpgOrPng) {
-    // message.error('You can only upload JPG/PNG file!');
     console.log('You can only upload JPG/PNG file!')
   }
   const isLt2M = file.size / 1024 / 1024 < 2;
-  console.log(isLt2M)
   if (!isLt2M) {
-    // message.error('Image must smaller than 2MB!');
     console.log('Image must smaller than 2MB!')
   }
   return isJpgOrPng && isLt2M;
