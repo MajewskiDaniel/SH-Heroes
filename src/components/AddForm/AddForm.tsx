@@ -6,6 +6,7 @@ import moment from 'moment';
 
 import {Tags} from '../Tags/Tags';
 import {PhotoPicker} from "../PhotoPicker/PhotoPicker";
+import {EmployeesSvc} from "../../services/EmoloyeesSvc";
 import {EmployeePosition, employeePositionMap, IEmployee, SeniorityLevel, seniorityMap} from "../../models/employee";
 import styles from './AddForm.module.scss';
 
@@ -43,6 +44,7 @@ export const AddForm: React.FC = () => {
   const disabledEvaluationDate = (current: any) => {
     return current && current > moment().startOf("day");
   };
+  console.log(EmployeesSvc.getEmployee())
 
   const setFlag = (count: number) => {
     if (submitted) return;
@@ -52,21 +54,36 @@ export const AddForm: React.FC = () => {
     }
   }
 
+  const handleSubmit = async (employee: IEmployee) => {
+    // console.log(EmployeesSvc.url)
+    // setSubmitted(true)
+    // console.log('submit', submitted)
+
+    try {
+      const data = await EmployeesSvc.addEmployee(employee)
+      console.log('add form ', data);
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={AddSchema}
       validateOnChange={submitted}
-      validateOnBlur={submitted }
+      validateOnBlur={submitted}
       onSubmit={(
         values: IEmployee,
         { setSubmitting }: FormikHelpers<IEmployee>
       ) => {
+        console.log('submitting')
         setFormValues(values);
         setSubmitting(false);
+        handleSubmit(values);
       }} >
       {(props) => {
-        !submitted && setFlag(props.submitCount);
+        // !submitted && setFlag(props.submitCount);
         console.log(props);
 
         return (
@@ -126,7 +143,7 @@ export const AddForm: React.FC = () => {
                 {({field}: FieldProps<string>) =>  <PhotoPicker {...field} />}
               </Field>
             </FormItem>
-            <SubmitButton>Submit</SubmitButton >
+            <SubmitButton onClick={()=> setSubmitted(true)}>Submit</SubmitButton >
           </Form>
         )
       }}

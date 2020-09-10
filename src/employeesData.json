@@ -1,0 +1,34 @@
+[
+  {
+    "tags": [
+      "abc",
+      "def"
+    ],
+    "_id": "5f58d9f8a3f70d422fa90195",
+    "firstName": "Rick",
+    "lastName": "Sanchez",
+    "startingYear": "2018",
+    "lastEvaluationDate": "2019-12-24",
+    "projectName": "Sanchezium",
+    "level": 3,
+    "position": 1,
+    "photo": "photo in base64",
+    "__v": 0
+  },
+  {
+    "tags": [
+      "love",
+      "science"
+    ],
+    "_id": "5f58da8d1d3dbb43e82764ed",
+    "firstName": "Morty",
+    "lastName": "Sanchez",
+    "startingYear": "2019",
+    "lastEvaluationDate": "2019-12-12",
+    "projectName": "Jessica",
+    "level": 1,
+    "position": 0,
+    "photo": "new photo",
+    "__v": 0
+  }
+]
