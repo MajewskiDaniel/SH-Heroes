@@ -1,24 +1,24 @@
-import React, {useState, useRef} from "react";
+import React, {useState} from "react";
 import { Input } from 'antd';
 import { Tag } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import styles from './Tags.module.scss';
+import {FieldInputProps} from "formik";
 
-export interface ITags {
-  propsSetTags: (tags:string[]) => void
+
+export interface ITags extends FieldInputProps<string[]>{
 }
 
-export const Tags: React.FC<ITags> = ({propsSetTags}) => {
-  const [tags, setTags] = useState<string[]>([]);
+export const Tags: React.FC<ITags> = ({onChange, value, name}) => {
+
   const [inputVisible,  setInputVisible] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
-  const inputEl = useRef(null);
+  // const inputEl = useRef(null);
 
 
   const handleClose = (removedTag: string) => {
-    const newTags = tags.filter(tag => tag !== removedTag);
-    setTags(newTags);
-    propsSetTags(newTags);
+    const newTags = value.filter(tag => tag !== removedTag);
+
+    onChange({ target: { name, value: newTags }});
   };
 
   const showInput = () => {
@@ -30,12 +30,12 @@ export const Tags: React.FC<ITags> = ({propsSetTags}) => {
   };
 
   const  handleInputConfirm = () => {
-    let newTags = tags;
-    if (inputValue && tags.indexOf(inputValue) === -1) {
-      newTags = [...tags, inputValue];
+    let newTags = value;
+    if (inputValue && value.indexOf(inputValue) === -1) {
+      newTags = [...value, inputValue];
     }
-    setTags(newTags);
-    propsSetTags(newTags);
+    onChange({ target: { name, value: newTags }});
+
     setInputValue('');
     setInputVisible(false);
   };
@@ -57,7 +57,7 @@ export const Tags: React.FC<ITags> = ({propsSetTags}) => {
     );
   };
 
-  const tagChild = tags.map(forMap);
+  const tagChild = value.map(forMap);
 
     return (
       <>
@@ -68,7 +68,7 @@ export const Tags: React.FC<ITags> = ({propsSetTags}) => {
         </div>
         {inputVisible && (
           <Input
-            ref={inputEl}
+            // ref={inputEl}
             type="text"
             size="small"
             style={{ width: 78 }}
