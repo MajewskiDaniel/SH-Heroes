@@ -6,9 +6,9 @@ import { Table, Avatar, Tag } from "antd";
 export const EmployeeList: React.FC<PropsWithChildren<{
   employees: IEmployee[];
 }>> = ({ employees }) => {
-  const sortedEmployees = employees.sort(
-    (a, b) => parseFloat(a.startingYear) - parseFloat(b.startingYear)
-  );
+  // const sortedEmployees = employees.sort(
+  //   (a, b) => parseFloat(a.startingYear) - parseFloat(b.startingYear)
+  // );
   const columns = [
     {
       title: "Photo",
@@ -88,8 +88,11 @@ export const EmployeeList: React.FC<PropsWithChildren<{
     <div>
       <Table
         columns={columns}
-        dataSource={sortedEmployees}
+        dataSource={employees}
         pagination={{ pageSize: 5 }}
+        // rawKey={employees.map((employee)=>employee._id)}
+        // rowKey={(record) => record._id}
+        // rowKey={}
       />
     </div>
   );
