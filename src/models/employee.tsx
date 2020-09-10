@@ -11,31 +11,28 @@ export interface IEmployee {
 }
 
 export enum EmployeePosition {
-  SOFTWARE_DEV = "Software developer",
-  PROJECT_MANAGER = "Project manager",
-  TESTER = "Tester",
-  GRAPHIC_DESIGNER = "Graphic designer"
+  SOFTWARE_DEV,
+  PROJECT_MANAGER,
+  TESTER ,
+  GRAPHIC_DESIGNER,
 }
 
 export enum SeniorityLevel {
-  JUNIOR = "Junior",
-  MID = "Mid",
-  SENIOR = "Senior",
-  TECH_LEAD = "Tech Lead",
+  JUNIOR,
+  MID,
+  SENIOR,
+  TECH_LEAD ,
 }
 
-// w modelach możemy zrobić mapę
+export const seniorityMap = new Map()
+  .set(SeniorityLevel.JUNIOR, "Junior")
+  .set(SeniorityLevel.MID, "Mid")
+  .set(SeniorityLevel.SENIOR, "Senior")
+  .set(SeniorityLevel.TECH_LEAD, "Tech Lead")
 
-export const seniorityMap = {
-  [SeniorityLevel.JUNIOR]: "Junior",
-  [SeniorityLevel.MID]: "Mid",
-  [SeniorityLevel.SENIOR]: "Senior",
-  [SeniorityLevel.TECH_LEAD]: "Tech Lead",
-};
 
-export const employeePositionMap = {
-  [EmployeePosition.SOFTWARE_DEV]: "Software developer",
-  [EmployeePosition.PROJECT_MANAGER]: "Project manager",
-  [EmployeePosition.TESTER]: "Tester",
-  [EmployeePosition.GRAPHIC_DESIGNER]: "Graphic designer"
-}
+export const employeePositionMap = new Map()
+  .set(EmployeePosition.SOFTWARE_DEV, "Software developer")
+  .set(EmployeePosition.PROJECT_MANAGER, "Project manager")
+  .set(EmployeePosition.TESTER, "Tester")
+  .set(EmployeePosition.GRAPHIC_DESIGNER, "Graphic designer")

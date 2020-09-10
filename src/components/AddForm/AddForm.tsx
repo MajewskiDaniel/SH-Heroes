@@ -6,7 +6,7 @@ import moment from 'moment';
 
 import {Tags} from '../Tags/Tags';
 import {PhotoPicker} from "../PhotoPicker/PhotoPicker";
-import {EmployeePosition, IEmployee, SeniorityLevel} from "../../models/employee";
+import {EmployeePosition, employeePositionMap, IEmployee, SeniorityLevel, seniorityMap} from "../../models/employee";
 import styles from './AddForm.module.scss';
 
 const AddSchema = yup.object().shape({
@@ -28,8 +28,8 @@ export const AddForm: React.FC = () => {
     lastEvaluationDate: "",
     projectName: "",
     tags: [],
-    level: SeniorityLevel.SENIOR,
-    position: EmployeePosition.GRAPHIC_DESIGNER,
+    level: SeniorityLevel.JUNIOR,
+    position: EmployeePosition.SOFTWARE_DEV,
     photo: ""
   };
 
@@ -56,8 +56,8 @@ export const AddForm: React.FC = () => {
     <Formik
       initialValues={initialValues}
       validationSchema={AddSchema}
-      validateOnChange={submitted ? true : false}
-      validateOnBlur={submitted  ? true : false}
+      validateOnChange={submitted}
+      validateOnBlur={submitted }
       onSubmit={(
         values: IEmployee,
         { setSubmitting }: FormikHelpers<IEmployee>
@@ -105,17 +105,17 @@ export const AddForm: React.FC = () => {
             <label htmlFor="level" className={styles.Label}>Level</label>
             <FormItem name="level">
               <Select name="level">
-                {Object.entries(SeniorityLevel).map(([key, value]) => (
-                  <Select.Option key={key} value={value}>{value}</Select.Option>
+                {Array.from(seniorityMap.keys()).map((key) => (
+                  <Select.Option key={key} value={key}>{seniorityMap.get(key)}</Select.Option>
                 ))}
               </Select>
             </FormItem>
 
             <FormItem name="position">
               <label htmlFor="position" className={styles.Label}>Position</label>
-              <Select  name="position" >
-                {Object.entries(EmployeePosition).map(([key, value]) => (
-                  <Select.Option key={key} value={value}>{value}</Select.Option>
+              <Select name="position" >
+                {Array.from(employeePositionMap.keys()).map((key) => (
+                  <Select.Option key={key} value={key}>{employeePositionMap.get(key)}</Select.Option>
                 ))}
               </Select>
             </FormItem>
