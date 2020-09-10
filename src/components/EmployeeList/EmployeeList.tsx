@@ -1,14 +1,18 @@
 import React, { PropsWithChildren } from "react";
 import styles from "./EmployeeList.module.scss";
-import { IEmployee } from "../../models/employee";
-import { Table, Avatar, Tag } from "antd";
+import {
+  IEmployee,
+  seniorityMap,
+  employeePositionMap,
+} from "../../models/employee";
+import { Table, Avatar, Tag, Space } from "antd";
 
 export const EmployeeList: React.FC<PropsWithChildren<{
   employees: IEmployee[];
 }>> = ({ employees }) => {
-  // const sortedEmployees = employees.sort(
-  //   (a, b) => parseFloat(a.startingYear) - parseFloat(b.startingYear)
-  // );
+  const sortedEmployees = employees.sort(
+    (a, b) => parseFloat(b.startingYear) - parseFloat(a.startingYear)
+  );
   const columns = [
     {
       title: "Photo",
@@ -35,11 +39,27 @@ export const EmployeeList: React.FC<PropsWithChildren<{
       title: "Starting Year",
       dataIndex: "startingYear",
       key: "startingYear",
+      render: (value: string) => {
+        let date = new Date(value);
+        let year = date.getFullYear().toString();
+        return <p>{year}</p>;
+      },
     },
     {
       title: "Last Evaluation Date",
       dataIndex: "lastEvaluationDate",
       key: "lastEvaluationDate",
+      render: (value: string) => {
+        let date = new Date(value);
+        let year = date.getFullYear().toString();
+        let month = date.getMonth().toString();
+        let day = date.getDate().toString();
+        return (
+          <p>
+            {day}-{month}-{year}
+          </p>
+        );
+      },
     },
     {
       title: "Actual Project",
@@ -66,23 +86,29 @@ export const EmployeeList: React.FC<PropsWithChildren<{
       title: "Seniority Level",
       dataIndex: "level",
       key: "level",
+      render: (value: number) => <p>{seniorityMap.get(value)}</p>,
     },
     {
       title: "Position",
       dataIndex: "position",
       key: "position",
+      render: (value: number) => <p>{employeePositionMap.get(value)}</p>,
     },
 
-    // {
-    //   title: "Action",
-    //   key: "action",
-    //   render: (text: string, record) => (
-    //     <Space size="middle">
-    //       <a>Invite {record.name}</a>
-    //       <a>Delete</a>
-    //     </Space>
-    //   ),
-    // },
+    {
+      title: "Action",
+      dataIndex: "_id",
+      key: "action",
+      render: (id: string) => {
+        let idHref = `/employee/${id}`;
+        return (
+          <Space size="middle">
+            <a href={idHref}>Edit</a>
+            <a>Delete</a>
+          </Space>
+        );
+      },
+    },
   ];
   return (
     <div>
@@ -92,7 +118,6 @@ export const EmployeeList: React.FC<PropsWithChildren<{
         pagination={{ pageSize: 5 }}
         // rawKey={employees.map((employee)=>employee._id)}
         // rowKey={(record) => record._id}
-        // rowKey={}
       />
     </div>
   );

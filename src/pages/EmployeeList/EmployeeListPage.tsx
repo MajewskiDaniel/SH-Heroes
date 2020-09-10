@@ -8,6 +8,7 @@ import {
 import styles from "./EmployeeListPage.module.scss";
 import { EmployeesSvc } from "../../services/EmployeesSvc";
 import { Button } from "antd";
+import { Link } from "react-router-dom";
 
 // const employees: IEmployee[] = [
 //   {
@@ -160,7 +161,7 @@ const EmployeeListPage: React.FC<PropsWithChildren<IEmployee[]>> = (args) => {
       <div className={styles.header}>
         <h2 className={styles.tableName}>Employee List</h2>
         <Button className={styles.addButton} type="primary">
-          Add new
+          <Link to="/employee">Add new</Link>
         </Button>
       </div>
       <EmployeeList employees={employees} />
