@@ -1,9 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import Employee from "./models/employee.model";
+import cors from "cors";
+import Employee, { IEmployee } from "./models/employee.model";
 
-// require("dotenv").config();
 dotenv.config();
 
 const app = express();
@@ -16,6 +16,7 @@ mongoose.connect(`${process.env.MONGODB_CONNECTION}`, {
 });
 
 app.use(express.json());
+app.use(cors());
 
 app.get("/", (req: any, res: any) => res.send("Express + TypeScript Server"));
 
@@ -33,10 +34,21 @@ app.post("/employees/", async (req, res) => {
 //get all employees
 app.get("/employees/", async (req, res) => {
   try {
-    const employees = await Employee.find(req.query);
+    const employees: IEmployee[] = await Employee.find(req.query);
     res.status(200).send(employees);
   } catch {
     res.status(404).send(`error: can't get employees`);
+  }
+});
+
+//get employee by id
+app.get("/employees/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const employee = await Employee.findById(id);
+    res.status(200).send(employee);
+  } catch {
+    res.status(404).send(`error: can't get employee nr: ${id}`);
   }
 });
 
