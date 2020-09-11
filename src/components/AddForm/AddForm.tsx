@@ -1,12 +1,13 @@
 import React, {useState} from 'react';
 import {Field, FieldProps, Form, Formik, FormikHelpers} from 'formik';
 import {DatePicker, FormItem, Input, Select, SubmitButton} from 'formik-antd';
+import { notification } from 'antd';
 import * as yup from 'yup';
 import moment from 'moment';
 
 import {Tags} from '../Tags/Tags';
 import {PhotoPicker} from "../PhotoPicker/PhotoPicker";
-import {EmployeesSvc} from "../../services/EmoloyeesSvc";
+import {EmployeesSvc} from "../../services/EmployeesSvc";
 import {EmployeePosition, employeePositionMap, IEmployee, SeniorityLevel, seniorityMap} from "../../models/employee";
 import styles from './AddForm.module.scss';
 
@@ -44,26 +45,23 @@ export const AddForm: React.FC = () => {
   const disabledEvaluationDate = (current: any) => {
     return current && current > moment().startOf("day");
   };
-  console.log(EmployeesSvc.getEmployee())
-
-  const setFlag = (count: number) => {
-    if (submitted) return;
-    if (count > 0) {
-      setSubmitted(true);
-      console.log("SET STATE")
-    }
-  }
 
   const handleSubmit = async (employee: IEmployee) => {
-    // console.log(EmployeesSvc.url)
-    // setSubmitted(true)
-    // console.log('submit', submitted)
-
     try {
-      const data = await EmployeesSvc.addEmployee(employee)
+      console.log('add')
+      const data = await EmployeesSvc.addEmployee(employee);
       console.log('add form ', data);
+      notification.open({
+        message: 'Added new employee'
+      });
     } catch (e) {
-      console.log(e)
+      console.log('error')
+    }
+    try{
+      const data = await EmployeesSvc.getEmployee();
+      console.log(data)
+    }catch (e) {
+      console.log('error')
     }
   }
 
@@ -77,15 +75,12 @@ export const AddForm: React.FC = () => {
         values: IEmployee,
         { setSubmitting }: FormikHelpers<IEmployee>
       ) => {
-        console.log('submitting')
         setFormValues(values);
         setSubmitting(false);
         handleSubmit(values);
       }} >
       {(props) => {
-        // !submitted && setFlag(props.submitCount);
-        console.log(props);
-
+        // console.log(props);
         return (
           <Form className={styles.Form}>
             <label htmlFor="firstName" className={styles.Label}>Name</label>
@@ -143,7 +138,7 @@ export const AddForm: React.FC = () => {
                 {({field}: FieldProps<string>) =>  <PhotoPicker {...field} />}
               </Field>
             </FormItem>
-            <SubmitButton onClick={()=> setSubmitted(true)}>Submit</SubmitButton >
+            <SubmitButton onClick={()=> !submitted && setSubmitted(true)}>Submit</SubmitButton >
           </Form>
         )
       }}
