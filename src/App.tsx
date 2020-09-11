@@ -32,6 +32,7 @@ export const App = () => {
               <Route exact path="/skill-list" component={SkillListPage} />
               <Route path="/employee-list" component={EmployeeListPage} />
               <Route path="/employee" component={EditorPage} />
+              <Route path="/employee/:id" component={EditorPage} />
               <Route component={NotFoundPage} />
             </Switch>
           </Content>
