@@ -12,7 +12,7 @@ export default {
   component: EmployeeList,
 } as Meta;
 
-const Template: Story<{ employees: IEmployee[] }> = (args) => (
+const Template: Story<{ employees: IEmployee[], fetchEmployees: any }> = (args) => (
   <EmployeeList {...args} />
 );
 
@@ -150,4 +150,5 @@ TestEmployeeTable.args = {
       photo: "https://tiny.pl/7jw83",
     },
   ],
+  fetchEmployees: ()=>{}
 };

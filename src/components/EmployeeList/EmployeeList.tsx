@@ -11,15 +11,16 @@ import { Table, Avatar, Tag, Space, Popconfirm } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 
 export const EmployeeList: React.FC<PropsWithChildren<{
-  employees: IEmployee[];
-}>> = ({ employees }) => {
+  employees: IEmployee[],
+  fetchEmployees: ()=>void
+}>> = ({ employees , fetchEmployees}) => {
   const sortedEmployees = employees.sort(
     (a, b) => parseFloat(b.startingYear) - parseFloat(a.startingYear)
   );
 
   const onDelete = async (employee: IEmployee) => {
-    const data = await EmployeesSvc.deleteEmployee(employee);
-    console.log(data);
+    await EmployeesSvc.deleteEmployee(employee);
+    fetchEmployees();
   };
 
   const columns = [
