@@ -131,9 +131,10 @@ async function fetchDeleteEmployee(url: string) {
       headers: { 'Content-Type': 'application/json' }
     });
     checkForError(resp);
-    const data = await resp.json();
-    return data;
+    // const data = await resp.json();
+    return true;
   } catch (e) {
+    console.log(e);
     return false;
   }
 }

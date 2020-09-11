@@ -144,6 +144,7 @@ import { Link } from "react-router-dom";
 
 const EmployeeListPage: React.FC<PropsWithChildren<IEmployee[]>> = (args) => {
   const [employees, setEmployees] = useState([]);
+
   const fetchEmployees = async () => {
     try {
       const employeesData = await EmployeesSvc.getEmployee();
@@ -164,7 +165,7 @@ const EmployeeListPage: React.FC<PropsWithChildren<IEmployee[]>> = (args) => {
           <Link to="/employee">Add new</Link>
         </Button>
       </div>
-      <EmployeeList employees={employees} />
+      <EmployeeList employees={employees} fetchEmployees={fetchEmployees} />
     </>
   );
 };
