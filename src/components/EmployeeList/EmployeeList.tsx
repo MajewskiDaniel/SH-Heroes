@@ -1,12 +1,14 @@
 import React, { PropsWithChildren } from "react";
 import styles from "./EmployeeList.module.scss";
 import { Link } from "react-router-dom";
+import { EmployeesSvc } from "../../services/EmployeesSvc";
 import {
   IEmployee,
   seniorityMap,
   employeePositionMap,
 } from "../../models/employee";
-import { Table, Avatar, Tag, Space } from "antd";
+import { Table, Avatar, Tag, Space, Popconfirm } from "antd";
+import { QuestionCircleOutlined } from "@ant-design/icons";
 
 export const EmployeeList: React.FC<PropsWithChildren<{
   employees: IEmployee[];
@@ -14,6 +16,12 @@ export const EmployeeList: React.FC<PropsWithChildren<{
   const sortedEmployees = employees.sort(
     (a, b) => parseFloat(b.startingYear) - parseFloat(a.startingYear)
   );
+
+  const onDelete = async (employee: IEmployee) => {
+    const data = await EmployeesSvc.deleteEmployee(employee);
+    console.log(data);
+  };
+
   const columns = [
     {
       title: "Photo",
@@ -34,7 +42,6 @@ export const EmployeeList: React.FC<PropsWithChildren<{
       title: "Last Name",
       dataIndex: "lastName",
       key: "lastName",
-      // render: (text: string) => <a>{text}</a>,
     },
     {
       title: "Starting Year",
@@ -100,12 +107,18 @@ export const EmployeeList: React.FC<PropsWithChildren<{
       title: "Action",
       dataIndex: "_id",
       key: "action",
-      render: (id: string) => {
+      render: (id: string, record: IEmployee) => {
         let idHref = `/employee/${id}`;
         return (
           <Space size="middle">
             <Link to={idHref}>Edit</Link>
-            <Link to="">Delete</Link>
+            <Popconfirm
+              title={`Are you sure you wat to fire ${record.firstName} ${record.lastName}?`}
+              onConfirm={() => onDelete(record)}
+              icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+            >
+              <a href="#">Delete</a>
+            </Popconfirm>
           </Space>
         );
       },
@@ -115,9 +128,12 @@ export const EmployeeList: React.FC<PropsWithChildren<{
     <div>
       <Table
         columns={columns}
-        dataSource={employees}
+        dataSource={sortedEmployees}
         pagination={{ pageSize: 5 }}
-        // rawKey={employees.map((employee)=>employee._id)}
+        // onRow={(record: any, index: any) => {
+        //   return {};
+        // }}
+        // rowKey={employees.map((employee)=>employee._id)}
         // rowKey={(record) => record._id}
       />
     </div>
