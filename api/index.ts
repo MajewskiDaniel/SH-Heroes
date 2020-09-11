@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors";
@@ -18,10 +18,12 @@ mongoose.connect(`${process.env.MONGODB_CONNECTION}`, {
 app.use(express.json());
 app.use(cors());
 
-app.get("/", (req: any, res: any) => res.send("Express + TypeScript Server"));
+app.get("/", (req: Request, res: Response) =>
+  res.send("Express + TypeScript Server")
+);
 
 //post employee
-app.post("/employees/", async (req, res) => {
+app.post("/employees/", async (req: Request, res: Response) => {
   try {
     const employee = new Employee(req.body);
     await employee.save();
@@ -32,7 +34,7 @@ app.post("/employees/", async (req, res) => {
 });
 
 //get all employees
-app.get("/employees/", async (req, res) => {
+app.get("/employees/", async (req: Request, res: Response) => {
   try {
     const employees: IEmployee[] = await Employee.find(req.query);
     res.status(200).send(employees);
@@ -42,7 +44,7 @@ app.get("/employees/", async (req, res) => {
 });
 
 //get employee by id
-app.get("/employees/:id", async (req, res) => {
+app.get("/employees/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const employee = await Employee.findById(id);
@@ -53,7 +55,7 @@ app.get("/employees/:id", async (req, res) => {
 });
 
 //delete employee by id
-app.delete("/employees/:id", async (req, res) => {
+app.delete("/employees/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     await Employee.findByIdAndDelete(id);
@@ -64,7 +66,7 @@ app.delete("/employees/:id", async (req, res) => {
 });
 
 //update employee by id
-app.put("/employees/:id", async (req, res) => {
+app.put("/employees/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     await Employee.findByIdAndUpdate(id, req.body, { new: true });

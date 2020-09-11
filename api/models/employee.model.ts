@@ -41,4 +41,4 @@ const employeeSchema: Schema = new Schema({
 
 interface IEmployeeDB extends Document, IEmployee {}
 
-export default mongoose.model<IEmployeeDB>("employee", employeeSchema);
+export default mongoose.model<IEmployeeDB>("Employee", employeeSchema);
