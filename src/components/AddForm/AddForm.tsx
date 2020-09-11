@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Field, FieldProps, Form, Formik, FormikHelpers} from 'formik';
 import {DatePicker, FormItem, Input, Select, SubmitButton} from 'formik-antd';
 import { notification } from 'antd';
@@ -22,7 +22,11 @@ const AddSchema = yup.object().shape({
   photo: yup.string().required(),
 });
 
-export const AddForm: React.FC = () => {
+export interface IAddForm {
+  id: string
+}
+
+export const AddForm: React.FC<IAddForm> = ({id}) => {
   const initialValues: IEmployee = {
     firstName: "",
     lastName: "",
@@ -37,6 +41,17 @@ export const AddForm: React.FC = () => {
 
   const [formValues, setFormValues] = useState<IEmployee>(initialValues);
   const [submitted, setSubmitted] = useState<boolean>(false);
+  const [initialValuesWithId, setInitialValuesWithId] = useState(initialValues);
+
+  useEffect(()=>{
+    if (id) {
+      (async () => {
+        const data = await EmployeesSvc.getEmployee(id);
+        console.log(data);
+        setInitialValuesWithId(data);
+      })()
+    }
+  },[])
 
   const disabledStartDate = (current: any) => {
     return current && current > moment().endOf("day");
@@ -47,27 +62,36 @@ export const AddForm: React.FC = () => {
   };
 
   const handleSubmit = async (employee: IEmployee) => {
-    try {
-      console.log('add')
-      const data = await EmployeesSvc.addEmployee(employee);
-      console.log('add form ', data);
-      notification.open({
-        message: 'Added new employee'
-      });
-    } catch (e) {
-      console.log('error')
-    }
-    try{
-      const data = await EmployeesSvc.getEmployee();
-      console.log(data)
-    }catch (e) {
-      console.log('error')
+    if (id) {
+      try {
+        console.log('edit')
+        const data = await EmployeesSvc.editEmployee(employee, id);
+        if (data) {
+          notification.open({
+            message: 'Edited employee'
+          });
+        }
+      } catch (e) {
+        console.log('error')
+      }
+    } else {
+      try {
+        console.log('add')
+        const data = await EmployeesSvc.addEmployee(employee);
+        console.log('add form ', data);
+        notification.open({
+          message: 'Added new employee'
+        });
+      } catch (e) {
+        console.log('error')
+      }
     }
   };
 
   return (
     <Formik
-      initialValues={initialValues}
+      enableReinitialize={true}
+      initialValues={id ? initialValuesWithId : initialValues}
       validationSchema={AddSchema}
       validateOnChange={submitted}
       validateOnBlur={submitted}
@@ -137,6 +161,9 @@ export const AddForm: React.FC = () => {
               />
             </FormItem>
 
+            <label htmlFor="tags" className={styles.Label}>
+              Tags
+            </label>
             <FormItem name="tags">
               <Field name="tags">
                 {({ field }: FieldProps<string[]>) => <Tags {...field} />}

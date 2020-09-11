@@ -7,11 +7,13 @@ export const EmployeesSvc = {
   url: `${process.env.REACT_APP_URL}/employees`,
   mocking: false,
 
-  async getEmployee (id: number | undefined = undefined){
+  async getEmployee (id?: string){
+    const urlWithId = id ? `${this.url}/${id}` : this.url;
+
     if(this.mocking) {
       return mockGetEmployee();
     } else {
-      return getEmployee(this.url);
+      return fetchGetEmployee(urlWithId);
     }
   },
 
@@ -23,11 +25,27 @@ export const EmployeesSvc = {
     }
   },
 
-  async editEmployee (employee: IEmployee) {
-    console.log('edit employee');
+  async editEmployee (employee: IEmployee, id?: string) {
+    const urlWithId = id ? `${this.url}/${id}` : this.url;
 
+    console.log('edit employee');
+    if(this.mocking) {
+      return mockEditEmployee(employee);
+    } else {
+      return fetchEditEmployee(urlWithId, employee);
+    }
+  },
+
+  async deleteEmployee (employee: IEmployee) {
+    if(this.mocking) {
+
+    }
   }
 }
+
+const checkForError = (response: any) => {
+  if (!response.ok) throw Error(response.statusText);
+};
 
 function mockAddEmployee (employee: IEmployee) {
   employees.push(employee);
@@ -43,10 +61,11 @@ async function addEmployee(url: string, employee: IEmployee) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(employee)
       });
+    checkForError(resp);
     const dataImp = await resp.json();
     return dataImp;
   } catch (e) {
-    console.log(e)
+   return false;
   }
 }
 
@@ -54,13 +73,14 @@ function mockGetEmployee() {
   return employees;
 }
 
-async function getEmployee(url: string) {
+async function fetchGetEmployee(url: string) {
   try {
-    const resp = await fetch(`${url}`);
+    const resp = await fetch(url);
+    checkForError(resp);
     const data = await resp.json();
     return data;
   } catch (e) {
-    console.log(e)
+    return [];
   }
 }
 
@@ -70,16 +90,37 @@ function mockEditEmployee(employee: IEmployee){
   return returned;
 }
 
-async function editEmployee(url: string, employee: IEmployee) {
+async function fetchEditEmployee(url: string, employee: IEmployee) {
   try {
     const resp: any = await fetch(`${url}/`, {
-      method: 'POST',
+      method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(employee)
-      }
-    );
-    const data = resp.json();
+      });
+    checkForError(resp);
+    const data = await resp.json();
+    return data;
   } catch (e) {
-    console.log(e)
+    return false;
+  }
+}
+
+function mockDeleteEmployee(employee: IEmployee){
+  employees = employees.map(e => e._id === employee._id ? employee : e);
+  const returned = employees.find(e => e._id === employee._id);
+  return returned;
+}
+
+async function fetchDeleteEmployee(url: string, employee: IEmployee) {
+  try {
+    const resp: any = await fetch(url, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    checkForError(resp);
+    const data = await resp.json();
+    return data;
+  } catch (e) {
+    return false;
   }
 }

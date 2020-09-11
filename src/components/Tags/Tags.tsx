@@ -4,7 +4,6 @@ import { Tag } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import {FieldInputProps} from "formik";
 
-
 export interface ITags extends FieldInputProps<string[]>{
 }
 
@@ -12,8 +11,6 @@ export const Tags: React.FC<ITags> = ({onChange, value, name}) => {
 
   const [inputVisible,  setInputVisible] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
-  // const inputEl = useRef(null);
-
 
   const handleClose = (removedTag: string) => {
     const newTags = value.filter(tag => tag !== removedTag);
