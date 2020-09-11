@@ -61,29 +61,41 @@ export const AddForm: React.FC<IAddForm> = ({id}) => {
     return current && current > moment().startOf("day");
   };
 
-  const handleSubmit = async (employee: IEmployee) => {
+  const handleSubmit = async (values: IEmployee, {setSubmitting, setErrors, setStatus, resetForm}: any)  => {
     if (id) {
       try {
-        console.log('edit')
-        const data = await EmployeesSvc.editEmployee(employee, id);
+        const data = await EmployeesSvc.editEmployee(values, id);
         if (data) {
           notification.open({
             message: 'Edited employee'
           });
         }
+        resetForm(initialValues);
+        setStatus({success: true});
       } catch (e) {
-        console.log('error')
+        notification.open({
+          message: 'Employee not edited'
+        });
+        setStatus({success: false});
+        setSubmitting(false);
+        setErrors({submit: e.message});
       }
     } else {
       try {
-        console.log('add')
-        const data = await EmployeesSvc.addEmployee(employee);
+        const data = await EmployeesSvc.addEmployee(values);
         console.log('add form ', data);
         notification.open({
           message: 'Added new employee'
         });
+        resetForm(initialValues);
+        setStatus({success: true});
       } catch (e) {
-        console.log('error')
+        notification.open({
+          message: 'Employee not added'
+        });
+        setStatus({success: false});
+        setSubmitting(false);
+        setErrors({submit: e.message});
       }
     }
   };
@@ -95,14 +107,7 @@ export const AddForm: React.FC<IAddForm> = ({id}) => {
       validationSchema={AddSchema}
       validateOnChange={submitted}
       validateOnBlur={submitted}
-      onSubmit={(
-        values: IEmployee,
-        { setSubmitting }: FormikHelpers<IEmployee>
-      ) => {
-        setFormValues(values);
-        setSubmitting(false);
-        handleSubmit(values);
-      }}
+      onSubmit={handleSubmit}
     >
       {(props) => {
         // console.log(props);
@@ -111,12 +116,7 @@ export const AddForm: React.FC<IAddForm> = ({id}) => {
             <label htmlFor="firstName" className={styles.Label}>
               Name
             </label>
-            <FormItem
-              name="firstName"
-              rules={[
-                { required: true, message: "Please input your username!" },
-              ]}
-            >
+            <FormItem name="firstName">
               <Input id="firstName" name="firstName" placeholder="name" />
             </FormItem>
 

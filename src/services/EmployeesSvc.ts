@@ -1,7 +1,8 @@
-import {EmployeePosition, IEmployee, SeniorityLevel} from "../models/employee";
+import {IEmployee} from "../models/employee";
 import employeesData from "../employeesData.json";
 
 let employees: IEmployee[] = employeesData;
+let id = 1;
 
 export const EmployeesSvc = {
   url: `${process.env.REACT_APP_URL}/employees`,
@@ -11,7 +12,7 @@ export const EmployeesSvc = {
     const urlWithId = id ? `${this.url}/${id}` : this.url;
 
     if(this.mocking) {
-      return mockGetEmployee();
+      return mockGetEmployee(id);
     } else {
       return fetchGetEmployee(urlWithId);
     }
@@ -37,8 +38,11 @@ export const EmployeesSvc = {
   },
 
   async deleteEmployee (employee: IEmployee) {
+    const urlWithId = `${this.url}/${employee._id}`;
     if(this.mocking) {
-
+      return mockDeleteEmployee(employee);
+    } else {
+      return fetchDeleteEmployee(urlWithId);
     }
   }
 }
@@ -48,10 +52,14 @@ const checkForError = (response: any) => {
 };
 
 function mockAddEmployee (employee: IEmployee) {
-  employees.push(employee);
-  console.log(employees);
-  return employees[employees.length-1];
+  const newEmployee = employee;
+  newEmployee._id = id.toString();
+  id++;
+  employees.push(newEmployee);
+  const data = employees[employees.length-1];
+  return new Promise((resolve) => setTimeout(()=>resolve(data), 1000));
 }
+
 
 async function addEmployee(url: string, employee: IEmployee) {
   try {
@@ -69,8 +77,13 @@ async function addEmployee(url: string, employee: IEmployee) {
   }
 }
 
-function mockGetEmployee() {
-  return employees;
+function mockGetEmployee(id?: string) {
+  if(id){
+    const user = employees.find( e => e._id === id);
+    return new Promise((resolve) => setTimeout(()=>resolve(user), 1000));
+  } else {
+    return new Promise((resolve) => setTimeout(()=>resolve(employees), 1000));
+  }
 }
 
 async function fetchGetEmployee(url: string) {
@@ -86,8 +99,8 @@ async function fetchGetEmployee(url: string) {
 
 function mockEditEmployee(employee: IEmployee){
   employees = employees.map(e => e._id === employee._id ? employee : e);
-  const returned = employees.find(e => e._id === employee._id);
-  return returned;
+  const data = employees.find(e => e._id === employee._id);
+  return new Promise((resolve) => setTimeout(()=>resolve(data), 1000));
 }
 
 async function fetchEditEmployee(url: string, employee: IEmployee) {
@@ -98,20 +111,20 @@ async function fetchEditEmployee(url: string, employee: IEmployee) {
       body: JSON.stringify(employee)
       });
     checkForError(resp);
-    const data = await resp.json();
-    return data;
+    // const data = await resp.json();
+    return true;
   } catch (e) {
+    console.log(e)
     return false;
   }
 }
 
 function mockDeleteEmployee(employee: IEmployee){
-  employees = employees.map(e => e._id === employee._id ? employee : e);
-  const returned = employees.find(e => e._id === employee._id);
-  return returned;
+  employees = employees.filter(e => e._id !== employee._id);
+  return new Promise((resolve) => setTimeout(()=>resolve(employee._id), 1000));;
 }
 
-async function fetchDeleteEmployee(url: string, employee: IEmployee) {
+async function fetchDeleteEmployee(url: string) {
   try {
     const resp: any = await fetch(url, {
       method: 'DELETE',
