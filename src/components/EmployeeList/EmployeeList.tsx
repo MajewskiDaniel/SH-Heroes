@@ -1,5 +1,6 @@
 import React, { PropsWithChildren } from "react";
 import styles from "./EmployeeList.module.scss";
+import { Link } from "react-router-dom";
 import {
   IEmployee,
   seniorityMap,
@@ -103,8 +104,8 @@ export const EmployeeList: React.FC<PropsWithChildren<{
         let idHref = `/employee/${id}`;
         return (
           <Space size="middle">
-            <a href={idHref}>Edit</a>
-            <a>Delete</a>
+            <Link to={idHref}>Edit</Link>
+            <Link to="">Delete</Link>
           </Space>
         );
       },
