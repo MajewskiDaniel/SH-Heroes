@@ -1,17 +1,17 @@
-import {IEmployee} from "../models/employee";
+import {EmployeePosition, IEmployee, SeniorityLevel} from "../models/employee";
 import employeesData from "../employeesData.json";
 
 let employees: IEmployee[] = employeesData;
 
 export const EmployeesSvc = {
   url: `${process.env.REACT_APP_URL}/employees`,
-  mocking: true,
+  mocking: false,
 
   async getEmployee (id: number | undefined = undefined){
     if(this.mocking) {
       return mockGetEmployee();
     } else {
-      return fetchGetEmployee(this.url);
+      return getEmployee(this.url);
     }
   },
 
@@ -19,39 +19,23 @@ export const EmployeesSvc = {
     if(this.mocking) {
       return mockAddEmployee(employee);
     } else {
-      return fetchAddEmployee(this.url, employee);
+      return addEmployee(this.url, employee);
     }
   },
 
   async editEmployee (employee: IEmployee) {
-    if(this.mocking) {
-      return mockEditEmployee(employee);
-    } else {
-      return fetchEditEmployee(this.url, employee);
-    }
-  },
+    console.log('edit employee');
 
-  async deleteEmployee (employee: IEmployee) {
-    if(this.mocking) {
-      return mockDeleteEmployee(employee);
-    } else {
-      return fetchDeleteEmployee(this.url, employee);
-    }
   }
 }
 
-function checkForError (response: any) {
-  if (!response.ok) throw Error(response.statusText);
-  return response.json();
-};
-
-async function mockAddEmployee (employee: IEmployee) {
+function mockAddEmployee (employee: IEmployee) {
   employees.push(employee);
-  const resp =  await new Promise((resolve) => setTimeout(() => resolve(employees), 1000));
-  return resp;
+  console.log(employees);
+  return employees[employees.length-1];
 }
 
-async function fetchAddEmployee(url: string, employee: IEmployee) {
+async function addEmployee(url: string, employee: IEmployee) {
   try {
     const resp = await fetch(
       `${url}`, {
@@ -59,22 +43,20 @@ async function fetchAddEmployee(url: string, employee: IEmployee) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(employee)
       });
-    checkForError(resp);
-    const data = await resp.json();
-    return data;
+    const dataImp = await resp.json();
+    return dataImp;
   } catch (e) {
     console.log(e)
   }
 }
 
 function mockGetEmployee() {
-  return new Promise((resolve) => setTimeout(() => resolve(employees), 1000));
+  return employees;
 }
 
-async function fetchGetEmployee(url: string) {
+async function getEmployee(url: string) {
   try {
     const resp = await fetch(`${url}`);
-    checkForError(resp);
     const data = await resp.json();
     return data;
   } catch (e) {
@@ -84,39 +66,20 @@ async function fetchGetEmployee(url: string) {
 
 function mockEditEmployee(employee: IEmployee){
   employees = employees.map(e => e._id === employee._id ? employee : e);
-  const resp = employees.find(e => e._id === employee._id);
-  return new Promise((resolve) => setTimeout(() => resolve(resp), 1000));
+  const returned = employees.find(e => e._id === employee._id);
+  return returned;
 }
 
-async function fetchEditEmployee(url: string, employee: IEmployee) {
+async function editEmployee(url: string, employee: IEmployee) {
   try {
-    const resp: any = await fetch(`${url}/${employee._id}`, {
-      method: 'PUT',
+    const resp: any = await fetch(`${url}/`, {
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(employee)
-      });
-    checkForError(resp);
+      }
+    );
     const data = resp.json();
-    return data;
   } catch (e) {
     console.log(e)
-  }
-}
-
-function mockDeleteEmployee(employee: IEmployee) {
-  employees = employees.filter( e => e._id !== employee._id);
-  return new Promise((resolve) => setTimeout(() => resolve(employees), 1000));
-}
-
-async function fetchDeleteEmployee(url: string, employee: IEmployee) {
-  try {
-    const resp = await fetch(`${url}/${employee._id}`, {
-        method: "DELETE"
-      });
-    checkForError(resp);
-    const data = await resp.json();
-    return data;
-  } catch (e) {
-    console.log(e);
   }
 }
