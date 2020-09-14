@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Upload} from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import {FieldInputProps} from "formik";
+import {UploadChangeParam} from "antd/lib/upload/interface";
 
 export interface IPhotoPicker extends FieldInputProps<string>{
 }
@@ -9,18 +10,18 @@ export interface IPhotoPicker extends FieldInputProps<string>{
 export const PhotoPicker: React.FC<IPhotoPicker> = ({onChange, value, name}) => {
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handleChange = (info: any) => {
-    if (info.file.status === 'uploading') {
+  const handleChange = async ({ file }: UploadChangeParam ) => {
+    if (file.status === "uploading") {
+      onChange({ target: { name, value: "" }});
       setLoading(true);
       return;
     }
-    if (info.file.status === 'done') {
-      getBase64(info.file.originFileObj, (imageUrl: string) => {
-        setLoading(false);
-        onChange({ target: { name, value: imageUrl }});
-      });
-    };
+    if (file.status === "done") {
+      const image = await uploadImage(file.originFileObj as File);
+      onChange({ target: { name, value: image }});
+      setLoading(false);
     }
+  };
 
   const uploadButton = (
     <div>
@@ -44,13 +45,15 @@ export const PhotoPicker: React.FC<IPhotoPicker> = ({onChange, value, name}) => 
   )
 }
 
-function getBase64(img: any, callback: any) {
-  const reader = new FileReader();
-  reader.addEventListener('load', () => callback(reader.result));
-  reader.readAsDataURL(img);
-}
+function uploadImage(img: File) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => resolve(reader.result));
+    reader.readAsDataURL(img);
+  });
+};
 
-function beforeUpload(file: any) {
+function beforeUpload(file: File) {
   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
   if (!isJpgOrPng) {
     console.log('You can only upload JPG/PNG file!')

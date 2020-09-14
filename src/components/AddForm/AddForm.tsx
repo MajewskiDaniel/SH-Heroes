@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Field, FieldProps, Form, Formik, FormikHelpers} from 'formik';
+import {Field, FieldProps, Form, Formik, FormikHelpers, FormikProps} from 'formik';
 import {DatePicker, FormItem, Input, Select, SubmitButton} from 'formik-antd';
 import { notification } from 'antd';
 import * as yup from 'yup';
@@ -10,6 +10,7 @@ import {PhotoPicker} from "../PhotoPicker/PhotoPicker";
 import {EmployeesSvc} from "../../services/EmployeesSvc";
 import {EmployeePosition, employeePositionMap, IEmployee, SeniorityLevel, seniorityMap} from "../../models/employee";
 import styles from './AddForm.module.scss';
+import {FormikErrors, FormikState} from "formik/dist/types";
 
 const AddSchema = yup.object().shape({
   firstName: yup.string().required("Required"),
@@ -17,85 +18,86 @@ const AddSchema = yup.object().shape({
   startingYear: yup.string().required("Required"),
   lastEvaluationDate: yup.string().required("Required"),
   tags: yup.array(),
-  level: yup.mixed().required(),
-  position: yup.mixed().required(),
-  photo: yup.string().required(),
+  level: yup.mixed().required("Required"),
+  position: yup.mixed().required("Required"),
+  photo: yup.string().required("Required"),
 });
+
+const INITIAL_VALUES: FormIEmployee = {
+  firstName: "",
+  lastName: "",
+  startingYear: "",
+  lastEvaluationDate: "",
+  projectName: "",
+  tags: [],
+  level: "",
+  position: "",
+  photo: "",
+};
+
+type OmitAB = Omit<IEmployee, "level"|"position">;
+
+interface FormIEmployee extends OmitAB {
+  level: SeniorityLevel | "",
+  position: EmployeePosition | ""
+}
 
 export interface IAddForm {
   id: string
 }
 
 export const AddForm: React.FC<IAddForm> = ({id}) => {
-  const initialValues: IEmployee = {
-    firstName: "",
-    lastName: "",
-    startingYear: "",
-    lastEvaluationDate: "",
-    projectName: "",
-    tags: [],
-    level: SeniorityLevel.JUNIOR,
-    position: EmployeePosition.SOFTWARE_DEV,
-    photo: "",
-  };
-
-  const [formValues, setFormValues] = useState<IEmployee>(initialValues);
+  // const [formValues, setFormValues] = useState<IEmployee>(INITIAL_VALUES);
   const [submitted, setSubmitted] = useState<boolean>(false);
-  const [initialValuesWithId, setInitialValuesWithId] = useState(initialValues);
+  const [initialValuesWithId, setInitialValuesWithId] = useState<FormIEmployee>(INITIAL_VALUES);
+
+  const fetchUser = async (id: string) => {
+    const data = await EmployeesSvc.getEmployee(id);
+    if (data && !Array.isArray(data)) {
+      setInitialValuesWithId(data);
+    }
+  }
 
   useEffect(()=>{
     if (id) {
-      (async () => {
-        const data = await EmployeesSvc.getEmployee(id);
-        console.log(data);
-        setInitialValuesWithId(data);
-      })()
+      fetchUser(id)
     }
   },[])
 
-  const disabledStartDate = (current: any) => {
+  const disabledStartDate = (current: moment.Moment) => {
     return current && current > moment().endOf("day");
   };
 
-  const disabledEvaluationDate = (current: any) => {
+  const disabledEvaluationDate = (current: moment.Moment) => {
     return current && current > moment().startOf("day");
   };
 
-  const handleSubmit = async (values: IEmployee, {setSubmitting, setErrors, setStatus, resetForm}: any)  => {
-    if (id) {
-      try {
-        const data = await EmployeesSvc.editEmployee(values, id);
-        if (data) {
-          notification.open({
-            message: 'Edited employee'
-          });
-        }
-        resetForm(initialValues);
-        setStatus({success: true});
-      } catch (e) {
-        notification.open({
-          message: 'Employee not edited'
+  const handleSubmit = async (values: FormIEmployee | IEmployee, handlers: {
+    setSubmitting: (isSubmitting: boolean) => void,
+    setStatus: (status?: any) => void,
+    resetForm:  (nextState?: any) => void;
+    // (nextState?: Partial<FormikState<Values>>) => void;
+  })  => {
+    if (isInstanceOfIEmployee(values)) {
+      const data = id ? await EmployeesSvc.editEmployee(values as IEmployee, id)
+                      : await EmployeesSvc.addEmployee(values as IEmployee);
+      if (data) {
+        notification['success']({
+          message: 'Success',
+          description:
+            id ? 'Edited employee' : 'Added employee',
         });
-        setStatus({success: false});
-        setSubmitting(false);
-        setErrors({submit: e.message});
-      }
-    } else {
-      try {
-        const data = await EmployeesSvc.addEmployee(values);
-        console.log('add form ', data);
-        notification.open({
-          message: 'Added new employee'
+        id && await fetchUser(id);
+        id ? handlers.resetForm(initialValuesWithId) : handlers.resetForm(INITIAL_VALUES);
+        handlers.setStatus({success: true});
+      } else {
+        notification['error']({
+          message: 'Error',
+          description:
+            id ? 'Employee not edited' : 'Employee not added',
         });
-        resetForm(initialValues);
-        setStatus({success: true});
-      } catch (e) {
-        notification.open({
-          message: 'Employee not added'
-        });
-        setStatus({success: false});
-        setSubmitting(false);
-        setErrors({submit: e.message});
+        handlers.setStatus({success: false});
+        handlers.setSubmitting(false);
       }
     }
   };
@@ -103,7 +105,7 @@ export const AddForm: React.FC<IAddForm> = ({id}) => {
   return (
     <Formik
       enableReinitialize={true}
-      initialValues={id ? initialValuesWithId : initialValues}
+      initialValues={id ? initialValuesWithId : INITIAL_VALUES}
       validationSchema={AddSchema}
       validateOnChange={submitted}
       validateOnBlur={submitted}
@@ -113,67 +115,50 @@ export const AddForm: React.FC<IAddForm> = ({id}) => {
         // console.log(props);
         return (
           <Form className={styles.Form}>
-            <label htmlFor="firstName" className={styles.Label}>
-              Name
-            </label>
             <FormItem name="firstName">
+              <label htmlFor="firstName" className={styles.Label}>Name</label>
               <Input id="firstName" name="firstName" placeholder="name" />
             </FormItem>
 
-            <label htmlFor="lastName" className={styles.Label}>
-              Surname
-            </label>
             <FormItem name="lastName">
+              <label htmlFor="lastName" className={styles.Label}>Surname</label>
               <Input id="lastName" name="lastName" placeholder="surname" />
             </FormItem>
 
-            <label htmlFor="startingYear" className={styles.Label}>
-              Starting year
-            </label>
             <FormItem name="startingYear">
+              <label htmlFor="startingYear" className={styles.Label}>Starting year</label>
               <DatePicker
                 name="startingYear"
                 id="startingYear"
                 picker="year"
-                disabledDate={disabledStartDate}
-              />
+                disabledDate={disabledStartDate} />
             </FormItem>
 
-            <label htmlFor="lastEvaluationDate" className={styles.Label}>
-              Evaluation date
-            </label>
             <FormItem name="lastEvaluationDate">
+              <label htmlFor="lastEvaluationDate" className={styles.Label}>Evaluation date</label>
               <DatePicker
                 name="lastEvaluationDate"
                 id="lastEvaluationDate"
-                disabledDate={disabledEvaluationDate}
-              />
+                disabledDate={disabledEvaluationDate} />
             </FormItem>
 
-            <label htmlFor="projectName" className={styles.Label}>
-              Project name
-            </label>
             <FormItem name="projectName">
+              <label htmlFor="projectName" className={styles.Label}>Project name</label>
               <Input
                 id="projectName"
                 name="projectName"
-                placeholder="Project name"
-              />
+                placeholder="Project name" />
             </FormItem>
 
-            <label htmlFor="tags" className={styles.Label}>
-              Tags
-            </label>
             <FormItem name="tags">
+              <label htmlFor="tags" className={styles.Label}>Tags</label>
               <Field name="tags">
                 {({ field }: FieldProps<string[]>) => <Tags {...field} />}
               </Field>
             </FormItem>
 
-            <label htmlFor="level" className={styles.Label}>
-              Level
-            </label>
             <FormItem name="level">
+              <label htmlFor="level" className={styles.Label}>Level</label>
               <Select name="level">
                 {Array.from(seniorityMap.keys()).map((key) => (
                   <Select.Option key={key} value={key}>
@@ -184,9 +169,7 @@ export const AddForm: React.FC<IAddForm> = ({id}) => {
             </FormItem>
 
             <FormItem name="position">
-              <label htmlFor="position" className={styles.Label}>
-                Position
-              </label>
+              <label htmlFor="position" className={styles.Label}>Position</label>
               <Select name="position">
                 {Array.from(employeePositionMap.keys()).map((key) => (
                   <Select.Option key={key} value={key}>
@@ -196,10 +179,8 @@ export const AddForm: React.FC<IAddForm> = ({id}) => {
               </Select>
             </FormItem>
 
-            <label htmlFor="photo" className={styles.Label}>
-              Photo
-            </label>
             <FormItem name="photo">
+              <label htmlFor="photo" className={styles.Label}>Photo</label>
               <Field name="photo">
                 {({ field }: FieldProps<string>) => <PhotoPicker {...field} />}
               </Field>
@@ -211,3 +192,7 @@ export const AddForm: React.FC<IAddForm> = ({id}) => {
     </Formik>
   );
 };
+
+function isInstanceOfIEmployee (object: any): object is IEmployee {
+  return Object.values(SeniorityLevel).includes(object.level) && Object.values(EmployeePosition).includes(object.position);
+}
