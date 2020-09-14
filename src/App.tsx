@@ -33,6 +33,8 @@ export const App = () => {
               <Route path="/employee-list" component={EmployeeListPage} />
               <Route path="/employee/:id" component={EditorPage} />
               <Route path="/employee" component={EditorPage} />
+              <Route path="/skill/:id" component={EditorPage} />
+              <Route path="/skill" component={EditorPage} />
               <Route component={NotFoundPage} />
             </Switch>
           </Content>
