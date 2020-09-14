@@ -11,6 +11,7 @@ export interface IEmployee {
   level: SeniorityLevel;
   position: EmployeePosition;
   photo: string;
+  skills?: ISkill[];
 }
 
 export enum EmployeePosition {
@@ -27,6 +28,22 @@ export enum SeniorityLevel {
   TECH_LEAD,
 }
 
+export interface ISkill {
+  _id?: string;
+  skillName: string;
+  skillCategory: string;
+  skillWeight: SkillWeight;
+}
+
+export enum SkillWeight {
+  ONE,
+  TWO,
+  THREE,
+  FOUR,
+  FIVE,
+}
+
+// extend schema by 'required'
 const employeeSchema: Schema = new Schema({
   firstName: String,
   lastName: String,
