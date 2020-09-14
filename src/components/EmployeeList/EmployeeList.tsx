@@ -11,9 +11,9 @@ import { Table, Avatar, Tag, Space, Popconfirm } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 
 export const EmployeeList: React.FC<PropsWithChildren<{
-  employees: IEmployee[],
-  fetchEmployees: ()=>void
-}>> = ({ employees , fetchEmployees}) => {
+  employees: IEmployee[];
+  fetchEmployees: () => void;
+}>> = ({ employees, fetchEmployees }) => {
   const sortedEmployees = employees.sort(
     (a, b) => parseFloat(b.startingYear) - parseFloat(a.startingYear)
   );
@@ -114,7 +114,7 @@ export const EmployeeList: React.FC<PropsWithChildren<{
           <Space size="middle">
             <Link to={idHref}>Edit</Link>
             <Popconfirm
-              title={`Are you sure you wat to fire ${record.firstName} ${record.lastName}?`}
+              title={`Are you sure you want to fire ${record.firstName} ${record.lastName}?`}
               onConfirm={() => onDelete(record)}
               icon={<QuestionCircleOutlined style={{ color: "red" }} />}
             >
