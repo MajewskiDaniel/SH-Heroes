@@ -4,7 +4,7 @@ import { Button } from "antd";
 import { Link } from "react-router-dom";
 import { SkillList } from "../../components/SkillList/SkillList";
 import { ISkill, SkillWeight } from "../../models/employee";
-import { SkillsSvc } from "../../services/EmployeesSvc";
+import { SkillSvc } from "../../services/EmployeesSvc";
 
 // const skills: ISkill[] = [
 //   {
@@ -69,7 +69,7 @@ const SkillListPage: React.FC<ISkill[]> = () => {
 
   const fetchSkills = async () => {
     try {
-      const skillData = await SkillsSvc.getSkill();
+      const skillData = await SkillSvc.getSkills();
       setSkills(skillData);
     } catch (e) {
       console.log("fetchSkills:: error::", e);
