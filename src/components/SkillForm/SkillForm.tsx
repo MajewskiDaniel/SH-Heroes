@@ -6,10 +6,10 @@ import { PlusOutlined } from '@ant-design/icons';
 import { useHistory } from "react-router-dom";
 import * as yup from 'yup';
 
-import {IEmployee, ISkill, SkillWeight, skillWeightMap} from "../../models/employee";
+import {ISkill, SkillWeight, skillWeightMap} from "../../models/employee";
 import styles from './SkillForm.module.scss';
 import {FormikErrors, FormikState} from "formik/dist/types";
-import {EmployeesSvc} from "../../services/EmployeesSvc";
+import { SkillSvc } from "../../services/EmployeesSvc";
 
 const SkillSchema = yup.object().shape({
   skillName: yup.string().required("Required"),
@@ -74,12 +74,24 @@ export const SkillForm: React.FC<ISkillForm> = ({id}) => {
     resetForm:  (nextState?: any) => void;
     // (nextState?: Partial<FormikState<Values>>) => void;
   }) => {
-    notification['success']({
-      message: 'Success',
-      description:
-        id ? 'Edited skill' : `Skill ${values.skillName} has been successfully saved`,
-    });
-    history.push("/skill-list");
+    if (isInstanceOfISkill(values)) {
+      try {
+        const resp = id ? await SkillSvc.editSkill(values) : await SkillSvc.addSkill(values);
+        notification['success']({
+          message: 'Success',
+          description:
+            id ? `Skill ${values.skillName} has been successfully edited` : `Skill ${values.skillName} has been successfully saved`,
+        });
+        history.push("/skill-list");
+      } catch (e) {
+        console.log(e.message);
+        notification['error']({
+          message: 'Error',
+          description:
+            id ? `Skill ${values.skillName} not edited` : `Skill ${values.skillName} not saved`,
+        });
+      }
+    }
   }
 
   return (
@@ -99,9 +111,9 @@ export const SkillForm: React.FC<ISkillForm> = ({id}) => {
             </FormItem>
             <FormItem name="skillCategory" >
               <label htmlFor="skillCategory" className={styles.Label}>Category</label>
-              <Select id="skillCategory" name="skillCategory" dropdownRender={(menu: any) => (
+              <Select id="skillCategory" name="skillCategory" dropdownRender={(children: React.ReactNode) => (
                 <div>
-                  {menu}
+                  {children}
                   <Divider style={{ margin: '4px 0' }} />
                   <div style={{ display: 'flex', flexWrap: 'nowrap', padding: 8 }}>
                     <InputAnt style={{ flex: 'auto' }}  onChange={onInputAddCategoryChange} value={newCategory}/>
