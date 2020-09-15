@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styles from "./SkillList.module.scss";
 import { SkillsSvc } from "../../services/SkillsSvc";
-import { ISkill } from "../../models/employee";
+import { ISkill, skillWeightMap } from "../../models/employee";
 import { Table, Space, Popconfirm } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 
@@ -30,7 +30,7 @@ export const SkillList: React.FC<{
       title: "Skill weight",
       dataIndex: "skillWeight",
       key: "skillWeight",
-      //   render: (value: number) => <p>{SkillWeightMap.get(value)}</p>,
+      render: (value: number) => <p>{skillWeightMap.get(value)}</p>,
     },
     {
       title: "Actions",
