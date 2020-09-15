@@ -130,6 +130,16 @@ app.put("/skills/:id", async (req: Request, res: Response) => {
   }
 });
 
+//get categories
+app.get("/categories", async (req: Request, res: Response) => {
+  try {
+    const categories = await Skill.distinct("skillCategory");
+    res.status(200).send(categories);
+  } catch (e) {
+    res.status(404).send(e.message);
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`[server]: Server is running at port: ${PORT}`);
 });
