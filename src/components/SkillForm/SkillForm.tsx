@@ -1,14 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import {Field, FieldProps, Form, Formik, FormikHelpers, FormikProps} from 'formik';
-import {DatePicker, FormItem, Input, Select, SubmitButton} from 'formik-antd';
+import {FormItem, Input, Select, SubmitButton} from 'formik-antd';
 import { notification, Divider, Input as InputAnt } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useHistory } from "react-router-dom";
 import * as yup from 'yup';
 
-import { ISkill,  SkillWeight, skillWeightMap} from "../../models/employee";
+import {IEmployee, ISkill, SkillWeight, skillWeightMap} from "../../models/employee";
 import styles from './SkillForm.module.scss';
 import {FormikErrors, FormikState} from "formik/dist/types";
+import {EmployeesSvc} from "../../services/EmployeesSvc";
 
 const SkillSchema = yup.object().shape({
   skillName: yup.string().required("Required"),
@@ -44,8 +45,18 @@ export const SkillForm: React.FC<ISkillForm> = ({id}) => {
     setCategories(["HSE", "Finance", "Logistics"]);
   }
 
+  const fetchSkill = async (id: number) => {
+    // const data = await EmployeesSvc.getEmployee(id);
+    // if (data && !Array.isArray(data)) {
+    //   setInitialValuesWithId(data);
+    // }
+  }
+
   useEffect(() => {
     fetchCategories();
+    // if (id) {
+    //   fetchSkill();
+    // }
   }, []);
 
   const onInputAddCategoryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,7 +68,12 @@ export const SkillForm: React.FC<ISkillForm> = ({id}) => {
     setNewCategory("");
   }
 
-  const handleSubmit = (values: IFormSkill) => {
+  const handleSubmit = async (values: IFormSkill | ISkill, handlers: {
+    setSubmitting: (isSubmitting: boolean) => void,
+    setStatus: (status?: any) => void,
+    resetForm:  (nextState?: any) => void;
+    // (nextState?: Partial<FormikState<Values>>) => void;
+  }) => {
     notification['success']({
       message: 'Success',
       description:
