@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styles from "./SkillList.module.scss";
-import { SkillsSvc } from "../../services/SkillsSvc";
+import { SkillSvc } from "../../services/EmployeesSvc";
 import { ISkill, skillWeightMap } from "../../models/employee";
 import { Table, Space, Popconfirm } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
@@ -11,7 +11,7 @@ export const SkillList: React.FC<{
   fetchSkills: () => void;
 }> = ({ skills, fetchSkills }) => {
   const onDelete = async (skill: ISkill) => {
-    await SkillsSvc.deleteSkill(skill);
+    await SkillSvc.deleteSkill(skill);
     fetchSkills();
   };
 
