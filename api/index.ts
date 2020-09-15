@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors";
-import Employee, { IEmployee } from "./models/employee.model";
+import { Employee, Skill, IEmployee, ISkill } from "./models/employee.model";
 
 dotenv.config();
 
@@ -71,6 +71,60 @@ app.put("/employees/:id", async (req: Request, res: Response) => {
   try {
     await Employee.findByIdAndUpdate(id, req.body, { new: true });
     res.status(200).send(`employee nr: ${id} updated`);
+  } catch (e) {
+    res.status(404).send(e.message);
+  }
+});
+
+//post skill
+app.post("/skills/", async (req: Request, res: Response) => {
+  try {
+    const skill = new Skill(req.body);
+    await skill.save();
+    res.status(201).send(skill);
+  } catch {
+    res.status(418).send(`error: can't post skill`);
+  }
+});
+
+//get all skills
+app.get("/skills/", async (req: Request, res: Response) => {
+  try {
+    const skills: ISkill[] = await Skill.find(req.query);
+    res.status(200).send(skills);
+  } catch {
+    res.status(404).send(`error: can't get skills`);
+  }
+});
+
+//get skill by id
+app.get("/skills/:id", async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const skill = await Skill.findById(id);
+    res.status(200).send(skill);
+  } catch {
+    res.status(404).send(`error: can't get skill nr: ${id}`);
+  }
+});
+
+//delete skill by id
+app.delete("/skills/:id", async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    await Skill.findByIdAndDelete(id);
+    res.status(200).send(`skill nr: ${id} deleted`);
+  } catch (e) {
+    res.status(404).send(e.message);
+  }
+});
+
+//update skill by id
+app.put("/skills/:id", async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    await Skill.findByIdAndUpdate(id, req.body, { new: true });
+    res.status(200).send(`skill nr: ${id} updated`);
   } catch (e) {
     res.status(404).send(e.message);
   }

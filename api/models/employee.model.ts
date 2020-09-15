@@ -29,7 +29,6 @@ export enum SeniorityLevel {
 }
 
 export interface ISkill {
-  _id?: string;
   skillName: string;
   skillCategory: string;
   skillWeight: SkillWeight;
@@ -56,6 +55,15 @@ const employeeSchema: Schema = new Schema({
   photo: String,
 });
 
+const skillSchema: Schema = new Schema({
+  skillName: String,
+  skillCategory: String,
+  skillWeight: Number,
+});
+
 interface IEmployeeDB extends Document, IEmployee {}
 
-export default mongoose.model<IEmployeeDB>("Employee", employeeSchema);
+interface ISkillDB extends Document, ISkill {}
+
+export const Employee = mongoose.model<IEmployeeDB>("Employee", employeeSchema);
+export const Skill = mongoose.model<ISkillDB>("Skill", skillSchema);
