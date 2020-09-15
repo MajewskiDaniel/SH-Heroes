@@ -2,7 +2,13 @@ import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors";
-import { Employee, Skill, IEmployee, ISkill } from "./models/employee.model";
+import {
+  Employee,
+  Skill,
+  IEmployee,
+  ISkill,
+  ISkillPaginated,
+} from "./models/employee.model";
 
 dotenv.config();
 
@@ -87,13 +93,32 @@ app.post("/skills/", async (req: Request, res: Response) => {
   }
 });
 
+// //get all skills
+// app.get("/skills/", async (req: Request, res: Response) => {
+//   try {
+//     const skills: ISkill[] = await Skill.find(req.query);
+//     res.status(200).send(skills);
+//   } catch {
+//     res.status(404).send(`error: can't get skills`);
+//   }
+// });
+
 //get all skills
 app.get("/skills/", async (req: Request, res: Response) => {
+  const { page = 1, limit = 5 }: any = req.query;
   try {
-    const skills: ISkill[] = await Skill.find(req.query);
-    res.status(200).send(skills);
-  } catch {
-    res.status(404).send(`error: can't get skills`);
+    const skills: ISkill[] = await Skill.find()
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec();
+    const count = await Skill.countDocuments();
+    res.status(200).send({
+      skills,
+      totalPages: Math.ceil(count / limit),
+      currentPage: parseInt(page),
+    });
+  } catch (e) {
+    res.status(404).send(e.message);
   }
 });
 

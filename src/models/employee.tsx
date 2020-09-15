@@ -19,6 +19,12 @@ export interface ISkill {
   skillWeight: SkillWeight;
 }
 
+export interface ISkillPaginated {
+  skills: ISkill[];
+  totalPages: number;
+  currentPage: number;
+}
+
 export enum EmployeePosition {
   SOFTWARE_DEV,
   PROJECT_MANAGER,
@@ -67,7 +73,7 @@ export const skillWeightMap = new Map()
   .set(SkillWeight["2/5"], "2/5")
   .set(SkillWeight["3/5"], "3/5")
   .set(SkillWeight["4/5"], "4/5")
-  .set(SkillWeight["5/5"], "5/5")
+  .set(SkillWeight["5/5"], "5/5");
 
 export const skillLevelMap = new Map()
   .set(SkillLevel.ZERO, "ZERO")
@@ -75,5 +81,4 @@ export const skillLevelMap = new Map()
   .set(SkillLevel.TWO, "TWO")
   .set(SkillLevel.THREE, "THREE")
   .set(SkillLevel.FOUR, "FOUR")
-  .set(SkillLevel.FIVE, "FIVE")
-
+  .set(SkillLevel.FIVE, "FIVE");

@@ -42,6 +42,12 @@ export enum SkillWeight {
   FIVE,
 }
 
+export interface ISkillPaginated {
+  skills: ISkill[];
+  totalPages: number;
+  currentPage: number;
+}
+
 // extend schema by 'required'
 const employeeSchema: Schema = new Schema({
   firstName: String,
