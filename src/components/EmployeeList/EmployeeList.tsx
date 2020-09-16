@@ -1,6 +1,7 @@
 import React, { PropsWithChildren } from "react";
 import styles from "./EmployeeList.module.scss";
 import { Link } from "react-router-dom";
+import { FormOutlined, DeleteOutlined } from '@ant-design/icons';
 import { EmployeesSvc } from "../../services/EmployeesSvc";
 import {
   IEmployee,
@@ -112,13 +113,13 @@ export const EmployeeList: React.FC<PropsWithChildren<{
         let idHref = `/employee/${id}`;
         return (
           <Space size="middle">
-            <Link to={idHref}>Edit</Link>
+            <Link to={idHref}><FormOutlined /></Link>
             <Popconfirm
               title={`Are you sure you want to fire ${record.firstName} ${record.lastName}?`}
               onConfirm={() => onDelete(record)}
               icon={<QuestionCircleOutlined style={{ color: "red" }} />}
             >
-              <a href="#">Delete</a>
+              <a href="#"><DeleteOutlined /></a>
             </Popconfirm>
           </Space>
         );

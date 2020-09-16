@@ -19,14 +19,13 @@ const SkillSchema = yup.object().shape({
 
 const INITIAL_VALUES = {
   skillName: "",
-  skillCategory: [""],
+  skillCategory: "",
   skillWeight: "",
 };
 
-type OmitAB = Omit<ISkill, "skillCategory"|"skillWeight">;
+type OmitAB = Omit<ISkill, "skillWeight">;
 
 interface IFormSkill extends OmitAB {
-  skillCategory: string[],
   skillWeight: SkillWeight | string
 }
 
@@ -42,30 +41,42 @@ export const SkillForm: React.FC<ISkillForm> = ({id}) => {
   const history = useHistory();
 
   const fetchCategories = async () => {
-    setCategories(["HSE", "Finance", "Logistics"]);
+    try {
+      const cat = await SkillSvc.getCategories();
+      setCategories(cat);
+    } catch (e) {
+      console.log(e);
+    }
   }
 
-  const fetchSkill = async (id: number) => {
-    // const data = await EmployeesSvc.getEmployee(id);
-    // if (data && !Array.isArray(data)) {
-    //   setInitialValuesWithId(data);
-    // }
+  const fetchSkill = async (id: string) => {
+    try {
+      const data = await SkillSvc.getSkill(id);
+      setInitialValuesWithId(data);
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   useEffect(() => {
     fetchCategories();
-    // if (id) {
-    //   fetchSkill();
-    // }
+    if (id) {
+      fetchSkill(id);
+    }
   }, []);
 
-  const onInputAddCategoryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewCategory(event.target.value);
   }
 
-  const addCategory = () => {
-    setCategories([...categories, newCategory]);
+  const addCategory = async() => {
+    await setCategories([...categories, newCategory]);
     setNewCategory("");
+  }
+
+  const onEnter = async (props: any) => {
+    await addCategory();
+    props.setFieldValue('skillCategory', newCategory);
   }
 
   const handleSubmit = async (values: IFormSkill | ISkill, handlers: {
@@ -82,6 +93,8 @@ export const SkillForm: React.FC<ISkillForm> = ({id}) => {
           description:
             id ? `Skill ${values.skillName} has been successfully edited` : `Skill ${values.skillName} has been successfully saved`,
         });
+        handlers.setStatus({success: true});
+        handlers.resetForm();
         history.push("/skill-list");
       } catch (e) {
         console.log(e.message);
@@ -97,7 +110,7 @@ export const SkillForm: React.FC<ISkillForm> = ({id}) => {
   return (
     <Formik
       enableReinitialize={true}
-      initialValues={INITIAL_VALUES}
+      initialValues={ id ? initialValuesWithId : INITIAL_VALUES}
       validationSchema={SkillSchema}
       validateOnChange={submitted}
       validateOnBlur={submitted}
@@ -106,7 +119,7 @@ export const SkillForm: React.FC<ISkillForm> = ({id}) => {
         return (
           <Form className={styles.Form}>
             <FormItem name="skillName" >
-              <label htmlFor="firstName" className={styles.Label}>Name</label>
+              <label htmlFor="skillName" className={styles.Label}>Name</label>
               <Input id="skillName" name="skillName" placeholder="name"></Input>
             </FormItem>
             <FormItem name="skillCategory" >
@@ -114,13 +127,10 @@ export const SkillForm: React.FC<ISkillForm> = ({id}) => {
               <Select id="skillCategory" name="skillCategory" dropdownRender={(children: React.ReactNode) => (
                 <div>
                   {children}
-                  <Divider style={{ margin: '4px 0' }} />
-                  <div style={{ display: 'flex', flexWrap: 'nowrap', padding: 8 }}>
-                    <InputAnt style={{ flex: 'auto' }}  onChange={onInputAddCategoryChange} value={newCategory}/>
-                    <a
-                      style={{ flex: 'none', padding: '8px', display: 'block', cursor: 'pointer' }}
-                      onClick={addCategory}
-                    >
+                  <Divider className={styles.Divider} />
+                  <div className={styles.Container}>
+                    <InputAnt className={styles.Input}  onChange={onInputChange} value={newCategory} onPressEnter={()=>onEnter(props)}/>
+                    <a className={styles.Link} onClick={addCategory} >
                       <PlusOutlined /> Add item
                     </a>
                   </div>

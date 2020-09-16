@@ -10,3 +10,24 @@
   padding: 5px 0;
   font-weight: 700;
 }
+
+.Divider {
+  margin: 4px 0;
+}
+
+.Container {
+  display: flex;
+  flex-wrap: nowrap;
+  padding: 8px;
+}
+
+.Input {
+  flex: auto;
+}
+
+.Link {
+  flex: none;
+  padding: 8px;
+  display: block;
+  cursor: pointer;
+}
