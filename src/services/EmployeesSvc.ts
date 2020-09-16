@@ -51,9 +51,9 @@ export const EmployeesSvc = {
 export const SkillSvc = {
   skillsUrl: `${process.env.REACT_APP_URL}/skills`,
 
-  async getSkills (page?: number, limit?: number) {
-    const urlWithQuery = `${this.skillsUrl}?page=${page}&limit=${limit}`;
-    const resp = page && limit ? await fetch(urlWithQuery) : await fetch(this.skillsUrl);
+  async getSkills (limit?: number, current?: number) {
+    const urlWithQuery = `${this.skillsUrl}?page=${current}&limit=${limit}`;
+    const resp = current && limit ? await fetch(urlWithQuery) : await fetch(this.skillsUrl);
     checkForError(resp);
     return await resp.json();
   },

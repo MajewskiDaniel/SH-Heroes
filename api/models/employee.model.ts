@@ -44,7 +44,7 @@ export enum SkillWeight {
 
 export interface ISkillPaginated {
   skills: ISkill[];
-  totalPages: number;
+  totalRecords: number;
   currentPage: number;
 }
 

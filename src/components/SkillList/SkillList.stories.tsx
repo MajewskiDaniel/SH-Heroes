@@ -1,20 +1,20 @@
 import React from "react";
 import { Story, Meta } from "@storybook/react/types-6-0";
 import { SkillList } from "./SkillList";
-import { ISkill, SkillWeight } from "../../models/employee";
+import { ISkill, SkillWeight, ISkillPaginated } from "../../models/employee";
 
 export default {
   title: "Storybook/SkillList",
   component: SkillList,
 } as Meta;
 
-const Template: Story<{ skills: ISkill[]; fetchSkills: any }> = (args) => (
+const Template: Story<{ skills: ISkillPaginated; fetchSkills: any }> = (args) => (
   <SkillList {...args} />
 );
 
 export const TestSkillsTable = Template.bind({});
 
-TestSkillsTable.args = {
+const skills: ISkillPaginated = {
   skills: [
     {
       skillName: "Word",
@@ -72,5 +72,11 @@ TestSkillsTable.args = {
       skillWeight: SkillWeight["1/5"],
     },
   ],
+  totalRecords: 2,
+  currentPage: 1,
+}
+
+  TestSkillsTable.args = {
+  skills,
   fetchSkills: () => {},
 };

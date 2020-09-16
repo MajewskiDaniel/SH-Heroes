@@ -2,18 +2,20 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styles from "./SkillList.module.scss";
 import { SkillSvc } from "../../services/EmployeesSvc";
-import { ISkill, skillWeightMap } from "../../models/employee";
+import { ISkill, skillWeightMap, ISkillPaginated } from "../../models/employee";
 import { Table, Space, Popconfirm } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 
 export const SkillList: React.FC<{
-  skills: ISkill[];
-  fetchSkills: () => void;
+  skills: ISkillPaginated;
+  fetchSkills: (limit: number, current: number) => void;
 }> = ({ skills, fetchSkills }) => {
   const onDelete = async (skill: ISkill) => {
     await SkillSvc.deleteSkill(skill);
-    fetchSkills();
+    fetchSkills(limit, skills.currentPage);
   };
+
+  let limit = 5;
 
   const columns = [
     {
@@ -58,8 +60,13 @@ export const SkillList: React.FC<{
     <div>
       <Table
         columns={columns}
-        dataSource={skills}
-        pagination={{ pageSize: 5 }}
+        dataSource={skills.skills}
+        pagination={{
+          pageSize: limit,
+          current: skills.currentPage,
+          total: skills.totalRecords,
+          onChange: (page, pageSize)=>{fetchSkills(pageSize as number, page)}
+        }}
       />
     </div>
   );
