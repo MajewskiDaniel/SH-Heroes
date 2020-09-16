@@ -15,6 +15,15 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT;
 
+function run() {
+  if (!process.env.MONGODB_CONNECTION) {
+    console.log("no mongo db config");
+    return;
+  }
+}
+
+
+
 mongoose.connect(`${process.env.MONGODB_CONNECTION}`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -102,20 +111,29 @@ app.post("/skills/", async (req: Request, res: Response) => {
 //     res.status(404).send(`error: can't get skills`);
 //   }
 // });
+interface query {
+  page?: string;
+  limit?: string;
+  sortBy?: string;
+  criteria?: string;
+}
 
 //get all skills
-app.get("/skills/", async (req: Request, res: Response) => {
-  const { page = 1, limit = 5 }: any = req.query;
+app.get("/skills/", async (req: Request<{}, any, any, query>, res: Response) => {
+
+  const { page = '1', limit = '5', sortBy = "skillName", criteria = "asc" }: query = req.query;
+
   try {
     const skills: ISkill[] = await Skill.find()
-      .limit(limit * 1)
-      .skip((page - 1) * limit)
+      .sort({ [sortBy]: criteria })
+      .skip((Number(page) - 1) * Number(limit))
+      .limit(Number(limit) * 1)
       .exec();
     const count = await Skill.countDocuments();
     res.status(200).send({
       skills,
-      totalRecords: Math.ceil(count ),
-      currentPage: parseInt(page),
+      totalRecords: count,
+      currentPage: page,
     });
   } catch (e) {
     res.status(404).send(e.message);
