@@ -3,73 +3,19 @@ import styles from "./SkillListPage.module.scss";
 import { Button } from "antd";
 import { Link } from "react-router-dom";
 import { SkillList } from "../../components/SkillList/SkillList";
-import { ISkill, SkillWeight } from "../../models/employee";
+import { ISkill, SkillWeight, ISkillPaginated } from "../../models/employee";
 import { SkillSvc } from "../../services/EmployeesSvc";
 
-// const skills: ISkill[] = [
-//   {
-//     skillName: "Word",
-//     skillCategory: "Programming languages",
-//     skillWeight: SkillWeight["3/5"],
-//   },
-//   {
-//     skillName: "Excel",
-//     skillCategory: "Programming languages",
-//     skillWeight: SkillWeight["4/5"],
-//   },
-//   {
-//     skillName: "Java",
-//     skillCategory: "Programming languages",
-//     skillWeight: SkillWeight["2/5"],
-//   },
-//   {
-//     skillName: "Alcohol resistance",
-//     skillCategory: "Soft skills",
-//     skillWeight: SkillWeight["5/5"],
-//   },
-//   {
-//     skillName: "Windows",
-//     skillCategory: "Environment",
-//     skillWeight: SkillWeight["4/5"],
-//   },
-//   {
-//     skillName: "Linux",
-//     skillCategory: "Environment",
-//     skillWeight: SkillWeight["1/5"],
-//   },
-//   {
-//     skillName: "Script",
-//     skillCategory: "Programming languages",
-//     skillWeight: SkillWeight["2/5"],
-//   },
-//   {
-//     skillName: "Git",
-//     skillCategory: "Devops",
-//     skillWeight: SkillWeight["3/5"],
-//   },
-//   {
-//     skillName: "Google searching",
-//     skillCategory: "Intelligence",
-//     skillWeight: SkillWeight["3/5"],
-//   },
-//   {
-//     skillName: "Task delegation",
-//     skillCategory: "Intelligence",
-//     skillWeight: SkillWeight["1/5"],
-//   },
-//   {
-//     skillName: "Salary negotiation skill",
-//     skillCategory: "Soft skills",
-//     skillWeight: SkillWeight["1/5"],
-//   },
-// ];
-
 const SkillListPage: React.FC<ISkill[]> = () => {
-  const [skills, setSkills] = useState([]);
+  const [skills, setSkills] = useState<ISkillPaginated>({
+    skills: [],
+    currentPage: 1,
+    totalRecords: 11
+  });
 
-  const fetchSkills = async () => {
+  const fetchSkills = async (limit?: number, current?: number) => {
     try {
-      const skillData = await SkillSvc.getSkills();
+      const skillData = await SkillSvc.getSkills(limit, current);
       setSkills(skillData);
     } catch (e) {
       console.log("fetchSkills:: error::", e);

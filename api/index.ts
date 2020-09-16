@@ -114,7 +114,7 @@ app.get("/skills/", async (req: Request, res: Response) => {
     const count = await Skill.countDocuments();
     res.status(200).send({
       skills,
-      totalPages: Math.ceil(count / limit),
+      totalRecords: Math.ceil(count ),
       currentPage: parseInt(page),
     });
   } catch (e) {
