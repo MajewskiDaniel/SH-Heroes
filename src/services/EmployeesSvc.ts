@@ -18,62 +18,42 @@ export const EmployeesSvc = {
   },
 
   async addEmployee(employee: IEmployee) {
-    try {
-      const resp = await fetch(
-        this.url, {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(employee)
-        });
-      checkForError(resp);
-      return await resp.json();
-    } catch (e) {
-      return false;
-    }
-  },
-
-  async editEmployee(employee: IEmployee, id?: string) {
-    const urlWithId = id ? `${this.url}/${id}` : this.url;
-
-    try {
-      const resp: any = await fetch(`${urlWithId}/`, {
-        method: 'PUT',
+    const resp = await fetch(
+      this.url, {
+        method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(employee)
       });
-      checkForError(resp);
-      // const data = await resp.json();
-      return true;
-    } catch (e) {
-      console.log(e)
-      return false;
-    }
+    checkForError(resp);
+    return await resp.json();
+  },
+
+  async editEmployee(employee: IEmployee, id?: string) {
+    const resp: any = await fetch(`${this.url}/${id}`, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(employee)
+    });
+    checkForError(resp);
+    return await resp;
   },
 
   async deleteEmployee(employee: IEmployee) {
-    const urlWithId = `${this.url}/${employee._id}`;
-    console.log('delete')
-    try {
-      const resp: any = await fetch(urlWithId, {
-        method: 'DELETE',
-        headers: {'Content-Type': 'application/json'}
-      });
-      checkForError(resp);
-      console.log(resp)
-      // const data = await resp.json();
-      return true;
-    } catch (e) {
-      console.log(e);
-      return false;
-    }
+    const resp: any = await fetch(`${this.url}/${employee._id}`, {
+      method: 'DELETE',
+      headers: {'Content-Type': 'application/json'}
+    });
+    checkForError(resp);
+    return resp;
   }
 }
 
 export const SkillSvc = {
   skillsUrl: `${process.env.REACT_APP_URL}/skills`,
 
-  async getSkills () {
-    const resp = await fetch(this.skillsUrl);
+  async getSkills (page?: number, limit?: number) {
+    const urlWithQuery = `${this.skillsUrl}?page=${page}&limit=${limit}`;
+    const resp = page && limit ? await fetch(urlWithQuery) : await fetch(this.skillsUrl);
     checkForError(resp);
     return await resp.json();
   },
@@ -95,13 +75,13 @@ export const SkillSvc = {
   },
 
   async editSkill (skill: ISkill) {
-    const resp = await fetch(this.skillsUrl, {
+    const resp = await fetch(`${this.skillsUrl}/${skill._id}`, {
       method: "PUT",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(skill)
     });
     checkForError(resp);
-    return await resp.json();
+    return resp;
   },
 
   async deleteSkill (skill: ISkill) {
@@ -111,6 +91,12 @@ export const SkillSvc = {
     });
     checkForError(resp);
     return resp;
+  },
+
+  async getCategories () {
+    const resp = await fetch(`${process.env.REACT_APP_URL}/categories`);
+    checkForError(resp);
+    return await resp.json();
   }
 }
 

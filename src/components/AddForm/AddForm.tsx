@@ -4,6 +4,7 @@ import {DatePicker, FormItem, Input, Select, SubmitButton} from 'formik-antd';
 import { notification } from 'antd';
 import * as yup from 'yup';
 import moment from 'moment';
+import { useHistory } from "react-router-dom";
 
 import {Tags} from '../Tags/Tags';
 import {PhotoPicker} from "../PhotoPicker/PhotoPicker";
@@ -50,6 +51,7 @@ export const AddForm: React.FC<IAddForm> = ({id}) => {
   // const [formValues, setFormValues] = useState<IEmployee>(INITIAL_VALUES);
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [initialValuesWithId, setInitialValuesWithId] = useState<FormIEmployee>(INITIAL_VALUES);
+  const history = useHistory();
 
   const fetchUser = async (id: string) => {
     const data = await EmployeesSvc.getEmployee(id);
@@ -79,9 +81,9 @@ export const AddForm: React.FC<IAddForm> = ({id}) => {
     // (nextState?: Partial<FormikState<Values>>) => void;
   })  => {
     if (isInstanceOfIEmployee(values)) {
-      const data = id ? await EmployeesSvc.editEmployee(values as IEmployee, id)
-                      : await EmployeesSvc.addEmployee(values as IEmployee);
-      if (data) {
+      try {
+        const data = id ? await EmployeesSvc.editEmployee(values as IEmployee, id)
+          : await EmployeesSvc.addEmployee(values as IEmployee);
         notification['success']({
           message: 'Success',
           description:
@@ -90,7 +92,9 @@ export const AddForm: React.FC<IAddForm> = ({id}) => {
         id && await fetchUser(id);
         id ? handlers.resetForm(initialValuesWithId) : handlers.resetForm(INITIAL_VALUES);
         handlers.setStatus({success: true});
-      } else {
+        history.push("/employee-list");
+      } catch (e) {
+        console.log(e);
         notification['error']({
           message: 'Error',
           description:

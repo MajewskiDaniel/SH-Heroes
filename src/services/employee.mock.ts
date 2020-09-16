@@ -1,7 +1,9 @@
 import mock from "fetch-mock";
 import employeesData from "../employeesData.json";
+import skillsData from "../skillsData.json";
 
 let employees = employeesData;
+let skills = skillsData;
 
 export default () => {
   mock.get(/employees$/, () => employees, {delay: 2000});
@@ -29,5 +31,35 @@ export default () => {
     const [, id] = url.match(/employees\/?(.*)$/) || []
     employees = employees.filter(e => !id.includes(e._id));
     return {status: 201}
+  }, {delay: 500});
+
+
+  mock.get(/skills$/, () => skills, {delay: 2000});
+
+  mock.get(/skills\/(.*)$/, (url) => {
+    const [, id] = url.match(/skills\/?(.*)$/) || []
+    const skill = skills.find(i => i._id === id);
+    return skill ? skill : {status: 404};
+  }, {delay: 500});
+
+  mock.post(/skills$/, (url, options) => {
+    const skill = JSON.parse(options.body as string);
+    skills.push(skill)
+    return {status: 200, body: skills}
   }, {delay: 500})
+
+  mock.put(/skills\/(.*)$/, (url, options) => {
+    const [, id] = url.match(/skills\/?(.*)$/) || [];
+    const skill = JSON.parse(options.body as string);
+    skills = skills.map(i => id.includes(i._id) ? skill : i );
+    return skill;
+  }, {delay: 500});
+
+  mock.delete(/skills\/(.*)$/, (url) => {
+    const [, id] = url.match(/skills\/?(.*)$/) || []
+    skills = skills.filter(e => !id.includes(e._id));
+    return {status: 201}
+  }, {delay: 500})
+
+  mock.get(/categories$/, () => ["Devops", "Logistics", "Programming skills"], {delay: 2000});
 }
