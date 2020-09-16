@@ -1,6 +1,7 @@
 import {IEmployee} from "../models/employee";
 import applyMock from './employee.mock'
-import {ISkill} from "../models/employee"
+import {ISkill, ISkillQuery} from "../models/employee"
+import {number} from "yup";
 
 const MOCKED_DATA = false;
 if (MOCKED_DATA) {
@@ -51,9 +52,23 @@ export const EmployeesSvc = {
 export const SkillSvc = {
   skillsUrl: `${process.env.REACT_APP_URL}/skills`,
 
-  async getSkills (limit?: number, current?: number) {
-    const urlWithQuery = `${this.skillsUrl}?page=${current}&limit=${limit}`;
-    const resp = current && limit ? await fetch(urlWithQuery) : await fetch(this.skillsUrl);
+  async getSkills (limit?: number, page?: number, sortBy?: string, criteria?: string) {
+
+    const tempOptions = {
+      limit,
+      page,
+      sortBy,
+      criteria,
+    }
+    const url = new URL(this.skillsUrl);
+    Object.entries(tempOptions)
+      .forEach(([key, value]) => {
+      if (value) {
+        url.searchParams.append(key, String(value))
+      }
+    });
+    console.log(url.toString())
+    const resp = await fetch(url.toString());
     checkForError(resp);
     return await resp.json();
   },
@@ -100,6 +115,6 @@ export const SkillSvc = {
   }
 }
 
-const checkForError = (response: any) => {
+function checkForError (response: any){
   if (!response.ok) throw Error(response.statusText);
 };
