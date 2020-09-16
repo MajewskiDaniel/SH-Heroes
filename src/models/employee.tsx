@@ -25,6 +25,13 @@ export interface ISkillPaginated {
   currentPage: number;
 }
 
+export interface ISkillQuery {
+  page?: string;
+  limit?: string;
+  sortBy?: string;
+  criteria?: string;
+}
+
 export enum EmployeePosition {
   SOFTWARE_DEV,
   PROJECT_MANAGER,

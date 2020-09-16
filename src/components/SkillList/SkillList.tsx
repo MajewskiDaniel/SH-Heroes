@@ -5,6 +5,7 @@ import { SkillSvc } from "../../services/EmployeesSvc";
 import { ISkill, skillWeightMap, ISkillPaginated } from "../../models/employee";
 import { Table, Space, Popconfirm } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
+import { PaginationProps } from "antd/lib/pagination";
 
 export const SkillList: React.FC<{
   skills: ISkillPaginated;
@@ -15,23 +16,37 @@ export const SkillList: React.FC<{
     fetchSkills(limit, skills.currentPage);
   };
 
-  let limit = 5;
+  const handleTableChange = (pagination: any, filters: any, sorter: any) => {
+    console.log("params", pagination, filters, sorter, extra);
+    fetchSkills(
+      pagination.pageSize,
+      pagination.current,
+      sorter.field,
+      sorted.order
+    );
+  };
+
+  const limit = 5;
+  // let sortingDirection = "ascending";
 
   const columns = [
     {
       title: "Skill name",
       dataIndex: "skillName",
       key: "skillName",
+      sorter: true,
     },
     {
       title: "Skill category",
       dataIndex: "skillCategory",
       key: "skillCategory",
+      sorter: true,
     },
     {
       title: "Skill weight",
       dataIndex: "skillWeight",
       key: "skillWeight",
+      sorter: true,
       render: (value: number) => <p>{skillWeightMap.get(value)}</p>,
     },
     {
@@ -65,8 +80,8 @@ export const SkillList: React.FC<{
           pageSize: limit,
           current: skills.currentPage,
           total: skills.totalRecords,
-          onChange: (page, pageSize)=>{fetchSkills(pageSize as number, page)}
         }}
+        onChange={handleTableChange}
       />
     </div>
   );
