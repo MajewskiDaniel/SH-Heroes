@@ -49,12 +49,10 @@ export const employeeSchema: Schema = new Schema({
   tags: [String],
   level: {
     type: Number,
-    enum: SeniorityLevel,
     required: true
   },
   position: {
     type: Number,
-    enum: EmployeePosition,
     required: true
   },
   photo: {

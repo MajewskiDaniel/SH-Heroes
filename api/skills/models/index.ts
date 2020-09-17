@@ -31,7 +31,6 @@ export const skillSchema: Schema = new Schema({
   },
   skillWeight: {
     type: Number,
-    enum: SkillWeight,
     required: true
   },
 });
