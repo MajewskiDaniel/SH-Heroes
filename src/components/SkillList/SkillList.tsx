@@ -5,29 +5,22 @@ import { SkillSvc } from "../../services/EmployeesSvc";
 import { ISkill, skillWeightMap, ISkillPaginated } from "../../models/employee";
 import { Table, Space, Popconfirm } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
-import { PaginationProps } from "antd/lib/pagination";
+import { TablePaginationConfig } from "antd/lib/table";
+import { SorterResult } from "antd/lib/table/interface";
 
 export const SkillList: React.FC<{
   skills: ISkillPaginated;
-  fetchSkills: (limit: number, current: number) => void;
+  fetchSkills: (
+    limit: number,
+    current: number,
+    sorter: string,
+    order: string
+  ) => void;
 }> = ({ skills, fetchSkills }) => {
   const onDelete = async (skill: ISkill) => {
     await SkillSvc.deleteSkill(skill);
-    fetchSkills(limit, skills.currentPage);
+    fetchSkills(limit, skills.currentPage, "", "");
   };
-
-  const handleTableChange = (pagination: any, filters: any, sorter: any) => {
-    console.log("params", pagination, filters, sorter, extra);
-    fetchSkills(
-      pagination.pageSize,
-      pagination.current,
-      sorter.field,
-      sorted.order
-    );
-  };
-
-  const limit = 5;
-  // let sortingDirection = "ascending";
 
   const columns = [
     {
@@ -70,6 +63,27 @@ export const SkillList: React.FC<{
       },
     },
   ];
+
+  const handleTableChange = (
+    pagination: TablePaginationConfig,
+    filters: Record<string, React.Key[] | null>,
+    sorter: SorterResult<ISkill> | SorterResult<ISkill>[]
+  ) => {
+    if (!Array.isArray(sorter)) {
+      console.log("params", pagination, filters, sorter);
+      let criteria;
+      if (sorter.order === "ascend") criteria = "asc";
+      else criteria = "desc";
+      fetchSkills(
+        pagination.pageSize || limit,
+        pagination.current || 0,
+        sorter.field as string,
+        criteria
+      );
+    }
+  };
+
+  const limit = 5;
 
   return (
     <div>
