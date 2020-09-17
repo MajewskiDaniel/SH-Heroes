@@ -28,8 +28,12 @@ router.post('/', async (req: Request, res: Response) => {
   try {
     const employee = await employeesService.addEmployee(req.body);
     res.status(201).send(employee);
-  } catch {
-    res.status(418).send(`error: can't post user`);
+  } catch(e) {
+    if(e.message = "occurred") {
+      res.status(409).send('error: user already exists')
+    } else {
+      res.status(418).send(`error: can't post user`);
+    }
   }
 });
 

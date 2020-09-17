@@ -25,8 +25,12 @@ export class SkillService {
   }
 
   async postSkill(skill: ISkill) {
-    const skillModel = new this.Skill(skill);
-    return skillModel.save();
+    if( ! (await this.occurred(skill))){
+      const skillModel = new this.Skill(skill);
+      return skillModel.save();
+    } else {
+      throw new Error('occurred');
+    }
   }
 
   async editSkill(id: string, skill: ISkill) {
@@ -39,5 +43,10 @@ export class SkillService {
 
   async countRecords() {
     return this.Skill.countDocuments();
+  }
+
+  async occurred(skill: ISkill) {
+    const occurred = await this.Skill.find({skillName: skill.skillName});
+    return occurred.length > 0;
   }
 }
