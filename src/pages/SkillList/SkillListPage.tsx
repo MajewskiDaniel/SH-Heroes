@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styles from "./SkillListPage.module.scss";
 import { Button } from "antd";
 import { Link } from "react-router-dom";
@@ -12,29 +12,35 @@ const SkillListPage: React.FC<ISkill[]> = () => {
     currentPage: 1,
     totalRecords: 11,
   });
+  console.log("::skills::", skills);
+  const fetchSkills = useCallback(
+    async (
+      limit?: number,
+      current?: number,
+      sortBy?: string,
+      criteria?: string
+    ) => {
+      let sortingOrder = criteria === "descend" ? "desc" : "asc";
+      try {
+        // console.log("::SkillListPage::fetchSkills::criteria::", criteria);
+        const skillData = await SkillSvc.getSkills(
+          limit,
+          current,
+          sortBy,
+          sortingOrder
+        );
+        console.log("::skillData::", skillData);
+        setSkills(skillData);
+      } catch (e) {
+        console.log("fetchSkills:: error::", e);
+      }
+    },
+    [skills]
+  );
 
-  const fetchSkills = async (
-    limit?: number,
-    current?: number,
-    sortBy?: string,
-    criteria?: string
-  ) => {
-    try {
-      const skillData = await SkillSvc.getSkills(
-        limit,
-        current,
-        sortBy,
-        criteria
-      );
-      setSkills(skillData);
-    } catch (e) {
-      console.log("fetchSkills:: error::", e);
-    }
-  };
-
-  useEffect(() => {
-    fetchSkills();
-  }, []);
+  // useEffect(() => {
+  //   fetchSkills();
+  // }, []);
 
   return (
     <>

@@ -3,13 +3,13 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors";
 
+import { router as employees } from "./employees/routes";
+import { router as skills } from "./skills/routes";
+
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT;
-
-import {router as employees} from "./employees/routes";
-import {router as skills} from "./skills/routes";
 
 function run() {
   if (!process.env.MONGODB_CONNECTION) {
@@ -26,8 +26,8 @@ function run() {
   app.use(express.json());
   app.use(cors());
 
-  app.use('/employees', employees);
-  app.use('/skills', skills);
+  app.use("/employees", employees);
+  app.use("/skills", skills);
 }
 
 run();

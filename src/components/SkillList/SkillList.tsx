@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styles from "./SkillList.module.scss";
 import { SkillSvc } from "../../services/EmployeesSvc";
@@ -21,6 +21,22 @@ export const SkillList: React.FC<{
     await SkillSvc.deleteSkill(skill);
     fetchSkills(limit, skills.currentPage, "", "");
   };
+
+  const limit = 5;
+
+  interface IOptions {
+    pageSize: number;
+    currentPage: number;
+    sortBy: string | undefined;
+    sortOrder: string | undefined;
+  }
+
+  const [options, setOptions] = useState<IOptions>({
+    pageSize: limit,
+    currentPage: 1,
+    sortBy: undefined,
+    sortOrder: undefined,
+  });
 
   const columns = [
     {
@@ -70,24 +86,36 @@ export const SkillList: React.FC<{
     sorter: SorterResult<ISkill> | SorterResult<ISkill>[]
   ) => {
     if (!Array.isArray(sorter)) {
-      // console.log("params", pagination, filters, sorter);
-      const criteria = sorter.order === "ascend" ? "asc" : "desc";
-      fetchSkills(
-        pagination.pageSize || limit,
-        pagination.current || 0,
-        sorter.field as string,
-        criteria
-      );
+      if (
+        sorter.field !== options.sortBy ||
+        sorter.order !== options.sortOrder
+      ) {
+        setOptions({
+          ...options,
+          currentPage: 1,
+          sortBy: sorter.field as string,
+          sortOrder: sorter.order as string,
+        });
+      } else
+        setOptions({ ...options, currentPage: pagination.current as number });
     }
   };
 
-  const limit = 5;
+  useEffect(() => {
+    fetchSkills(
+      options.pageSize,
+      options.currentPage,
+      options.sortBy as string,
+      options.sortOrder as string
+    );
+  }, [options]);
 
   return (
     <div>
       <Table
         columns={columns}
         dataSource={skills.skills}
+        sortDirections={["ascend", "descend", "ascend"]}
         pagination={{
           pageSize: limit,
           current: skills.currentPage,
