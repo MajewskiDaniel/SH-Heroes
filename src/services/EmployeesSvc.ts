@@ -109,7 +109,7 @@ export const SkillSvc = {
   },
 
   async getCategories () {
-    const resp = await fetch(`${process.env.REACT_APP_URL}/categories`);
+    const resp = await fetch(`${this.skillsUrl}/categories`);
     checkForError(resp);
     return await resp.json();
   }
