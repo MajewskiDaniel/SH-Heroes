@@ -21,9 +21,19 @@ export interface ISkillPaginated {
 }
 
 export const skillSchema: Schema = new Schema({
-  skillName: String,
-  skillCategory: String,
-  skillWeight: Number,
+  skillName: {
+    type: String,
+    required: true
+  },
+  skillCategory: {
+    type: String,
+    required: true
+  },
+  skillWeight: {
+    type: Number,
+    enum: SkillWeight,
+    required: true
+  },
 });
 
 export interface ISkillDB extends Document, ISkill {}

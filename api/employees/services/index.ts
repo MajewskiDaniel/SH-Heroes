@@ -1,31 +1,41 @@
 import { IEmployee, IEmployeeDB, employeeSchema, IEmployeeService} from "../models";
 import mongoose, {Model} from "mongoose";
+import {ParamsDictionary} from "express-serve-static-core";
 
-export class EmployeesService implements IEmployeeService {
-  Employee: Model<IEmployeeDB>;
-
+export class EmployeesService  {
+  // Employee: Model<IEmployeeDB>;
+  static Employee = mongoose.model<IEmployeeDB>("Employee", employeeSchema);
   constructor() {
-    this.Employee = mongoose.model<IEmployeeDB>("Employee", employeeSchema);
+
   }
 
-  async getEmployees(params: any) {
-    return this.Employee.find(params);
+  async getEmployees(params: ParamsDictionary) {
+    return EmployeesService.Employee.find(params);
   }
 
   async getEmployeeById(id: string) {
-    return this.Employee.findById(id);
+    return EmployeesService.Employee.findById(id);
   }
 
   async addEmployee(employee: IEmployee) {
-    const employeeModel = new this.Employee(employee);
-    return employeeModel.save();
+    if (! (await this.occurred(employee))) {
+      const employeeModel = new EmployeesService.Employee(employee);
+      return employeeModel.save();
+    } else {
+      throw new Error('occurred');
+    }
   }
 
   async editEmployee(id: string, employee: IEmployee) {
-    return this.Employee.findByIdAndUpdate(id, employee, { new: true })
+    return EmployeesService.Employee.findByIdAndUpdate(id, employee, { new: true })
   }
 
   async deleteEmployee(id: string) {
-    return this.Employee.findByIdAndDelete(id);
+    return EmployeesService.Employee.findByIdAndDelete(id);
+  }
+
+  async occurred(employee: IEmployee){
+    const occurred = await EmployeesService.Employee.find({ firstName: employee.firstName, lastName: employee.lastName });
+    return occurred.length > 0;
   }
 }

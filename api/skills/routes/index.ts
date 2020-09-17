@@ -50,8 +50,12 @@ router.post('/', async (req: Request, res: Response) => {
   try {
     const skill = await skillService.postSkill(req.body);
     res.status(201).send(skill);
-  } catch {
-    res.status(418).send(`error: can't post skill`);
+  } catch(e) {
+    if(e.message = "occurred") {
+      res.status(409).send('error: skill already exists')
+    } else {
+      res.status(418).send(`error: can't post skill`);
+    }
   }
 });
 

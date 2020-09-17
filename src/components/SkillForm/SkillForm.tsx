@@ -70,7 +70,10 @@ export const SkillForm: React.FC<ISkillForm> = ({id}) => {
   }
 
   const addCategory = async() => {
-    await setCategories([...categories, newCategory]);
+    const occurrence = categories.find(cat => cat === newCategory);
+    if (!occurrence) {
+      await setCategories([...categories, newCategory]);
+    }
     setNewCategory("");
   }
 

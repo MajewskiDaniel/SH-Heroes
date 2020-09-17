@@ -28,17 +28,39 @@ export enum SeniorityLevel {
   TECH_LEAD,
 }
 
-// extend schema by 'required'
 export const employeeSchema: Schema = new Schema({
-  firstName: String,
-  lastName: String,
-  startingYear: String,
-  lastEvaluationDate: String,
+  firstName: {
+    type: String,
+    required: true
+  },
+  lastName: {
+    type: String,
+    required: true
+  },
+  startingYear: {
+    type: String,
+    required: true
+  },
+  lastEvaluationDate: {
+    type: String,
+    required: true
+  },
   projectName: String,
   tags: [String],
-  level: Number,
-  position: Number,
-  photo: String,
+  level: {
+    type: Number,
+    enum: SeniorityLevel,
+    required: true
+  },
+  position: {
+    type: Number,
+    enum: EmployeePosition,
+    required: true
+  },
+  photo: {
+    type: String,
+    required: true
+  },
 });
 
 export interface IEmployeeDB extends Document, IEmployee {}
