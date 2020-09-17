@@ -91,6 +91,7 @@ export const SkillList: React.FC<{
         pagination={{
           pageSize: limit,
           current: skills.currentPage,
+          total: skills.totalRecords,
         }}
         onChange={handleTableChange}
       />
