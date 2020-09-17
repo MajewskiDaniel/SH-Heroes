@@ -10,12 +10,22 @@ const SkillListPage: React.FC<ISkill[]> = () => {
   const [skills, setSkills] = useState<ISkillPaginated>({
     skills: [],
     currentPage: 1,
-    totalRecords: 11
+    totalRecords: 11,
   });
 
-  const fetchSkills = async (limit?: number, current?: number) => {
+  const fetchSkills = async (
+    limit?: number,
+    current?: number,
+    sortBy?: string,
+    criteria?: string
+  ) => {
     try {
-      const skillData = await SkillSvc.getSkills(limit, current);
+      const skillData = await SkillSvc.getSkills(
+        limit,
+        current,
+        sortBy,
+        criteria
+      );
       setSkills(skillData);
     } catch (e) {
       console.log("fetchSkills:: error::", e);

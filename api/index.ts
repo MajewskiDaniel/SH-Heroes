@@ -2,6 +2,9 @@ import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors";
+
+import * as yup from "yup";
+
 import {
   Employee,
   Skill,
@@ -15,14 +18,19 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT;
 
+const queryModel = yup.object({
+  limit: yup.number(),
+  page: yup.number(),
+  sortBy: yup.string(),
+  criteria: yup.string(),
+});
+
 function run() {
   if (!process.env.MONGODB_CONNECTION) {
     console.log("no mongo db config");
     return;
   }
 }
-
-
 
 mongoose.connect(`${process.env.MONGODB_CONNECTION}`, {
   useNewUrlParser: true,
@@ -111,23 +119,17 @@ app.post("/skills/", async (req: Request, res: Response) => {
 //     res.status(404).send(`error: can't get skills`);
 //   }
 // });
-interface query {
-  page?: string;
-  limit?: string;
-  sortBy?: string;
-  criteria?: string;
-}
 
 //get all skills
-app.get("/skills/", async (req: Request<{}, any, any, query>, res: Response) => {
-
-  const { page = '1', limit = '5', sortBy = "skillName", criteria = "asc" }: query = req.query;
+app.get("/skills/", async (req: Request, res: Response) => {
+  const { page = 1, limit = 5, sortBy = "skillName", criteria = "asc" } =
+    queryModel.cast(req.query) || {};
 
   try {
     const skills: ISkill[] = await Skill.find()
       .sort({ [sortBy]: criteria })
-      .skip((Number(page) - 1) * Number(limit))
-      .limit(Number(limit) * 1)
+      .skip((page - 1) * limit)
+      .limit(limit * 1)
       .exec();
     const count = await Skill.countDocuments();
     res.status(200).send({

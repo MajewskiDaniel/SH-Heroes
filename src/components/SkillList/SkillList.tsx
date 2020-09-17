@@ -5,33 +5,41 @@ import { SkillSvc } from "../../services/EmployeesSvc";
 import { ISkill, skillWeightMap, ISkillPaginated } from "../../models/employee";
 import { Table, Space, Popconfirm } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
+import { TablePaginationConfig } from "antd/lib/table";
+import { SorterResult } from "antd/lib/table/interface";
 
 export const SkillList: React.FC<{
   skills: ISkillPaginated;
-  fetchSkills: (limit: number, current: number) => void;
+  fetchSkills: (
+    limit: number,
+    current: number,
+    sorter: string,
+    order: string
+  ) => void;
 }> = ({ skills, fetchSkills }) => {
   const onDelete = async (skill: ISkill) => {
     await SkillSvc.deleteSkill(skill);
-    fetchSkills(limit, skills.currentPage);
+    fetchSkills(limit, skills.currentPage, "", "");
   };
-
-  let limit = 5;
 
   const columns = [
     {
       title: "Skill name",
       dataIndex: "skillName",
       key: "skillName",
+      sorter: true,
     },
     {
       title: "Skill category",
       dataIndex: "skillCategory",
       key: "skillCategory",
+      sorter: true,
     },
     {
       title: "Skill weight",
       dataIndex: "skillWeight",
       key: "skillWeight",
+      sorter: true,
       render: (value: number) => <p>{skillWeightMap.get(value)}</p>,
     },
     {
@@ -56,6 +64,25 @@ export const SkillList: React.FC<{
     },
   ];
 
+  const handleTableChange = (
+    pagination: TablePaginationConfig,
+    filters: Record<string, React.Key[] | null>,
+    sorter: SorterResult<ISkill> | SorterResult<ISkill>[]
+  ) => {
+    if (!Array.isArray(sorter)) {
+      // console.log("params", pagination, filters, sorter);
+      const criteria = sorter.order === "ascend" ? "asc" : "desc";
+      fetchSkills(
+        pagination.pageSize || limit,
+        pagination.current || 0,
+        sorter.field as string,
+        criteria
+      );
+    }
+  };
+
+  const limit = 5;
+
   return (
     <div>
       <Table
@@ -65,8 +92,8 @@ export const SkillList: React.FC<{
           pageSize: limit,
           current: skills.currentPage,
           total: skills.totalRecords,
-          onChange: (page, pageSize)=>{fetchSkills(pageSize as number, page)}
         }}
+        onChange={handleTableChange}
       />
     </div>
   );
