@@ -12,11 +12,11 @@ export class SkillService {
     return this.Skill.distinct("skillCategory");
   };
 
-  async getSkills({ page = '1', limit = '5', sortBy = "skillName", criteria = "asc" }) {
+  async getSkills({ page = 1, limit = 5, sortBy = "skillName", criteria = "asc" }) {
     return this.Skill.find()
       .sort({ [sortBy]: criteria })
-      .skip((Number(page) - 1) * Number(limit))
-      .limit(Number(limit) * 1)
+      .skip((page - 1) * limit)
+      .limit(limit * 1)
       .exec();
   }
 

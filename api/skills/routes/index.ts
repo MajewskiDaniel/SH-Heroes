@@ -1,3 +1,4 @@
+import * as yup from "yup";
 import {Request, Response} from "express";
 import {SkillService} from "../services"
 
@@ -5,12 +6,12 @@ const express = require('express');
 const router = express.Router();
 const skillService = new SkillService();
 
-interface query {
-  page?: string;
-  limit?: string;
-  sortBy?: string;
-  criteria?: string;
-}
+const queryModel = yup.object({
+  limit: yup.number(),
+  page: yup.number(),
+  sortBy: yup.string(),
+  criteria: yup.string(),
+});
 
 router.get("/categories", async (req: Request, res: Response) => {
   try {
@@ -21,15 +22,15 @@ router.get("/categories", async (req: Request, res: Response) => {
   }
 });
 
-router.get('/', async (req: Request<{}, any, any, query>, res: Response) => {
-  // const { page, limit, sortBy, criteria }: query = req.query;
+router.get('/', async (req: Request, res: Response) => {
   try {
-    const skills = await skillService.getSkills(req.query)
+    const options = queryModel.cast(req.query) || {page: 1};
+    const skills = await skillService.getSkills(options)
     const count = await skillService.countRecords();
     res.status(200).send({
       skills,
       totalRecords: count,
-      currentPage: req.query.page,
+      currentPage: options.page,
     });
   } catch (e) {
     res.status(404).send(e.message);
