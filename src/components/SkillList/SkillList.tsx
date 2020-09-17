@@ -70,10 +70,8 @@ export const SkillList: React.FC<{
     sorter: SorterResult<ISkill> | SorterResult<ISkill>[]
   ) => {
     if (!Array.isArray(sorter)) {
-      console.log("params", pagination, filters, sorter);
-      let criteria;
-      if (sorter.order === "ascend") criteria = "asc";
-      else criteria = "desc";
+      // console.log("params", pagination, filters, sorter);
+      const criteria = sorter.order === "ascend" ? "asc" : "desc";
       fetchSkills(
         pagination.pageSize || limit,
         pagination.current || 0,
@@ -93,7 +91,6 @@ export const SkillList: React.FC<{
         pagination={{
           pageSize: limit,
           current: skills.currentPage,
-          total: skills.totalRecords,
         }}
         onChange={handleTableChange}
       />

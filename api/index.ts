@@ -18,7 +18,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT;
 
-const Table = yup.object({
+const queryModel = yup.object({
   limit: yup.number(),
   page: yup.number(),
   sortBy: yup.string(),
@@ -123,7 +123,7 @@ app.post("/skills/", async (req: Request, res: Response) => {
 //get all skills
 app.get("/skills/", async (req: Request, res: Response) => {
   const { page = 1, limit = 5, sortBy = "skillName", criteria = "asc" } =
-    Table.cast(req.query) || {};
+    queryModel.cast(req.query) || {};
 
   try {
     const skills: ISkill[] = await Skill.find()
