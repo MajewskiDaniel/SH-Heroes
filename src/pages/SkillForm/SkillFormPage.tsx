@@ -1,16 +1,14 @@
 import React from "react";
 import { useParams, useRouteMatch, useHistory } from "react-router-dom";
-import { AddForm } from "../../components/AddForm/AddForm";
 import { LeftCircleOutlined } from '@ant-design/icons';
-import styles from './EditorPage.module.scss';
-import {SkillForm} from "../../components/SkillForm/SkillForm";
+import styles from './SkillForm.module.scss';
+import {SkillForm as Form} from '../../components/SkillForm/SkillForm';
 
-export interface IEditor {
+export interface ISkillForm {
 }
 
-const Editor: React.FC<IEditor> = () => {
-  let { url } = useRouteMatch();
-  let { id } = useParams();
+const SkillForm: React.FC<ISkillForm> = () => {
+  const { id } = useParams();
   const history = useHistory();
 
   if(id) {
@@ -18,9 +16,9 @@ const Editor: React.FC<IEditor> = () => {
       <div className={styles.EditorContainer}>
         <span className={styles.PageTitle}>
           <LeftCircleOutlined className={styles.Arrow} onClick={() => history.goBack()}/>
-          { url.includes("/skill")  ? "Edit skill" : "Edit employee" }
+          "Edit skill"
         </span>
-        { url.includes("/skill")  ? <SkillForm id={id}></SkillForm> : <AddForm id={id}></AddForm> }
+        <Form id={id}></Form>
       </div>
     )
   } else {
@@ -28,12 +26,12 @@ const Editor: React.FC<IEditor> = () => {
       <div className={styles.EditorContainer}>
         <span className={styles.PageTitle}>
           <LeftCircleOutlined className={styles.Arrow} onClick={() => history.goBack()}/>
-          { url.includes("/skill")  ? "Add skill" : "Add employee" }
+          "Add skill"
         </span>
-        { url.includes("/skill")  ? <SkillForm id={id}></SkillForm> : <AddForm id={id}></AddForm> }
+        <Form id={id}></Form>
       </div>
     )
   }
 }
 
-export default Editor;
+export default SkillForm;

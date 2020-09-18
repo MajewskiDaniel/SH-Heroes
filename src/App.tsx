@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import HomePage from "./pages/Home/HomePage";
 import SkillListPage from "./pages/SkillList/SkillListPage";
-import EditorPage from "./pages/Editor/EditorPage";
+import EditorPage from "./pages/EmployeeForm/EditorPage";
 import EmployeeListPage from "./pages/EmployeeList/EmployeeListPage";
 import NotFoundPage from "./pages/NotFound/NotFoundPage.";
 import { Sidenav } from "./components/Sidenav/Sidenav";
 import { MainHeader } from "./components/MainHeader/MainHeader";
+import SkillFormPage from "./pages/SkillForm/SkillFormPage";
 import { Layout } from "antd";
 
 import "./App.scss";
@@ -33,8 +34,8 @@ export const App = () => {
               <Route path="/employee-list" component={EmployeeListPage} />
               <Route path="/employee/:id" component={EditorPage} />
               <Route path="/employee" component={EditorPage} />
-              <Route path="/skill/:id" component={EditorPage} />
-              <Route path="/skill" component={EditorPage} />
+              <Route path="/skill/:id" component={SkillFormPage} />
+              <Route path="/skill" component={SkillFormPage} />
               <Route component={NotFoundPage} />
             </Switch>
           </Content>
