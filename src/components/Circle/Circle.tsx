@@ -8,7 +8,7 @@ export interface ICircleProps {
 
 export const Circle: React.FC<ICircleProps> = ({level}) => {
   return (
-    <div className={styles[skillLevelMap.get(level)]}>
+    <div className={[styles[skillLevelMap.get(level)], styles.Circle].join(' ')}>
     </div>
   );
 }

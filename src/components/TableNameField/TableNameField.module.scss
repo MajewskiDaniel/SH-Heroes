@@ -2,8 +2,8 @@
   display: flex;
   flex-direction: row;
   height: 30px;
-  border: 1px solid lightgrey;
-  max-width: 20%;
+  //border: 1px solid lightgrey;
+  //max-width: 20%;
   .avatar {
     width: 10%;
     text-align: left;
@@ -15,6 +15,7 @@
   .name {
     width: 90%;
     text-align: left;
+    margin-left: 10px;
     span {
       line-height: 28px;
       font-weight: bold;

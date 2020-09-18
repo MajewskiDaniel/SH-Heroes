@@ -9,7 +9,7 @@ export interface IEmployee {
   level: SeniorityLevel;
   position: EmployeePosition;
   photo: string;
-  skills?: [{ skill: ISkill; skillLevel: SkillLevel }];
+  skills?: { skill: ISkill, skillLevel: SkillLevel }[];
 }
 
 export interface ISkill {
