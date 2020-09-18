@@ -6,7 +6,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { useHistory } from "react-router-dom";
 import * as yup from 'yup';
 
-import {ISkill, SkillWeight, skillWeightMap} from "../../models/employee";
+import {ISkill, skillLevelMap, SkillWeight, skillWeightMap} from "../../models/employee";
 import styles from './SkillForm.module.scss';
 import {FormikErrors, FormikState} from "formik/dist/types";
 import { SkillSvc } from "../../services/EmployeesSvc";
@@ -48,6 +48,8 @@ export const SkillForm: React.FC<ISkillForm> = ({id}) => {
       console.log(e);
     }
   }
+
+  console.log("skillLevel: ", skillLevelMap.get(4))
 
   const fetchSkill = async (id: string) => {
     try {

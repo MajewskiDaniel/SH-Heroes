@@ -48,15 +48,16 @@ export interface IAddForm {
 }
 
 export const AddForm: React.FC<IAddForm> = ({id}) => {
-  // const [formValues, setFormValues] = useState<IEmployee>(INITIAL_VALUES);
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [initialValuesWithId, setInitialValuesWithId] = useState<FormIEmployee>(INITIAL_VALUES);
   const history = useHistory();
 
   const fetchUser = async (id: string) => {
-    const data = await EmployeesSvc.getEmployee(id);
-    if (data && !Array.isArray(data)) {
+    try {
+      const data = await EmployeesSvc.getEmployee(id);
       setInitialValuesWithId(data);
+    } catch (e) {
+      console.log(e.message)
     }
   }
 
