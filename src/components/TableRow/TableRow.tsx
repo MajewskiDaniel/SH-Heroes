@@ -16,13 +16,10 @@ export const TableRow: React.FC<PropsWithChildren<ITableRowProps>> = ({employee,
     <tr className={styles.Row}>
       <th className={styles.User}><TableNameField firstName={employee.firstName} lastName={employee.lastName} avatar={employee.photo} /></th>
       {
-        skills && skills.map(( skill) => {
-          const occurred = Array.isArray(employee.skills) ? employee.skills.findIndex( s => s.skill.skillName === skill.skillName ) : -1;
-          if(occurred !== -1 && Array.isArray(employee.skills)) {
-            return <td className={styles.Cell}><Circle level={employee.skills[occurred].skillLevel} /></td>
-          } else {
-            return <td className={styles.Cell}><Circle level={SkillLevel.ZERO} /></td>
-          }
+        skills?.map(({skillName}) => {
+          const occurred = employee.skills?.find( ({skill}) => skill.skillName === skillName );
+          const level = occurred?.skillLevel || SkillLevel.ZERO;
+          return <td className={styles.Cell}><Circle level={level} /></td>
         })
       }
     </tr>
