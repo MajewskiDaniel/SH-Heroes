@@ -6,11 +6,30 @@ $width: 40px;
     padding: 5px;
     border: 1px solid lightgrey;
     overflow: hidden;
+    max-height: $width;
   }
 
   .pieChart {
     min-height: $width;
     width: 200px;
+    max-height: 200px;
+    position: relative;
+    .pieContainer {
+      position: absolute;
+      .pieDescription {
+        position: absolute;
+        top: 58px;
+        left: 45px;
+        font-size: 16px;
+        text-align: center;
+        color: grey;
+        .piePercentage {
+          font-size: 46px;
+          font-weight: bold;
+          color: goldenrod;
+        }
+      }
+    }
   }
   .skillName {
     height: 160px;
