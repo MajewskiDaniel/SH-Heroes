@@ -6,7 +6,7 @@ let employees = employeesData;
 let skills = skillsData;
 
 export default () => {
-  mock.get(/employees$/, () => employees, {delay: 2000});
+  mock.get(/employees$/, () => employees, {delay: 500});
 
   mock.get(/employees\/(.*)$/, (url) => {
     const [, id] = url.match(/employees\/?(.*)$/) || []
@@ -33,13 +33,20 @@ export default () => {
     return {status: 201}
   }, {delay: 500});
 
-
-  mock.get(/skills$/, () => skills, {delay: 2000});
+  mock.get(/skills\/categories$/, () => ["Devops", "Logistics", "Programming skills"], {delay: 500});
 
   mock.get(/skills\/(.*)$/, (url) => {
     const [, id] = url.match(/skills\/?(.*)$/) || []
     const skill = skills.find(i => i._id === id);
     return skill ? skill : {status: 404};
+  }, {delay: 500});
+
+  mock.get(/skills*/, () => {
+    return {
+      skills: skills,
+      totalRecords: 6,
+      currentPage: 1,
+    }
   }, {delay: 500});
 
   mock.post(/skills$/, (url, options) => {
@@ -60,6 +67,4 @@ export default () => {
     skills = skills.filter(e => !id.includes(e._id));
     return {status: 201}
   }, {delay: 500})
-
-  mock.get(/categories$/, () => ["Devops", "Logistics", "Programming skills"], {delay: 2000});
 }

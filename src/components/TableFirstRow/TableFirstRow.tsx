@@ -1,11 +1,10 @@
-import React, {PropsWithChildren} from 'react';
-import {IEmployee, ISkill} from '../../models/employee';
-import {IDinamic} from "../RowDisplayTotal/RowDisplayTotal";
+import React, { PropsWithChildren } from 'react';
+import { IDynamic } from "../RowDisplayTotal/RowDisplayTotal";
 
 import styles from './TableFirstRow.module.scss';
 
 export interface ITableFirstRowProps {
-  skillMatch: IDinamic
+  skillMatch: IDynamic
 }
 
 export const TableFirstRow: React.FC<PropsWithChildren<ITableFirstRowProps>> = ({skillMatch , children}) => {

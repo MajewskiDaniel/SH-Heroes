@@ -7,7 +7,7 @@ import EmployeeListPage from "./pages/EmployeeList/EmployeeListPage";
 import NotFoundPage from "./pages/NotFound/NotFoundPage.";
 import { Sidenav } from "./components/Sidenav/Sidenav";
 import { MainHeader } from "./components/MainHeader/MainHeader";
-import SkillFormPage from "./pages/SkillForm/SkillFormPage";
+import { SkillFormPage } from "./pages/SkillForm/SkillFormPage";
 import { Layout } from "antd";
 
 import "./App.scss";

@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import {SkillLevel, skillLevelMap} from '../../models/employee';
+import { SkillLevel } from '../../models/employee';
 import styles from './Circle.module.scss';
 
 export interface ICircleProps {

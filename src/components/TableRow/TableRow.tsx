@@ -1,8 +1,8 @@
 import React, {PropsWithChildren} from 'react';
 import {IEmployee, ISkill, SkillLevel} from '../../models/employee';
 
-import {TableNameField} from '../TableNameField/TableNameField';
-import {Circle} from "../Circle/Circle";
+import { TableNameField } from '../TableNameField/TableNameField';
+import { Circle } from "../Circle/Circle";
 
 import styles from './TableRow.module.scss'
 
