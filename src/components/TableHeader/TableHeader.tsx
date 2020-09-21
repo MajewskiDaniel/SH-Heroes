@@ -50,11 +50,13 @@ export const TableHeader: React.FC<{ skills: ISkill[] }> = ({ skills }) => {
       </tr>
       <tr className={styles.skillNames}>
         <td className={styles.pieChart}></td>
-        {skills.map((skill) => (
-          <th className={styles.skillName}>
-            <span>{skill.skillName}</span>
-          </th>
-        ))}
+        {categories.map((category) =>
+          skillsInCategory(category, skills).map((skill) => (
+            <th className={styles.skillName}>
+              <span>{skill}</span>
+            </th>
+          ))
+        )}
       </tr>
     </thead>
   );
