@@ -1,19 +1,18 @@
 import {ISkill, ISkillDB, skillSchema} from "../models";
-import mongoose, {Model} from "mongoose";
+import mongoose  from "mongoose";
 
 export class SkillService {
-  Skill: Model<ISkillDB>;
+  static Skill = mongoose.model<ISkillDB>("Skill", skillSchema);
 
   constructor() {
-    this.Skill = mongoose.model<ISkillDB>("Skill", skillSchema);
   }
 
   async getCategories() {
-    return this.Skill.distinct("skillCategory");
+    return SkillService.Skill.distinct("skillCategory");
   };
 
   async getSkills({ page = 1, limit = 5, sortBy = "skillName", criteria = "asc" }) {
-    return this.Skill.find()
+    return SkillService.Skill.find()
       .sort({ [sortBy]: criteria })
       .skip((page - 1) * limit)
       .limit(limit * 1)
@@ -21,12 +20,13 @@ export class SkillService {
   }
 
   async getSkillById(id: string) {
-    return this.Skill.findById(id)
+    return SkillService.Skill.findById(id)
   }
 
   async postSkill(skill: ISkill) {
-    if( ! (await this.occurred(skill))){
-      const skillModel = new this.Skill(skill);
+    const editedSkill = {...skill, skillName: this.capitalizeFirstLetter(skill.skillName), skillCategory: this.capitalizeFirstLetter(skill.skillCategory)};
+    if( ! (await this.occurred(editedSkill))){
+      const skillModel = new SkillService.Skill(editedSkill);
       return skillModel.save();
     } else {
       throw new Error('occurred');
@@ -34,19 +34,23 @@ export class SkillService {
   }
 
   async editSkill(id: string, skill: ISkill) {
-    return this.Skill.findByIdAndUpdate(id, skill, { new: true });
+    return SkillService.Skill.findByIdAndUpdate(id, skill, { new: true });
   }
 
   async deleteSkill(id: string) {
-    return this.Skill.findByIdAndDelete(id);
+    return SkillService.Skill.findByIdAndDelete(id);
   }
 
   async countRecords() {
-    return this.Skill.countDocuments();
+    return SkillService.Skill.countDocuments();
   }
 
   async occurred(skill: ISkill) {
-    const occurred = await this.Skill.find({skillName: skill.skillName});
+    const occurred = await SkillService.Skill.find({skillName: skill.skillName});
     return occurred.length > 0;
+  }
+
+  capitalizeFirstLetter(word: string) {
+    return word.charAt(0).toUpperCase() + word.slice(1);
   }
 }

@@ -1,12 +1,11 @@
-import { IEmployee, IEmployeeDB, employeeSchema, IEmployeeService} from "../models";
-import mongoose, {Model} from "mongoose";
+import { IEmployee, IEmployeeDB, employeeSchema } from "../models";
+import mongoose  from "mongoose";
 import {ParamsDictionary} from "express-serve-static-core";
 
 export class EmployeesService  {
-  // Employee: Model<IEmployeeDB>;
   static Employee = mongoose.model<IEmployeeDB>("Employee", employeeSchema);
-  constructor() {
 
+  constructor() {
   }
 
   async getEmployees(params: ParamsDictionary) {

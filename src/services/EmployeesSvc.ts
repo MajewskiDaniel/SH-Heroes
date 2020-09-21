@@ -1,7 +1,5 @@
-import { IEmployee } from "../models/employee";
+import { IEmployee, ISkill } from "../models/employee";
 import applyMock from "./employee.mock";
-import { ISkill, ISkillQuery } from "../models/employee";
-import { number } from "yup";
 
 const MOCKED_DATA = false;
 if (MOCKED_DATA) {
@@ -10,6 +8,12 @@ if (MOCKED_DATA) {
 
 export const EmployeesSvc = {
   url: `${process.env.REACT_APP_URL}/employees`,
+
+  async getEmployees() {
+    const resp = await fetch(this.url);
+    checkForError(resp);
+    return await resp.json();
+  },
 
   async getEmployee(id?: string) {
     const urlWithId = id ? `${this.url}/${id}` : this.url;
@@ -64,14 +68,12 @@ export const SkillSvc = {
       criteria,
     };
 
-    console.log("::getSkills::", tempOptions);
     const url = new URL(this.skillsUrl);
     Object.entries(tempOptions).forEach(([key, value]) => {
       if (value) {
         url.searchParams.append(key, String(value));
       }
     });
-    console.log(url.toString());
     const resp = await fetch(url.toString());
     checkForError(resp);
     return await resp.json();

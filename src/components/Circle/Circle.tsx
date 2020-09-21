@@ -1,5 +1,6 @@
 import React from 'react';
-import {SkillLevel, skillLevelMap} from '../../models/employee';
+import classNames from 'classnames';
+import { SkillLevel } from '../../models/employee';
 import styles from './Circle.module.scss';
 
 export interface ICircleProps {
@@ -8,7 +9,7 @@ export interface ICircleProps {
 
 export const Circle: React.FC<ICircleProps> = ({level}) => {
   return (
-    <div className={styles[skillLevelMap.get(level)]}>
+    <div className={classNames(styles[`SkillLevel-${level}`], styles.Circle)}>
     </div>
   );
 }

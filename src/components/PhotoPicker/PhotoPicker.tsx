@@ -2,7 +2,9 @@ import React, {useState} from 'react';
 import {Upload} from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import {FieldInputProps} from "formik";
-import {UploadChangeParam} from "antd/lib/upload/interface";
+import {RcCustomRequestOptions, UploadChangeParam} from "antd/lib/upload/interface";
+import {inspect} from "util";
+import styles from './PhotoPicker.module.scss';
 
 export interface IPhotoPicker extends FieldInputProps<string>{
 }
@@ -30,17 +32,21 @@ export const PhotoPicker: React.FC<IPhotoPicker> = ({onChange, value, name}) => 
     </div>
   );
 
+  const dummyRequest: (options: RcCustomRequestOptions) => void = ({ file, onSuccess }) => {
+    setTimeout(() => onSuccess({response: "ok"}, file), 0);
+  };
+
   return (
     <Upload
       name="photo"
       listType="picture-card"
       className="avatar-uploader"
       showUploadList={false}
-      action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+      customRequest={dummyRequest}
       beforeUpload={beforeUpload}
       onChange={handleChange}
     >
-      {value ? <img src={value} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+      {value ? <img src={value} alt="avatar" className={styles.Image} /> : uploadButton}
     </Upload>
   )
 }
