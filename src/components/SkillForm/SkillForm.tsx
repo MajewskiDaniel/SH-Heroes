@@ -8,7 +8,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import * as yup from 'yup';
 
 import { ISkill, SkillWeight, skillWeightMap } from "../../models/employee";
-import { SkillSvc } from "../../services/EmployeesSvc";
+import { Skills } from "../../services/SkillFetch";
 
 import styles from './SkillForm.module.scss';
 
@@ -41,7 +41,7 @@ export const SkillForm: React.FC<ISkillForm> = ({id}) => {
 
   const fetchCategories = async () => {
     try {
-      const cat = await SkillSvc.getCategories();
+      const cat = await Skills.getCategories();
       setCategories(cat);
     } catch (e) {
       console.log(e);
@@ -50,7 +50,7 @@ export const SkillForm: React.FC<ISkillForm> = ({id}) => {
 
   const fetchSkill = async (id: string) => {
     try {
-      const data = await SkillSvc.getSkill(id);
+      const data = await Skills.getSkill(id);
       setInitialValuesWithId(data);
     } catch (e) {
       console.log(e);
@@ -127,7 +127,7 @@ export const SkillForm: React.FC<ISkillForm> = ({id}) => {
   }) => {
     try {
       if (! isISkill(values)) throw new Error('Wrong data type');
-      id ? await SkillSvc.editSkill(values) : await SkillSvc.addSkill(values);
+      id ? await Skills.editSkill(values) : await Skills.addSkill(values);
       notification['success']({
         message: 'Success',
         description:

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styles from "./SkillList.module.scss";
-import { SkillSvc } from "../../services/EmployeesSvc";
+import { Skills } from "../../services/SkillFetch";
 import { ISkill, skillWeightMap, ISkillPaginated } from "../../models/employee";
 import {Table, Space, Popconfirm, notification} from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
@@ -19,7 +19,7 @@ export const SkillList: React.FC<{
 }> = ({ skills, fetchSkills }) => {
   const onDelete = async (skill: ISkill) => {
     try {
-      await SkillSvc.deleteSkill(skill);
+      await Skills.deleteSkill(skill);
       fetchSkills(limit, skills.currentPage, "", "");
       notification['success']({
         message: 'Success',

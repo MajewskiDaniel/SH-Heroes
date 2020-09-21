@@ -2,7 +2,7 @@ import React, { PropsWithChildren } from "react";
 import styles from "./EmployeeList.module.scss";
 import { Link } from "react-router-dom";
 import { FormOutlined, DeleteOutlined } from '@ant-design/icons';
-import { EmployeesSvc } from "../../services/EmployeesSvc";
+import { EmployeeFetch } from "../../services/EmployeeFetch";
 import {
   IEmployee,
   seniorityMap,
@@ -20,7 +20,7 @@ export const EmployeeList: React.FC<PropsWithChildren<{
   );
 
   const onDelete = async (employee: IEmployee) => {
-    await EmployeesSvc.deleteEmployee(employee);
+    await EmployeeFetch.deleteEmployee(employee);
     fetchEmployees();
   };
 

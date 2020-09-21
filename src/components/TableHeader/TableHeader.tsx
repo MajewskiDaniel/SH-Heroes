@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import styles from "./TableHeader.module.scss";
 import { ISkill } from "../../models/employee";
-import { SkillSvc } from "../../services/EmployeesSvc";
+import { Skills } from "../../services/SkillFetch";
+import { skillsInCategory } from "../../services/Utils";
 
 export const TableHeader: React.FC<{ skills: ISkill[] }> = ({ skills }) => {
   const [categories, setCategories] = useState<string[]>([]);
 
   const fetchCategories = async () => {
     try {
-      const categories: string[] = await SkillSvc.getCategories();
+      const categories: string[] = await Skills.getCategories();
       setCategories(categories);
     } catch (e) {
       console.log("::TableHeader::fetchCategories::error::", e.message);
@@ -16,15 +17,6 @@ export const TableHeader: React.FC<{ skills: ISkill[] }> = ({ skills }) => {
   };
 
   const cellWidth = 40;
-
-  function skillsInCategory(category: string, skills: ISkill[]): string[] {
-    let skillsTable: string[] = [];
-    skills.forEach((skill) => {
-      if (skill.skillCategory === category) skillsTable.push(skill.skillName);
-    });
-    skillsTable = skillsTable.sort();
-    return skillsTable;
-  }
 
   useEffect(() => {
     fetchCategories();
