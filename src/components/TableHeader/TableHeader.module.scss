@@ -1,0 +1,31 @@
+$width: 40px;
+
+.tableHeader {
+  .skillCategory {
+    font-size: 12px;
+    padding: 5px;
+    border: 1px solid lightgrey;
+  }
+
+  .pieChart {
+    min-height: $width;
+    width: 200px;
+    border: 1px solid lightgrey;
+  }
+  .skillName {
+    height: 160px;
+    min-width: $width;
+    max-width: $width;
+    border: 1px solid lightgrey;
+    vertical-align: bottom;
+    span {
+      display: inline-block;
+      bottom: 0;
+      font-size: 12px;
+      padding: 35px 5px 5px 0px;
+      transform: rotate(-90deg) translateX(-15px);
+      transform-origin: left;
+      white-space: nowrap;
+    }
+  }
+}
