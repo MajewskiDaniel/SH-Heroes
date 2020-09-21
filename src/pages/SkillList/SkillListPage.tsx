@@ -4,7 +4,7 @@ import { Button } from "antd";
 import { Link } from "react-router-dom";
 import { SkillList } from "../../components/SkillList/SkillList";
 import { ISkill, SkillWeight, ISkillPaginated } from "../../models/employee";
-import { SkillSvc } from "../../services/EmployeesSvc";
+import { Skills } from "../../services/SkillFetch";
 
 const SkillListPage: React.FC<ISkill[]> = () => {
   const [skills, setSkills] = useState<ISkillPaginated>({
@@ -23,7 +23,7 @@ const SkillListPage: React.FC<ISkill[]> = () => {
       let sortingOrder = criteria === "descend" ? "desc" : "asc";
       try {
         // console.log("::SkillListPage::fetchSkills::criteria::", criteria);
-        const skillData = await SkillSvc.getSkills(
+        const skillData = await Skills.getSkills(
           limit,
           current,
           sortBy,

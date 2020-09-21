@@ -9,7 +9,7 @@ import { FormikState } from "formik/dist/types";
 
 import { Tags } from '../Tags/Tags';
 import { PhotoPicker } from "../PhotoPicker/PhotoPicker";
-import { EmployeesSvc } from "../../services/EmployeesSvc";
+import { EmployeeFetch } from "../../services/EmployeeFetch";
 import { EmployeePosition, employeePositionMap, IEmployee, SeniorityLevel, seniorityMap } from "../../models/employee";
 
 import styles from './AddForm.module.scss';
@@ -53,7 +53,7 @@ export const AddForm: React.FC<IAddForm> = ({id}) => {
 
   const fetchUser = async (id: string) => {
     try {
-      const data = await EmployeesSvc.getEmployee(id);
+      const data = await EmployeeFetch.getEmployee(id);
       setInitialValuesWithId(data);
     } catch (e) {
       console.log(e.message)
@@ -80,8 +80,8 @@ export const AddForm: React.FC<IAddForm> = ({id}) => {
   })  => {
     try {
       if (! isIEmployee(values)) throw new Error("Wrong data type");
-      id ? await EmployeesSvc.editEmployee(values, id)
-        : await EmployeesSvc.addEmployee(values);
+      id ? await EmployeeFetch.editEmployee(values, id)
+        : await EmployeeFetch.addEmployee(values);
       notification['success']({
         message: 'Success',
         description:

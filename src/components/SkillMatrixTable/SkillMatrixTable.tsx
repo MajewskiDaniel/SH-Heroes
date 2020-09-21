@@ -6,7 +6,8 @@ import { TableRow } from "../TableRow/TableRow";
 
 import styles from "./SkillMatrixTable.module.scss";
 import {IEmployee, ISkill, ISkillPaginated} from "../../models/employee";
-import { EmployeesSvc, SkillSvc } from "../../services/EmployeesSvc";
+import { Skills } from "../../services/SkillFetch";
+import { EmployeeFetch } from  "../../services/EmployeeFetch"
 
 export interface ISkillMatrixTable {
 
@@ -21,7 +22,7 @@ export const SkillMatrixTable: React.FC<ISkillMatrixTable> = () => {
 
   const fetchEmployees = async () => {
     try {
-      const data = await EmployeesSvc.getEmployee();
+      const data = await EmployeeFetch.getEmployee();
       setEmployees(data);
     } catch (e) {
       console.log(e);
@@ -30,7 +31,7 @@ export const SkillMatrixTable: React.FC<ISkillMatrixTable> = () => {
 
   const fetchSkills = async () => {
     try {
-      const data = await SkillSvc.getSkills();
+      const data = await Skills.getSkills();
       setSkills(data);
     } catch (e) {
       console.log(e);

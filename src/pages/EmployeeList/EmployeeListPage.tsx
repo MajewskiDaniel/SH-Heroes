@@ -6,7 +6,7 @@ import {
   SeniorityLevel,
 } from "../../models/employee";
 import styles from "./EmployeeListPage.module.scss";
-import { EmployeesSvc } from "../../services/EmployeesSvc";
+import { EmployeeFetch } from "../../services/EmployeeFetch";
 import { Button } from "antd";
 import { Link } from "react-router-dom";
 
@@ -147,7 +147,7 @@ const EmployeeListPage: React.FC<PropsWithChildren<IEmployee[]>> = (args) => {
 
   const fetchEmployees = async () => {
     try {
-      const employeesData = await EmployeesSvc.getEmployee();
+      const employeesData = await EmployeeFetch.getEmployee();
       setEmployees(employeesData);
     } catch (e) {
       console.log("fetchEmployees:: error::", e);
