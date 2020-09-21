@@ -76,13 +76,10 @@ export const SkillForm: React.FC<ISkillForm> = ({id}) => {
 
   const onEnter = async (props: FormikProps<ISkill | ISkillForm>) => {
     await addCategory();
-    console.log("::categories::", categories);
     props.setFieldValue('skillCategory', newCategory);
-    console.log("::newCategory::", newCategory)
   }
 
-  const renderForm = useCallback((props) => {
-    return (
+  const renderForm = useCallback((props) =>
       <Form className={styles.Form}>
         <FormItem name="skillName" >
           <label htmlFor="skillName" className={styles.Label}>Name</label>
@@ -121,8 +118,7 @@ export const SkillForm: React.FC<ISkillForm> = ({id}) => {
         </FormItem>
         <SubmitButton onClick={()=> !submitted && setSubmitted(true)}>Submit</SubmitButton >
       </Form>
-    )
-  },[newCategory, categories, initialValuesWithId, submitted])
+    ,[newCategory, categories, initialValuesWithId, submitted])
 
   const handleSubmit = async (values: ISkillFormExtends | ISkill, handlers: {
     setSubmitting: (isSubmitting: boolean) => void,

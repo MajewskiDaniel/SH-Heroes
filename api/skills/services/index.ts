@@ -11,7 +11,7 @@ export class SkillService {
     return SkillService.Skill.distinct("skillCategory");
   };
 
-  async getSkills({ page = 1, limit = 5, sortBy = "skillName", criteria = "asc" }) {
+  async getSkills({ page = 1, limit = 0, sortBy = "skillName", criteria = "asc" }) {
     return SkillService.Skill.find()
       .sort({ [sortBy]: criteria })
       .skip((page - 1) * limit)

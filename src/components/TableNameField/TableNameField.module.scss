@@ -1,23 +1,26 @@
 .tableNameField {
   display: flex;
   flex-direction: row;
-  height: 30px;
+  height: 100%;
+  justify-content: left;
+  align-items: center;
   //border: 1px solid lightgrey;
   //max-width: 20%;
   .avatar {
-    width: 10%;
+    //width: 10%;
     text-align: left;
-    padding: 3px;
+    padding-left: 3px;
+    height: 40px;
     img {
       max-height: 100%;
     }
   }
   .name {
-    width: 90%;
+    //width: 88%;
     text-align: left;
-    margin-left: 10px;
+    margin-left: 5px;
     span {
-      line-height: 28px;
+      //line-height: 28px;
       font-weight: bold;
     }
   }
