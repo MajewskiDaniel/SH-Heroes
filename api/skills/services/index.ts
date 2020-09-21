@@ -24,8 +24,9 @@ export class SkillService {
   }
 
   async postSkill(skill: ISkill) {
-    if( ! (await this.occurred(skill))){
-      const skillModel = new SkillService.Skill(skill);
+    const editedSkill = {...skill, skillName: this.capitalizeFirstLetter(skill.skillName), skillCategory: this.capitalizeFirstLetter(skill.skillCategory)};
+    if( ! (await this.occurred(editedSkill))){
+      const skillModel = new SkillService.Skill(editedSkill);
       return skillModel.save();
     } else {
       throw new Error('occurred');
@@ -47,5 +48,9 @@ export class SkillService {
   async occurred(skill: ISkill) {
     const occurred = await SkillService.Skill.find({skillName: skill.skillName});
     return occurred.length > 0;
+  }
+
+  capitalizeFirstLetter(word: string) {
+    return word.charAt(0).toUpperCase() + word.slice(1);
   }
 }

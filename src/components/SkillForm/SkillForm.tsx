@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import { useHistory } from "react-router-dom";
-import { Form, Formik, FormikProps } from 'formik';
+import {Form, Formik, FormikProps} from 'formik';
 import { FormikState } from "formik/dist/types";
 import { FormItem, Input, Select, SubmitButton } from 'formik-antd';
 import { notification, Divider, Input as InputAnt } from 'antd';
@@ -66,7 +66,7 @@ export const SkillForm: React.FC<ISkillForm> = ({id}) => {
     setNewCategory(event.target.value);
   }
 
-  const addCategory = () => {
+  const addCategory = async() => {
     const occurrence = categories.find(cat => cat === newCategory);
     if (!occurrence) {
       setCategories([...categories, newCategory]);
@@ -74,9 +74,11 @@ export const SkillForm: React.FC<ISkillForm> = ({id}) => {
     setNewCategory("");
   }
 
-  const onEnter = (props: FormikProps<ISkill | ISkillForm>) => {
-    addCategory();
+  const onEnter = async (props: FormikProps<ISkill | ISkillForm>) => {
+    await addCategory();
+    console.log("::categories::", categories);
     props.setFieldValue('skillCategory', newCategory);
+    console.log("::newCategory::", newCategory)
   }
 
   const renderForm = useCallback((props) => {

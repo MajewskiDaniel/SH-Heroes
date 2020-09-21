@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import styles from "./SkillList.module.scss";
 import { SkillSvc } from "../../services/EmployeesSvc";
 import { ISkill, skillWeightMap, ISkillPaginated } from "../../models/employee";
-import { Table, Space, Popconfirm } from "antd";
+import {Table, Space, Popconfirm, notification} from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { TablePaginationConfig } from "antd/lib/table";
 import { SorterResult } from "antd/lib/table/interface";
@@ -18,8 +18,22 @@ export const SkillList: React.FC<{
   ) => void;
 }> = ({ skills, fetchSkills }) => {
   const onDelete = async (skill: ISkill) => {
-    await SkillSvc.deleteSkill(skill);
-    fetchSkills(limit, skills.currentPage, "", "");
+    try {
+      await SkillSvc.deleteSkill(skill);
+      fetchSkills(limit, skills.currentPage, "", "");
+      notification['success']({
+        message: 'Success',
+        description:
+          `You have successfully deleted ${skill.skillName}`
+      });
+    } catch (e) {
+      console.log(e);
+      notification['error']({
+        message: 'Error',
+        description:
+          `Skill ${skill.skillName} not deleted`
+      });
+    }
   };
 
   const limit = 5;
