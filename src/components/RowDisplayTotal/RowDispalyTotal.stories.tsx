@@ -34,12 +34,7 @@ RowDisplayTotal1.args = {
     photo: "https://tiny.pl/7jw83",
     skills: [
       {
-        skill: {
-          _id: "5f608ca198a547765440bc3c",
-          skillName: "Write",
-          skillCategory: "Devops",
-          skillWeight: 2,
-        },
+        skill: "5f608ca198a547765440bc3c",
         skillLevel: SkillLevel.ONE
       }
       ]
@@ -60,21 +55,11 @@ RowDisplayTotal1.args = {
       photo: "https://tiny.pl/7jw83",
       skills: [
         {
-          skill: {
-            _id: "5f6080e6434a9c72e69a406b",
-            skillName: "Excel",
-            skillCategory: "Programming skills",
-            skillWeight: 4,
-          },
+          skill:  "5f6080e6434a9c72e69a406b",
           skillLevel: SkillLevel.THREE
         },
         {
-          skill: {
-            _id: "5f608c2e98a547765440bc58",
-            skillName: "Word",
-            skillCategory: "Programming skills",
-            skillWeight: 2,
-          },
+          skill:  "5f608c2e98a547765440bc58",
           skillLevel: SkillLevel.FOUR
         }]
     },
@@ -94,21 +79,11 @@ RowDisplayTotal1.args = {
       photo: "https://tiny.pl/7jw83",
       skills: [
         {
-          skill: {
-            _id: "5f6080e6434a9c72e69a406b",
-            skillName: "Excel",
-            skillCategory: "Programming skills",
-            skillWeight: 2,
-          },
+          skill: "5f6080e6434a9c72e69a406b",
           skillLevel: SkillLevel.FOUR
         },
         {
-          skill: {
-            _id: "5f608c5098a547765440bc8a",
-            skillName: "Alcohol resistance",
-            skillCategory: "Soft skills",
-            skillWeight: 3,
-          },
+          skill: "5f608c5098a547765440bc8a",
           skillLevel: SkillLevel.THREE
         }]
     },

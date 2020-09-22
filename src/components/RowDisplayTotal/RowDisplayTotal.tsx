@@ -28,9 +28,9 @@ export const RowDisplayTotal: React.FC<PropsWithChildren<IRowDisplayTotal>> = ({
 
     employees?.forEach(({skills}) => {
       skills?.forEach(({skill, skillLevel}) => {
-        totalSkillLevelHelper[skill._id!] += skillLevel;
+        totalSkillLevelHelper[skill] += skillLevel;
         if(skillLevel >= 3) {
-          totalHelper[skill._id!] += 1
+          totalHelper[skill] += 1
         }
       })
     });
