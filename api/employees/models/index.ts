@@ -71,8 +71,8 @@ export const employeeSchema: Schema = new Schema({
   },
   skills: [
     {
-      // skill: { type: mongoose.Schema.Types.ObjectId, ref: "skills" },
-      skill: String,
+      skill: { type: mongoose.Schema.Types.ObjectId, ref: "skills" },
+      // skill: String,
       skillLevel: Number,
     },
   ],
