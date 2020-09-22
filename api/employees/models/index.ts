@@ -1,5 +1,4 @@
-import {Schema, Document, Model} from "mongoose";
-import {ISkill} from "../../skills/models";
+import mongoose, { Schema, Document, Model } from "mongoose";
 
 export interface IEmployee {
   firstName: string;
@@ -11,7 +10,10 @@ export interface IEmployee {
   level: SeniorityLevel;
   position: EmployeePosition;
   photo: string;
-  skills?: ISkill[];
+  skills?: {
+    skill: string;
+    skillLevel: SkillLevel;
+  }[];
 }
 
 export enum EmployeePosition {
@@ -28,46 +30,64 @@ export enum SeniorityLevel {
   TECH_LEAD,
 }
 
+export enum SkillLevel {
+  ZERO,
+  ONE,
+  TWO,
+  THREE,
+  FOUR,
+}
+
 export const employeeSchema: Schema = new Schema({
   firstName: {
     type: String,
-    required: true
+    required: true,
   },
   lastName: {
     type: String,
-    required: true
+    required: true,
   },
   startingYear: {
     type: String,
-    required: true
+    required: true,
   },
   lastEvaluationDate: {
     type: String,
-    required: true
+    required: false,
   },
   projectName: String,
   tags: [String],
   level: {
     type: Number,
-    required: true
+    required: true,
   },
   position: {
     type: Number,
-    required: true
+    required: true,
   },
   photo: {
     type: String,
-    required: true
+    required: true,
   },
+  skills: [
+    {
+      // skill: { type: mongoose.Schema.Types.ObjectId, ref: "skills" },
+      skill: String,
+      skillLevel: Number,
+    },
+  ],
 });
 
 export interface IEmployeeDB extends Document, IEmployee {}
 
 export interface IEmployeeService {
-  Employee: Model<IEmployeeDB>,
-  getEmployees: (params: any) => Promise<IEmployeeDB[] | null>,
-  getEmployeeById: (id: string) =>  Promise<IEmployeeDB | null>,
-  addEmployee: (employee: IEmployee) =>  Promise<IEmployeeDB | null>,
-  editEmployee: (id: string, employee: IEmployee) =>  Promise<IEmployeeDB | null>,
-  deleteEmployee: (id: string) =>  Promise<IEmployeeDB | null>
+  Employee: Model<IEmployeeDB>;
+  getEmployees: (params: any) => Promise<IEmployeeDB[] | null>;
+  getEmployeeById: (id: string) => Promise<IEmployeeDB | null>;
+  addEmployee: (employee: IEmployee) => Promise<IEmployeeDB | null>;
+  editEmployee: (
+    id: string,
+    employee: IEmployee
+  ) => Promise<IEmployeeDB | null>;
+  deleteEmployee: (id: string) => Promise<IEmployeeDB | null>;
 }

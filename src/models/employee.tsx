@@ -9,7 +9,10 @@ export interface IEmployee {
   level: SeniorityLevel;
   position: EmployeePosition;
   photo: string;
-  skills?: { skill: ISkill, skillLevel: SkillLevel }[];
+  skills?: {
+    skill: string;
+    skillLevel: SkillLevel;
+  }[];
 }
 
 export interface ISkill {
@@ -60,7 +63,6 @@ export enum SkillLevel {
   TWO,
   THREE,
   FOUR,
-  FIVE,
 }
 
 export const seniorityMap = new Map()
@@ -87,5 +89,4 @@ export const skillLevelMap = new Map()
   .set(SkillLevel.ONE, "ONE")
   .set(SkillLevel.TWO, "TWO")
   .set(SkillLevel.THREE, "THREE")
-  .set(SkillLevel.FOUR, "FOUR")
-  .set(SkillLevel.FIVE, "FIVE");
+  .set(SkillLevel.FOUR, "FOUR");
