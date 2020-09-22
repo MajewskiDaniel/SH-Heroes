@@ -10,10 +10,16 @@ export interface ITableFirstRowProps {
 export const TableFirstRow: React.FC<PropsWithChildren<ITableFirstRowProps>> = ({skillMatch , children}) => {
   return (
     <tr className={styles.Row}>
-      <th className={styles.Title}>{children}</th>
+      <th className={styles.Title}><div className={styles.TitleCell}>{children}</div> </th>
       {
         Object.keys(skillMatch)?.map((skillValue) => {
-          return <td className={styles.Cell}>{skillMatch[skillValue]}</td>
+          return (
+            <td className={styles.Cell}>
+              <div className={styles.Container}>
+               {skillMatch[skillValue]}
+              </div>
+          </td>
+          )
         })
       }
     </tr>

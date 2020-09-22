@@ -5,9 +5,10 @@ import { RowDisplayTotal } from "../RowDisplayTotal/RowDisplayTotal";
 import { TableRow } from "../TableRow/TableRow";
 
 import styles from "./SkillMatrixTable.module.scss";
-import {IEmployee, ISkill, ISkillPaginated} from "../../models/employee";
+import { IEmployee, ISkill } from "../../models/employee";
 import { Skills } from "../../services/SkillFetch";
-import { EmployeeFetch } from  "../../services/EmployeeFetch"
+import { EmployeeFetch } from  "../../services/EmployeeFetch";
+import {allSkillsInCategory, skillsInCategory} from "../../services/Utils";
 
 export interface ISkillMatrixTable {
 
@@ -15,10 +16,8 @@ export interface ISkillMatrixTable {
 
 export const SkillMatrixTable: React.FC<ISkillMatrixTable> = () => {
   const [employees, setEmployees] = useState<IEmployee[]>([]);
-  const [skills, setSkills] = useState<ISkillPaginated>({skills: [],
-    totalRecords: 0,
-    currentPage: 1
-  });
+  const [skills, setSkills] = useState<ISkill[]>([]);
+  const [oldSkills, setOldSkills] = useState<ISkill[]>([]);
 
   const fetchEmployees = async () => {
     try {
@@ -40,16 +39,32 @@ export const SkillMatrixTable: React.FC<ISkillMatrixTable> = () => {
 
   useEffect(() => {
     fetchEmployees();
-    fetchSkills();
-  },[])
+
+    (async () => {
+      try {
+        const skillData = await Skills.getSkills();
+
+        const catData = await Skills.getCategories();
+
+        const sorted = catData?.reduce((acc: ISkill[], cat: string) => {
+          return [...acc, ...allSkillsInCategory(cat, skillData.skills)];
+        }, []);
+
+        setOldSkills(skillData.skills)
+        setSkills(sorted);
+      } catch (e) {
+        console.log(e)
+      }
+    })();
+  },[]);
 
   return (
     <table className={styles.Table}>
-      <TableHeader skills={skills?.skills} ></TableHeader>
+      <TableHeader skills={oldSkills} ></TableHeader>
       <tbody>
-        <RowDisplayTotal employees={employees} skills={skills?.skills} ></RowDisplayTotal>
+        <RowDisplayTotal employees={employees} skills={skills} ></RowDisplayTotal>
         { employees?.map( (employee) => (
-          <TableRow employee={employee} skills={skills?.skills} ></TableRow>
+          <TableRow employee={employee} skills={skills} ></TableRow>
         ))}
       </tbody>
     </table>

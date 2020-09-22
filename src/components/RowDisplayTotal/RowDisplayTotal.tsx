@@ -1,4 +1,4 @@
-import React, {PropsWithChildren} from 'react';
+import React, {PropsWithChildren, useEffect, useState} from 'react';
 import { IEmployee, ISkill } from '../../models/employee';
 import {TableFirstRow} from "../TableFirstRow/TableFirstRow";
 
@@ -12,24 +12,34 @@ export interface IDynamic {
 }
 
 export const RowDisplayTotal: React.FC<PropsWithChildren<IRowDisplayTotal>> = ({employees, skills }) => {
-  const total: IDynamic = {};
-  const totalSkillLevel: IDynamic = {};
+  const [total, setTotal] = useState<IDynamic>({});
+  const [totalSkillLevel, setTotalSkillLevel] = useState<IDynamic>({});
 
-  skills?.forEach((skill) => {
-    if( skill._id ) {
-      total[skill._id] = 0;
-      totalSkillLevel[skill._id] = 0;
-    };
-  });
+  useEffect(() => {
+    const totalHelper: IDynamic = {};
+    const totalSkillLevelHelper: IDynamic = {};
 
-  employees?.forEach(({skills}) => {
-    skills?.forEach(({skill, skillLevel}) => {
-      totalSkillLevel[skill._id!] += skillLevel;
-      if(skillLevel >= 3) {
-        total[skill._id!] += 1
-      }
-    })
-  });
+    skills?.forEach((skill) => {
+      if( skill._id ) {
+        totalHelper[skill._id] = 0;
+        totalSkillLevelHelper[skill._id] = 0;
+      };
+    });
+
+    employees?.forEach(({skills}) => {
+      skills?.forEach(({skill, skillLevel}) => {
+        totalSkillLevelHelper[skill._id!] += skillLevel;
+        if(skillLevel >= 3) {
+          totalHelper[skill._id!] += 1
+        }
+      })
+    });
+
+    setTotal(totalHelper);
+    setTotalSkillLevel(totalSkillLevelHelper);
+  }, [skills])
+
+
 
   return (
     <>

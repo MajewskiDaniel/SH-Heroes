@@ -6,8 +6,17 @@ export const checkForError = (response: any) => {
 
 export const skillsInCategory = (category: string, skills: ISkill[]): string[] => {
   let skillsTable: string[] = [];
-  skills.forEach((skill) => {
+  skills?.forEach((skill) => {
     if (skill.skillCategory === category) skillsTable.push(skill.skillName);
+  });
+  skillsTable = skillsTable.sort();
+  return skillsTable;
+}
+
+export const allSkillsInCategory = (category: string, skills: ISkill[]): ISkill[] => {
+  let skillsTable: ISkill[] = [];
+  skills?.forEach((skill) => {
+    if (skill.skillCategory === category) skillsTable.push(skill);
   });
   skillsTable = skillsTable.sort();
   return skillsTable;
