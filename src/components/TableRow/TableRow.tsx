@@ -12,7 +12,10 @@ export interface ITableRowProps {
 }
 
 export const TableRow: React.FC<PropsWithChildren<ITableRowProps>> = ({employee, skills }) => {
-  //logika do przypisania skilla do urzytkownika i zmainy levelu  +  metoda w employeeSvc
+
+  const handleLevelClick = ( level: React.ReactText, skill: ISkill ) => {
+    console.log("assign", level, employee, skill)
+  }
 
   return (
     <tr className={styles.Row}>
@@ -21,7 +24,7 @@ export const TableRow: React.FC<PropsWithChildren<ITableRowProps>> = ({employee,
         skills?.map((allSkillsSkill) => {
           const occurred = employee.skills?.find( ({skill}) => skill === allSkillsSkill._id );
           const level = occurred?.skillLevel || SkillLevel.ZERO;
-          return <td className={styles.Cell}><Circle level={level} skill={allSkillsSkill}/></td>
+          return <td className={styles.Cell}><Circle level={level} skill={allSkillsSkill} handleLevelClick={handleLevelClick}/></td>
         })
       }
     </tr>
