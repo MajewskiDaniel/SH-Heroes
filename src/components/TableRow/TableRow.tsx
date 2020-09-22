@@ -12,14 +12,16 @@ export interface ITableRowProps {
 }
 
 export const TableRow: React.FC<PropsWithChildren<ITableRowProps>> = ({employee, skills }) => {
+  //logika do przypisania skilla do urzytkownika i zmainy levelu  +  metoda w employeeSvc
+
   return (
     <tr className={styles.Row}>
       <th className={styles.User}><TableNameField firstName={employee.firstName} lastName={employee.lastName} avatar={employee.photo} /></th>
       {
-        skills?.map(({skillName}) => {
-          const occurred = employee.skills?.find( ({skill}) => skill.skillName === skillName );
+        skills?.map((allSkillsSkill) => {
+          const occurred = employee.skills?.find( ({skill}) => skill === allSkillsSkill._id );
           const level = occurred?.skillLevel || SkillLevel.ZERO;
-          return <td className={styles.Cell}><Circle level={level} /></td>
+          return <td className={styles.Cell}><Circle level={level} skill={allSkillsSkill}/></td>
         })
       }
     </tr>

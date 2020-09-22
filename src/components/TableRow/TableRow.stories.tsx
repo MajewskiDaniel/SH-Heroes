@@ -33,21 +33,11 @@ Table1Row.args = {
     photo: "https://tiny.pl/7jw83",
     skills: [
       {
-        skill: {
-          _id: "5f608c5098a547765440bc5a",
-          skillName: "Alcohol resistance",
-          skillCategory: "Soft skills",
-          skillWeight: 1,
-        },
+        skill: "5f608c5098a547765440bc5a",
         skillLevel: SkillLevel.FOUR
       },
       {
-        skill: {
-          _id: "5f608c8e98a547765440bc5b",
-          skillName: "Windows",
-          skillCategory: "Crucial skills",
-          skillWeight: 4,
-        },
+        skill: "5f608c8e98a547765440bc5b",
         skillLevel: SkillLevel.ONE
       }]
   },
