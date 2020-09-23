@@ -18,6 +18,7 @@ const Template: Story<PropsWithChildren<ITableRowProps>> = (args) => (
 export const Table1Row = Template.bind({});
 Table1Row.args = {
   employee: {
+    disable: false,
     tags: [
       "love",
       "science"
@@ -78,7 +79,13 @@ Table1Row.args = {
       skillCategory: "Devops",
       skillWeight: 2,
     }
-  ]
+  ],
+  reload: ()=> {
+    console.log('aaaaaaaa')
+  },
+  toggleEnable: (id) => {
+    console.log('aaaaaaaa')
+  }
 };
 
 

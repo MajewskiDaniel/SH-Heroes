@@ -36,13 +36,17 @@ export interface LabeledValue {
   label: React.ReactNode;
 }
 
+export interface ISkillMatirxEmployee extends IEmployee {
+  disable: boolean
+}
+
 export const SkillMatrixTable: React.FC<ISkillMatrixTable> = () => {
-  const [employees, setEmployees] = useState<IEmployee[]>([]);
+  const [employees, setEmployees] = useState<ISkillMatirxEmployee[]>([]);
   const [skills, setSkills] = useState<ISkill[]>([]);
   const [oldSkills, setOldSkills] = useState<ISkill[]>([]);
   const [visible, setVisible] = useState(false);
   const [sortOptions, setSortOptions] = useState<ISortOptions>({skills: [], experience: 0, seniorityLevel: null, tags: []});
-  const [filteredEmployees, setFilteredEmployees] = useState<IEmployee[]>([]);
+  const [filteredEmployees, setFilteredEmployees] = useState<ISkillMatirxEmployee[]>([]);
   const [tags, setTags] = useState<string[]>([]);
   const [totalEmployees, setTotalEmployees] = useState<IDynamic>({});
   const [totalSkillLevel, setTotalSkillLevel] = useState<IDynamic>({});
@@ -77,10 +81,11 @@ export const SkillMatrixTable: React.FC<ISkillMatrixTable> = () => {
   const fetchEmployees = async () => {
     try {
       const data = await EmployeeFetch.getEmployee();
+      // data.forEach(( empl: ISkillMatirxEmployee) => empl.disable = false);
       setEmployees(data);
       let tags = data.reduce(( acc: string[], empl: IEmployee ) =>  empl.tags ? [...acc, ...empl.tags] : acc, []);
       tags = Array.from(new Set(tags));
-      setTags(tags)
+      setTags(tags);
     } catch (e) {
       console.log(e);
     }
@@ -173,6 +178,12 @@ export const SkillMatrixTable: React.FC<ISkillMatrixTable> = () => {
     setSortOptions({...sortOptions, tags: newTags});
   }
 
+  const toggleEnable = (id: string) => {
+    let newEmpl = [...employees];
+    newEmpl.map( empl => empl._id === id? empl.disable = !empl.disable : empl);
+    setEmployees(newEmpl);
+  }
+
   const menu = (
     <Menu>
       {Array.from(skillLevelMap.keys()).map((key) => (
@@ -192,7 +203,10 @@ export const SkillMatrixTable: React.FC<ISkillMatrixTable> = () => {
     4: '4',
     6: '6',
     8: '8',
-    10: '10'
+    10: '10',
+    12: '12',
+    14: '14',
+    16: '16'
   };
 
   return (
@@ -244,7 +258,7 @@ export const SkillMatrixTable: React.FC<ISkillMatrixTable> = () => {
         <tbody>
           <RowDisplayTotal total={totalEmployees} totalSkillLevel={totalSkillLevel}></RowDisplayTotal>
           { filteredEmployees?.map( (employee) => (
-            <TableRow employee={employee} skills={skills} reload={fetchEmployees} ></TableRow>
+            <TableRow employee={employee} skills={skills} reload={fetchEmployees} toggleEnable={toggleEnable}></TableRow>
           ))}
         </tbody>
       </table>
