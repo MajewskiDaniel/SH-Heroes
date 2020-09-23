@@ -3,7 +3,6 @@ import styles from "./TableHeader.module.scss";
 import { ISkill } from "../../models/employee";
 import { Skills } from "../../services/SkillFetch";
 import { skillsInCategory } from "../../services/Utils";
-import { ResponsivePie } from "@nivo/pie";
 import { Pie } from "@nivo/pie";
 
 export const TableHeader: React.FC<{ skills: ISkill[] }> = ({ skills }) => {

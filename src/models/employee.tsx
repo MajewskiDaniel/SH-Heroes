@@ -9,10 +9,13 @@ export interface IEmployee {
   level: SeniorityLevel;
   position: EmployeePosition;
   photo: string;
-  skills?: {
-    skill: string;
-    skillLevel: SkillLevel;
-  }[];
+  skills?: IEmployeeSkill[];
+}
+
+export interface IEmployeeSkill {
+  _id?: string;
+  skill: string;
+  skillLevel: SkillLevel;
 }
 
 export interface ISkill {
