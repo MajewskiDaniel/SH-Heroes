@@ -1,6 +1,7 @@
-import { IEmployee, IEmployeeDB, employeeSchema } from "../models";
+import { IEmployee, IEmployeeDB, employeeSchema, SkillLevel } from "../models";
 import mongoose from "mongoose";
 import { ParamsDictionary } from "express-serve-static-core";
+import { skillSchema } from "../../skills/models";
 
 export class EmployeesService {
   static Employee = mongoose.model<IEmployeeDB>("Employee", employeeSchema);
@@ -34,15 +35,23 @@ export class EmployeesService {
     return EmployeesService.Employee.findByIdAndDelete(id);
   }
 
-  async updateSkill(
-    idE: string,
-    idS: string,
-    // updatedLevel: Partial<IEmployee["skills"]>
-    updatedLevel: any
-  ) {
+  async updateSkill(idE: string, idS: string, updatedLevel: SkillLevel) {
     return EmployeesService.Employee.updateOne(
       { _id: idE, "skills.skill": idS },
       { $set: { "skills.$.skillLevel": updatedLevel } }
+      // { upsert: true }
+    );
+  }
+
+  async checkSkill(idE: string, idS: string) {
+    console.log("::checkSkill::", "checking skill");
+    return EmployeesService.Employee.findOne({ _id: idE, "skills.skill": idS });
+  }
+
+  async setNewSkill(idE: string, idS: string, updatedLevel: SkillLevel) {
+    return EmployeesService.Employee.updateOne(
+      { _id: idE },
+      { $push: { skills: { skill: idS, skillLevel: updatedLevel } } }
     );
   }
 

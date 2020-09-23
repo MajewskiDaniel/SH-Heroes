@@ -50,14 +50,28 @@ router.put("/:id", async (req: Request, res: Response) => {
 router.patch("/:idE/skills/:idS", async (req: Request, res: Response) => {
   const { idE, idS } = req.params;
   const { skillLevel } = req.body;
-
-  try {
-    await employeesService.updateSkill(idE, idS, skillLevel);
-    res
-      .status(200)
-      .send(`skill nr: ${idS} updated to ${skillLevel} in employee nr: ${idE}`);
-  } catch (e) {
-    res.status(404).send(e.message);
+  const isSkillInUser = await employeesService.checkSkill(idE, idS);
+  if (isSkillInUser) {
+    try {
+      console.log("::employees api::", skillLevel);
+      await employeesService.updateSkill(idE, idS, skillLevel);
+      res
+        .status(200)
+        .send(
+          `skill nr: ${idS} updated to ${skillLevel} in employee nr: ${idE}`
+        );
+    } catch (e) {
+      res.status(404).send(e.message);
+    }
+  } else {
+    try {
+      await employeesService.setNewSkill(idE, idS, skillLevel);
+      res
+        .status(200)
+        .send(
+          `skill nr: ${idS} added with level: ${skillLevel} in employee nr: ${idE}`
+        );
+    } catch (e) {}
   }
 });
 

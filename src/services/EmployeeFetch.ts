@@ -1,4 +1,4 @@
-import { IEmployee } from "../models/employee";
+import { IEmployee, ISkill, IEmployeeSkill } from "../models/employee";
 import applyMock from "./employee.mock";
 import { checkForError } from "./Utils";
 
@@ -43,6 +43,32 @@ export const EmployeeFetch = {
     return await resp;
   },
 
+  async editSkillLevel(
+    employeeId: IEmployee["_id"],
+    skillId: ISkill["_id"],
+    level: Partial<IEmployeeSkill>
+  ) {
+    console.log(
+      "::EmployeeFetch SVC::editSkillLevel::",
+      "::level::",
+      level,
+      "::emp ID::",
+      employeeId,
+      "::skill ID::",
+      skillId
+    );
+    const resp: any = await fetch(
+      `${this.url}/${employeeId}/skills/${skillId}`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(level),
+      }
+    );
+    checkForError(resp);
+    return await resp;
+  },
+
   async deleteEmployee(employee: IEmployee) {
     const resp: any = await fetch(`${this.url}/${employee._id}`, {
       method: "DELETE",
@@ -52,7 +78,3 @@ export const EmployeeFetch = {
     return resp;
   },
 };
-
-
-
-

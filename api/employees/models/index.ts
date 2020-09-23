@@ -10,10 +10,12 @@ export interface IEmployee {
   level: SeniorityLevel;
   position: EmployeePosition;
   photo: string;
-  skills?: {
-    skill: string;
-    skillLevel: SkillLevel;
-  }[];
+  skills?: IEmployeeSkill[];
+}
+
+export interface IEmployeeSkill {
+  skill: string;
+  skillLevel: SkillLevel;
 }
 
 export enum EmployeePosition {
@@ -72,7 +74,6 @@ export const employeeSchema: Schema = new Schema({
   skills: [
     {
       skill: { type: mongoose.Schema.Types.ObjectId, ref: "skills" },
-      // skill: String,
       skillLevel: Number,
     },
   ],
