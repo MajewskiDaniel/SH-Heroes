@@ -1,45 +1,14 @@
 import React, {PropsWithChildren, useEffect, useState} from 'react';
 import { IEmployee, ISkill } from '../../models/employee';
 import {TableFirstRow} from "../TableFirstRow/TableFirstRow";
+import {IDynamic} from "../SkillMatrixTable/SkillMatrixTable";
 
 export interface IRowDisplayTotal {
-  employees: IEmployee[],
-  skills: ISkill[]
+  total: IDynamic,
+  totalSkillLevel: IDynamic
 }
 
-export interface IDynamic {
-  [key: string]: number
-}
-
-export const RowDisplayTotal: React.FC<PropsWithChildren<IRowDisplayTotal>> = ({employees, skills }) => {
-  const [total, setTotal] = useState<IDynamic>({});
-  const [totalSkillLevel, setTotalSkillLevel] = useState<IDynamic>({});
-
-  useEffect(() => {
-    const totalHelper: IDynamic = {};
-    const totalSkillLevelHelper: IDynamic = {};
-
-    skills?.forEach((skill) => {
-      if( skill._id ) {
-        totalHelper[skill._id] = 0;
-        totalSkillLevelHelper[skill._id] = 0;
-      };
-    });
-
-    employees?.forEach(({skills}) => {
-      skills?.forEach(({skill, skillLevel}) => {
-        totalSkillLevelHelper[skill] += skillLevel;
-        if(skillLevel >= 1) {
-          totalHelper[skill] += 1
-        }
-      })
-    });
-
-    setTotal(totalHelper);
-    setTotalSkillLevel(totalSkillLevelHelper);
-  }, [skills, employees])
-
-
+export const RowDisplayTotal: React.FC<PropsWithChildren<IRowDisplayTotal>> = ({total, totalSkillLevel }) => {
 
   return (
     <>
