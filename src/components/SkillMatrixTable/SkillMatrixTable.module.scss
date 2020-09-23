@@ -1,3 +1,27 @@
+.Container {
+  display: flex;
+  justify-content: left;
+  width: 100%;
+  position: relative;
+  margin: 10px;
+}
+
 .Table {
   background-color: white;
+}
+
+.Cog {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 0;
+  right: 10px;
+}
+
+.Checkbox {
+  width: 100%;
+}
+
+.TagSelect {
+  width: 100%;
 }

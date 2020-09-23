@@ -3,7 +3,6 @@ import {Upload} from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import {FieldInputProps} from "formik";
 import {RcCustomRequestOptions, UploadChangeParam} from "antd/lib/upload/interface";
-import {inspect} from "util";
 import styles from './PhotoPicker.module.scss';
 
 export interface IPhotoPicker extends FieldInputProps<string>{
