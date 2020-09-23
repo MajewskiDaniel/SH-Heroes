@@ -22,21 +22,13 @@ export const TableRow: React.FC<PropsWithChildren<ITableRowProps>> = ({
   skills,
   reload,
 }) => {
-  const handleLevelClick = (level: React.ReactText, skill: ISkill) => {
+  const handleLevelClick = async (level: React.ReactText, skill: ISkill) => {
     const skillLevel: Partial<IEmployeeSkill> = {
       skillLevel: Number(level),
     };
     const employeeId = employee._id;
     const skillId = skill._id;
-    EmployeeFetch.editSkillLevel(employeeId, skillId, skillLevel);
-    // console.log(
-    //   "::TableRow Comp::handleLevelClick::level::",
-    //   skillLevel,
-    //   "::emp ID::",
-    //   employee._id,
-    //   "::skill ID::",
-    //   skill._id
-    // );
+    await EmployeeFetch.editSkillLevel(employeeId, skillId, skillLevel);
     reload();
   };
 
