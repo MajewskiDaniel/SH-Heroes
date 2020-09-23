@@ -17,6 +17,10 @@ import {CustomTagProps, SingleType} from "rc-select/lib/interface/generator";
 export interface ISkillMatrixTable {
 }
 
+export interface IDynamic {
+  [key: string]: number
+}
+
 export interface ISortOptions {
   skills: string[],
   experience: number,
@@ -40,6 +44,35 @@ export const SkillMatrixTable: React.FC<ISkillMatrixTable> = () => {
   const [sortOptions, setSortOptions] = useState<ISortOptions>({skills: [], experience: 0, seniorityLevel: null, tags: []});
   const [filteredEmployees, setFilteredEmployees] = useState<IEmployee[]>([]);
   const [tags, setTags] = useState<string[]>([]);
+  const [totalEmployees, setTotalEmployees] = useState<IDynamic>({});
+  const [totalSkillLevel, setTotalSkillLevel] = useState<IDynamic>({});
+
+  useEffect(() => {
+    const totalHelper: IDynamic = {};
+    const totalSkillLevelHelper: IDynamic = {};
+
+    skills?.forEach((skill) => {
+      if( skill._id ) {
+        totalHelper[skill._id] = 0;
+        totalSkillLevelHelper[skill._id] = 0;
+      };
+    });
+
+    employees?.forEach((empl) => {
+      empl.skills?.forEach(({skill, skillLevel}) => {
+        const actual = skills.find( s => s._id === skill );
+        if(actual) {
+          totalSkillLevelHelper[skill] += skillLevel;
+          if(skillLevel >= 1) {
+            totalHelper[skill] += 1
+          }
+        }
+      })
+    });
+
+    setTotalEmployees(totalHelper);
+    setTotalSkillLevel(totalSkillLevelHelper);
+  }, [skills, employees])
 
   const fetchEmployees = async () => {
     try {
@@ -209,9 +242,9 @@ export const SkillMatrixTable: React.FC<ISkillMatrixTable> = () => {
       <table className={styles.Table}>
         <TableHeader skills={oldSkills}></TableHeader>
         <tbody>
-          <RowDisplayTotal employees={filteredEmployees} skills={skills}></RowDisplayTotal>
+          <RowDisplayTotal total={totalEmployees} totalSkillLevel={totalSkillLevel}></RowDisplayTotal>
           { filteredEmployees?.map( (employee) => (
-            <TableRow employee={employee} skills={skills} reload={fetchEmployees}></TableRow>
+            <TableRow employee={employee} skills={skills} reload={fetchEmployees} ></TableRow>
           ))}
         </tbody>
       </table>

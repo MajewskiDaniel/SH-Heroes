@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import { IDynamic } from "../RowDisplayTotal/RowDisplayTotal";
+import { IDynamic } from "../SkillMatrixTable/SkillMatrixTable";
 
 import styles from './TableFirstRow.module.scss';
 
