@@ -2,15 +2,18 @@ import React from "react";
 import { Story, Meta } from "@storybook/react/types-6-0";
 import { TableHeader } from "./TableHeader";
 import { ISkill } from "../../models/employee";
+import { IDynamic } from "../SkillMatrixTable/SkillMatrixTable";
 
 export default {
   title: "Storybook/TableHeader",
   component: TableHeader,
 } as Meta;
 
-const Template: Story<{ skills: ISkill[] }> = (skills) => (
-  <TableHeader {...skills} />
-);
+const Template: Story<{
+  skills: ISkill[];
+  totalSkillLevel: IDynamic;
+  employeesCoverage: number;
+}> = (args) => <TableHeader {...args} />;
 
 export const ExampleTableHeader = Template.bind({});
 ExampleTableHeader.args = {

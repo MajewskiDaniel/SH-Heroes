@@ -4,8 +4,13 @@ import { ISkill } from "../../models/employee";
 import { Skills } from "../../services/SkillFetch";
 import { skillsInCategory } from "../../services/Utils";
 import { Pie } from "@nivo/pie";
+import { IDynamic } from "../SkillMatrixTable/SkillMatrixTable";
 
-export const TableHeader: React.FC<{ skills: ISkill[] }> = ({ skills }) => {
+export const TableHeader: React.FC<{
+  skills: ISkill[];
+  totalSkillLevel: IDynamic;
+  employeesCoverage: number;
+}> = ({ skills, totalSkillLevel, employeesCoverage }) => {
   const [categories, setCategories] = useState<string[]>([]);
 
   const fetchCategories = async () => {
@@ -19,15 +24,30 @@ export const TableHeader: React.FC<{ skills: ISkill[] }> = ({ skills }) => {
 
   const cellWidth = 40;
 
+  const totalCoverage = (totalSkillLevel: IDynamic) => {
+    let coverageArr: number[] = [];
+    for (const skillLevel in totalSkillLevel) {
+      coverageArr.push(totalSkillLevel[skillLevel]);
+    }
+    console.log("::TableHeader::coverageArray::", coverageArr);
+    if (coverageArr.length !== 0) {
+      return Math.round(
+        (coverageArr.reduce((acc, currentVal) => acc + currentVal) /
+          (coverageArr.length * 5 * employeesCoverage)) *
+          100
+      );
+    } else return 0;
+  };
+
   const pieData = [
     {
       id: "matched",
-      value: 86,
+      value: totalCoverage(totalSkillLevel),
       color: "goldenrod",
     },
     {
       id: "not matched",
-      value: 14,
+      value: 100 - totalCoverage(totalSkillLevel),
       color: "lightgrey",
     },
   ];
@@ -35,6 +55,10 @@ export const TableHeader: React.FC<{ skills: ISkill[] }> = ({ skills }) => {
   useEffect(() => {
     fetchCategories();
   }, []);
+
+  useEffect(() => {
+    totalCoverage(totalSkillLevel);
+  }, [totalSkillLevel]);
 
   return (
     <thead className={styles.tableHeader}>
