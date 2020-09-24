@@ -1,6 +1,7 @@
 import  { useMemo } from 'react';
 import { ISkillMatirxEmployee, ISortOptions } from "../components/SkillMatrixTable/SkillMatrixTable";
 import moment from "moment";
+import { sortEmployees } from "../components/SkillMatrixTable/SkillMatrixTable";
 
 export const useFilter = (employees: ISkillMatirxEmployee[], filters: ISortOptions): [ISkillMatirxEmployee[]] => {
 
@@ -17,8 +18,8 @@ export const useFilter = (employees: ISkillMatirxEmployee[], filters: ISortOptio
     if (filters.experience) {
       results = results.filter((empl) => {
         const start = moment(empl.startingYear);
-        const exp = moment().diff(start, "year");
-        return exp === filters.experience;
+        const experience = moment().diff(start, "year");
+        return filters.experience[0] <= experience && experience < filters.experience[1];
       });
     }
     if (filters.seniorityLevel || filters.seniorityLevel === 0) {
@@ -32,7 +33,7 @@ export const useFilter = (employees: ISkillMatirxEmployee[], filters: ISortOptio
       );
       results = Array.from(new Set(elem.flat()));
     }
-
+    sortEmployees(results)
     return results;
   }, [employees, filters]);
 
