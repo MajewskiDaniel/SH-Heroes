@@ -1,25 +1,19 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Drawer, Checkbox, Slider, Dropdown, Menu, Tag, Select } from "antd";
 import { SettingOutlined } from "@ant-design/icons";
-import moment from "moment";
+import classNames from 'classnames';
 
 import { TableHeader } from "../TableHeader/TableHeader";
 import { RowDisplayTotal } from "../RowDisplayTotal/RowDisplayTotal";
 import { TableRow } from "../TableRow/TableRow";
 import styles from "./SkillMatrixTable.module.scss";
-import {
-  IEmployee,
-  ISkill,
-  SeniorityLevel,
-  seniorityMap,
-  skillLevelMap,
-} from "../../models/employee";
+import {IEmployee, ISkill, SeniorityLevel, seniorityMap, skillLevelMap,} from "../../models/employee";
 import { Skills } from "../../services/SkillFetch";
 import { EmployeeFetch } from "../../services/EmployeeFetch";
 import { allSkillsInCategory } from "../../services/Utils";
 import { CustomTagProps, SingleType } from "rc-select/lib/interface/generator";
-
-export interface ISkillMatrixTable {}
+import {useFilter} from "../../hooks/useFilter";
+import {useCountSkills} from "../../hooks/useCountSkills";
 
 export interface IDynamic {
   [key: string]: number;
@@ -44,7 +38,7 @@ export interface ISkillMatirxEmployee extends IEmployee {
   disable: boolean
 }
 
-export const SkillMatrixTable: React.FC<ISkillMatrixTable> = () => {
+export const SkillMatrixTable: React.FC = () => {
   const [employees, setEmployees] = useState<ISkillMatirxEmployee[]>([]);
   const [skills, setSkills] = useState<ISkill[]>([]);
   const [oldSkills, setOldSkills] = useState<ISkill[]>([]);
@@ -55,61 +49,27 @@ export const SkillMatrixTable: React.FC<ISkillMatrixTable> = () => {
     seniorityLevel: null,
     tags: [],
   });
-  const [filteredEmployees, setFilteredEmployees] = useState<ISkillMatirxEmployee[]>([]);
+  const [filteredEmployees] = useFilter(employees, sortOptions);
   const [tags, setTags] = useState<string[]>([]);
-  const [totalEmployees, setTotalEmployees] = useState<IDynamic>({});
-  const [totalSkillLevel, setTotalSkillLevel] = useState<IDynamic>({});
-  const [employeesCoverage, setEmployeesCoverage] = useState(0);
+  const {totalEmployees, totalSkillLevel, employeesCoverage} = useCountSkills(skills, employees);
+  const [disabledIds, setDisabledIds] = useState<string[]>([])
 
-  useEffect(() => {
-    const totalHelper: IDynamic = {};
-    const totalSkillLevelHelper: IDynamic = {};
-
-    skills?.forEach((skill) => {
-      if (skill._id) {
-        totalHelper[skill._id] = 0;
-        totalSkillLevelHelper[skill._id] = 0;
-      }
-    });
-
-    employees?.forEach((empl) => {
-      empl.skills?.forEach(({ skill, skillLevel }) => {
-        const actual = skills.find((s) => s._id === skill);
-        if (actual) {
-          totalSkillLevelHelper[skill] += skillLevel;
-          if (skillLevel >= 1) {
-            totalHelper[skill] += 1;
-          }
-        }
-      });
-    });
-
-    setTotalEmployees(totalHelper);
-    setTotalSkillLevel(totalSkillLevelHelper);
-    setEmployeesCoverage(employees.length);
-  }, [skills, employees]);
+  const sortEmployees = (employees: ISkillMatirxEmployee[]) => {
+    return employees.sort((empl: ISkillMatirxEmployee) => empl.disable ? 1 : -1);
+  }
 
   const fetchEmployees = async () => {
     try {
-      const data = await EmployeeFetch.getEmployee();
-      // data.forEach(( empl: ISkillMatirxEmployee) => empl.disable = false);
+      let data = await EmployeeFetch.getEmployee();
+      data.forEach(( empl: ISkillMatirxEmployee) => {
+        disabledIds.find(id => id === empl._id) ? empl.disable = true : empl.disable = false;
+      });
+      data = sortEmployees(data);
       setEmployees(data);
-      let tags = data.reduce(
-        (acc: string[], empl: IEmployee) =>
-          empl.tags ? [...acc, ...empl.tags] : acc,
-        []
-      );
+
+      let tags = data.reduce((acc: string[], empl: IEmployee) => empl.tags ? [...acc, ...empl.tags] : acc, []);
       tags = Array.from(new Set(tags));
       setTags(tags);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const fetchSkills = async () => {
-    try {
-      const data = await Skills.getSkills();
-      setSkills(data);
     } catch (e) {
       console.log(e);
     }
@@ -123,13 +83,7 @@ export const SkillMatrixTable: React.FC<ISkillMatrixTable> = () => {
 
         const catData = await Skills.getCategories();
 
-        const sorted = catData?.reduce(
-          (acc: ISkill[], cat: string) => [
-            ...acc,
-            ...allSkillsInCategory(cat, skillData.skills),
-          ],
-          []
-        );
+        const sorted = catData?.reduce((acc: ISkill[], cat: string) => [...acc, ...allSkillsInCategory(cat, skillData.skills),], []);
 
         setOldSkills(skillData.skills);
         setSkills(sorted);
@@ -138,40 +92,6 @@ export const SkillMatrixTable: React.FC<ISkillMatrixTable> = () => {
       }
     })();
   }, []);
-
-  useMemo(() => {
-    let results = [...employees];
-    if (sortOptions.skills.length > 0) {
-      const elem = sortOptions.skills.map((sortOptionSkill) =>
-        results.filter((empl) =>
-          empl.skills?.find((skill) => skill.skill === sortOptionSkill)
-        )
-      );
-      results = Array.from(new Set(elem.flat()));
-    }
-    if (sortOptions.experience) {
-      results = results.filter((empl) => {
-        const start = moment(empl.startingYear);
-        const exp = moment().diff(start, "year");
-        return exp === sortOptions.experience;
-      });
-    }
-    if (sortOptions.seniorityLevel || sortOptions.seniorityLevel === 0) {
-      results = results.filter(
-        (empl) => empl.level === sortOptions.seniorityLevel
-      );
-    }
-    if (sortOptions.tags.length > 0) {
-      const elem = sortOptions.tags.map((sortOptionTag) =>
-        results.filter((empl) =>
-          empl.tags?.find((tag) => tag === sortOptionTag)
-        )
-      );
-      results = Array.from(new Set(elem.flat()));
-    }
-
-    setFilteredEmployees(results);
-  }, [employees, sortOptions]);
 
   const showDrawer = () => {
     setVisible(true);
@@ -184,8 +104,7 @@ export const SkillMatrixTable: React.FC<ISkillMatrixTable> = () => {
   const onCheckboxClick = (skill: ISkill) => {
     let newSkills = [...sortOptions.skills];
     const occurred = newSkills.find((setSkill) => setSkill === skill._id);
-    newSkills = occurred
-      ? [...sortOptions.skills?.filter((setSkill) => setSkill !== skill._id)]
+    newSkills = occurred ? [...sortOptions.skills?.filter((setSkill) => setSkill !== skill._id)]
       : [...newSkills, skill._id!];
     setSortOptions({ ...sortOptions, skills: newSkills });
   };
@@ -211,7 +130,20 @@ export const SkillMatrixTable: React.FC<ISkillMatrixTable> = () => {
 
   const toggleEnable = (id: string) => {
     let newEmpl = [...employees];
-    newEmpl.map( empl => empl._id === id? empl.disable = !empl.disable : empl);
+    newEmpl.filter( empl => {
+      if(empl._id === id) {
+        if( empl.disable ) {
+          let ids = disabledIds.filter( disId => disId !== id);
+          setDisabledIds(ids)
+        } else {
+          setDisabledIds([...disabledIds, id]);
+        }
+        return empl.disable = !empl.disable;
+      } else {
+        return empl;
+      }
+    });
+    newEmpl = sortEmployees(newEmpl);
     setEmployees(newEmpl);
   }
 
@@ -234,14 +166,9 @@ export const SkillMatrixTable: React.FC<ISkillMatrixTable> = () => {
 
   const marks = {
     0: '0',
-    2: '2',
-    4: '4',
-    6: '6',
-    8: '8',
+    5: '5',
     10: '10',
-    12: '12',
-    14: '14',
-    16: '16'
+    15: '15',
   };
 
   return (
@@ -258,7 +185,7 @@ export const SkillMatrixTable: React.FC<ISkillMatrixTable> = () => {
         onClose={onClose}
         visible={visible}
       >
-        <div>Skills</div>
+        <div className={styles.Label}>Skills</div>
         {skills.map((skill) => (
           <Checkbox
             onChange={() => onCheckboxClick(skill)}
@@ -268,21 +195,21 @@ export const SkillMatrixTable: React.FC<ISkillMatrixTable> = () => {
             {skill.skillName}
           </Checkbox>
         ))}
-        <label htmlFor="exp">Experience</label>
+        <label className={styles.Label} htmlFor="exp">Experience</label>
         <Slider
           id="exp"
           min={0}
-          max={10}
+          max={16}
           onChange={handleSliderChange}
           value={sortOptions.experience}
           marks={marks}
         />
-        <Dropdown overlay={menu} trigger={["click"]}>
+        <Dropdown overlay={menu} trigger={["click"]} className={styles.Label}>
           <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
             Seniority level
           </a>
         </Dropdown>
-        <div>Tags</div>
+        <div className={styles.Label}>Tags</div>
         <Select
           mode="multiple"
           showArrow
@@ -304,7 +231,7 @@ export const SkillMatrixTable: React.FC<ISkillMatrixTable> = () => {
               </Tag>
             );
           }}
-          className={styles.TagSelect}
+          className={classNames(styles.TagSelect, styles.Label)}
           options={tags.map((tag) => ({ value: tag }))}
           onSelect={handleSelect}
           onDeselect={handleDeselect}
@@ -322,7 +249,7 @@ export const SkillMatrixTable: React.FC<ISkillMatrixTable> = () => {
             total={totalEmployees}
             totalSkillLevel={totalSkillLevel}
           ></RowDisplayTotal>
-          {filteredEmployees?.map((employee) => (
+          {filteredEmployees?.map((employee: ISkillMatirxEmployee) => (
             <TableRow
               employee={employee}
               skills={skills}

@@ -1,11 +1,6 @@
 import React, { PropsWithChildren } from "react";
 import { Dropdown, Checkbox, Menu } from "antd";
-import {
-  IEmployee,
-  ISkill,
-  SkillLevel,
-  IEmployeeSkill,
-} from "../../models/employee";
+import { ISkill, SkillLevel, IEmployeeSkill } from "../../models/employee";
 import { ISkillMatirxEmployee } from "../SkillMatrixTable/SkillMatrixTable";
 import { EmployeeFetch } from "../../services/EmployeeFetch";
 import { TableNameField } from "../TableNameField/TableNameField";
@@ -54,6 +49,7 @@ export const TableRow: React.FC<PropsWithChildren<ITableRowProps>> = ({
             firstName={employee.firstName}
             lastName={employee.lastName}
             avatar={employee.photo}
+            disable={employee.disable}
           />
         </th>
       </Dropdown>
@@ -68,6 +64,7 @@ export const TableRow: React.FC<PropsWithChildren<ITableRowProps>> = ({
               level={level}
               skill={allSkillsSkill}
               handleLevelClick={handleLevelClick}
+              disabled={employee.disable}
             />
           </td>
         );

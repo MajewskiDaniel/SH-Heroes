@@ -11,8 +11,8 @@
 }
 
 .Cog {
-  width: 30px;
-  height: 30px;
+  width: 50px;
+  height: 50px;
   position: absolute;
   top: 0;
   right: 10px;
@@ -24,4 +24,15 @@
 
 .TagSelect {
   width: 100%;
+}
+
+.Label {
+  font-weight: 600;
+  font-size: 1.2rem;
+  margin: 0.3rem 0;
+  color: black;
+}
+
+:global(.ant-checkbox-wrapper + .ant-checkbox-wrapper) {
+  margin-left: 0!important;
 }
