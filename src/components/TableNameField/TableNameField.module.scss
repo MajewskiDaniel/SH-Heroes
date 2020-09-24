@@ -4,23 +4,21 @@
   height: 100%;
   justify-content: left;
   align-items: center;
-  //border: 1px solid lightgrey;
-  //max-width: 20%;
+
   .avatar {
-    //width: 10%;
     text-align: left;
-    padding-left: 3px;
-    height: 40px;
+    padding: 2px;
+    height: 38px;
+    flex-basis: 40px;
     img {
       max-height: 100%;
     }
   }
   .name {
-    //width: 88%;
     text-align: left;
     margin-left: 5px;
     span {
-      //line-height: 28px;
+      font-size: 14px;
       font-weight: bold;
     }
   }

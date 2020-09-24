@@ -1,38 +1,49 @@
 $width: 40px;
 
 .tableHeader {
+  position: relative;
   .skillCategory {
     font-size: 12px;
     padding: 5px;
     border: 1px solid lightgrey;
-    overflow: hidden;
-    max-height: $width;
+    // overflow: hidden;
+    z-index: 1;
+    // max-height: $width;
+    height: 20px;
+    transform: translateY(-206px);
   }
 
   .pieChart {
     min-height: $width;
-    width: 200px;
-    max-height: 200px;
+    width: 220px;
+    max-height: 220px;
     position: relative;
-    .pieContainer {
-      position: absolute;
-      .pieDescription {
+    .flexWrapper {
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .pieContainer {
         position: absolute;
-        top: 58px;
-        left: 45px;
-        font-size: 16px;
-        text-align: center;
-        color: grey;
-        .piePercentage {
-          font-size: 46px;
-          font-weight: bold;
-          color: goldenrod;
+        .pieDescription {
+          position: absolute;
+          top: 58px;
+          left: 45px;
+          font-size: 16px;
+          text-align: center;
+          color: grey;
+          .piePercentage {
+            font-size: 46px;
+            font-weight: bold;
+            color: goldenrod;
+          }
         }
       }
     }
   }
   .skillName {
-    height: 160px;
+    height: 200px;
     min-width: $width;
     max-width: $width;
     border: 1px solid lightgrey;
@@ -46,5 +57,19 @@ $width: 40px;
       transform-origin: left;
       white-space: nowrap;
     }
+  }
+  th,
+  .pieChart,
+  .skillCategory {
+    position: sticky;
+    top: 0;
+    background: white;
+  }
+  th,
+  .skillName {
+    position: sticky;
+    top: 22px;
+    background: white;
+    border: 1px solid lightgrey;
   }
 }
