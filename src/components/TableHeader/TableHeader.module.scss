@@ -6,11 +6,11 @@ $width: 40px;
     font-size: 12px;
     padding: 5px;
     border: 1px solid lightgrey;
-    // overflow: hidden;
+    overflow: hidden;
     z-index: 1;
     // max-height: $width;
     height: 20px;
-    transform: translateY(-206px);
+    vertical-align: top;
   }
 
   .pieChart {
