@@ -14,6 +14,7 @@ import { allSkillsInCategory } from "../../services/Utils";
 import { CustomTagProps, SingleType } from "rc-select/lib/interface/generator";
 import {useFilter} from "../../hooks/useFilter";
 import {useCountSkills} from "../../hooks/useCountSkills";
+import {SliderRangeProps} from "antd/es/slider";
 
 export interface IDynamic {
   [key: string]: number;
@@ -21,7 +22,7 @@ export interface IDynamic {
 
 export interface ISortOptions {
   skills: string[];
-  experience: number;
+  experience: [number, number];
   seniorityLevel: SeniorityLevel | null;
   tags: string[];
 }
@@ -38,6 +39,18 @@ export interface ISkillMatirxEmployee extends IEmployee {
   disable: boolean
 }
 
+export const sortEmployees = (employees: ISkillMatirxEmployee[]) => {
+  return employees.sort((emplA: ISkillMatirxEmployee, emplB) => {
+    if(!emplA.disable && !emplB.disable) {
+      return 0;
+    } else if (emplA.disable && !emplB.disable) {
+      return 1;
+    } else {
+      return -1;
+    }
+  });
+}
+
 export const SkillMatrixTable: React.FC = () => {
   const [employees, setEmployees] = useState<ISkillMatirxEmployee[]>([]);
   const [skills, setSkills] = useState<ISkill[]>([]);
@@ -45,7 +58,7 @@ export const SkillMatrixTable: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const [sortOptions, setSortOptions] = useState<ISortOptions>({
     skills: [],
-    experience: 0,
+    experience: [0,16],
     seniorityLevel: null,
     tags: [],
   });
@@ -53,10 +66,6 @@ export const SkillMatrixTable: React.FC = () => {
   const [tags, setTags] = useState<string[]>([]);
   const {totalEmployees, totalSkillLevel, employeesCoverage} = useCountSkills(skills, employees);
   const [disabledIds, setDisabledIds] = useState<string[]>([])
-
-  const sortEmployees = (employees: ISkillMatirxEmployee[]) => {
-    return employees.sort((empl: ISkillMatirxEmployee) => empl.disable ? 1 : -1);
-  }
 
   const fetchEmployees = async () => {
     try {
@@ -109,7 +118,7 @@ export const SkillMatrixTable: React.FC = () => {
     setSortOptions({ ...sortOptions, skills: newSkills });
   };
 
-  const handleSliderChange = (value: number) => {
+  const handleSliderChange = (value: [number, number]) => {
     setSortOptions({ ...sortOptions, experience: value });
   };
 
@@ -197,6 +206,8 @@ export const SkillMatrixTable: React.FC = () => {
         ))}
         <label className={styles.Label} htmlFor="exp">Experience</label>
         <Slider
+          range
+          defaultValue={[0,16]}
           id="exp"
           min={0}
           max={16}
