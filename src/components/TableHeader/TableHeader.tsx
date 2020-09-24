@@ -64,21 +64,25 @@ export const TableHeader: React.FC<{
     <thead className={styles.tableHeader}>
       <tr className={styles.skillCategoriesRow}>
         <th className={styles.pieChart} rowSpan={2}>
-          <div className={styles.pieContainer}>
-            <Pie
-              data={pieData}
-              width={180}
-              height={180}
-              innerRadius={0.6}
-              padAngle={1}
-              cornerRadius={5}
-              enableRadialLabels={false}
-              enableSlicesLabels={false}
-              colors={[pieData[0].color, pieData[1].color]}
-            />
-            <div className={styles.pieDescription}>
-              Coverage <br />
-              <span className={styles.piePercentage}>{pieData[0].value}%</span>
+          <div className={styles.flexWrapper}>
+            <div className={styles.pieContainer}>
+              <Pie
+                data={pieData}
+                width={180}
+                height={180}
+                innerRadius={0.6}
+                padAngle={1}
+                cornerRadius={5}
+                enableRadialLabels={false}
+                enableSlicesLabels={false}
+                colors={[pieData[0].color, pieData[1].color]}
+              />
+              <div className={styles.pieDescription}>
+                Coverage <br />
+                <span className={styles.piePercentage}>
+                  {pieData[0].value}%
+                </span>
+              </div>
             </div>
           </div>
         </th>
@@ -92,7 +96,7 @@ export const TableHeader: React.FC<{
               }px`,
             }}
           >
-            {category}
+            <span>{category}</span>
           </th>
         ))}
       </tr>
