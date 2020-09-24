@@ -12,6 +12,7 @@
     flex-basis: 40px;
     img {
       max-height: 100%;
+      z-index: -1;
     }
   }
   .name {
@@ -22,7 +23,7 @@
       font-weight: bold;
     }
   }
-  .disable{
+  .disable {
     opacity: 0.5;
   }
 }
