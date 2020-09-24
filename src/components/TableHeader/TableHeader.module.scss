@@ -6,11 +6,20 @@ $width: 40px;
     font-size: 12px;
     padding: 5px;
     border: 1px solid lightgrey;
-    // overflow: hidden;
+    overflow: hidden;
     z-index: 1;
     // max-height: $width;
     height: 20px;
-    transform: translateY(-206px);
+    vertical-align: top;
+    span {
+      // display: inline-block;
+      // height: 100%;
+      // width: 100%;
+      // border: 1px solid lightgrey;
+      // box-shadow: 6px 6px lightgray, -6px -6px lightgray;
+      // outline: 1px solid lightgray;
+      // outline-offset: 5.5px;
+    }
   }
 
   .pieChart {
@@ -18,6 +27,8 @@ $width: 40px;
     width: 220px;
     max-height: 220px;
     position: relative;
+    background-color: white;
+    z-index: 1;
     .flexWrapper {
       height: 100%;
       display: flex;
@@ -62,7 +73,7 @@ $width: 40px;
   .pieChart,
   .skillCategory {
     position: sticky;
-    top: 0;
+    top: 0px;
     background: white;
   }
   th,

@@ -4,6 +4,7 @@
   width: 100%;
   position: relative;
   margin: 10px;
+  overflow-x: visible;
 }
 
 .Table {
@@ -33,5 +34,5 @@
 }
 
 :global(.ant-checkbox-wrapper + .ant-checkbox-wrapper) {
-  margin-left: 0!important;
+  margin-left: 0 !important;
 }
