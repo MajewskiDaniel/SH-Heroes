@@ -13,7 +13,6 @@ export const Login = {
       });
       checkForError(resp);
       const u = await resp.json();
-      console.log("resp", u.token)
       await this.saveToken(u.token);
       return true;
     } catch (e) {
