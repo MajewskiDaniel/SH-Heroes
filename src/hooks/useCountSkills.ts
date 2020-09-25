@@ -2,7 +2,7 @@ import {useMemo} from 'react';
 import { IDynamic, ISkillMatirxEmployee } from "../components/SkillMatrixTable/SkillMatrixTable";
 import { ISkill } from "../models/employee";
 
-export const useCountSkills = (skills: ISkill[], employees: ISkillMatirxEmployee[])
+export const useCountSkills = (skills: ISkill[], employees: ISkillMatirxEmployee[], filtered: ISkillMatirxEmployee[])
   : { totalEmployees: IDynamic; totalSkillLevel: IDynamic; employeesCoverage: number} => {
   const useCountSkills = useMemo(() => {
       const totalHelper: IDynamic = {};
@@ -15,7 +15,7 @@ export const useCountSkills = (skills: ISkill[], employees: ISkillMatirxEmployee
         }
       });
 
-      employees?.forEach((empl) => {
+    filtered?.forEach((empl) => {
         empl.skills?.forEach(({ skill, skillLevel }) => {
           const actual = skills.find((s) => s._id === skill);
           if (actual && !empl.disable) {
@@ -27,9 +27,9 @@ export const useCountSkills = (skills: ISkill[], employees: ISkillMatirxEmployee
         });
       });
     const employeesCount = employees.length;
-
+    console.log("hook")
       return {totalEmployees: totalHelper, totalSkillLevel: totalSkillLevelHelper, employeesCoverage: employeesCount};
-  }, [skills, employees]);
+  }, [skills,  filtered]);
 
   return useCountSkills;
 }
