@@ -11,8 +11,6 @@ if (MOCKED_DATA) {
 export const EmployeeFetch = {
   url: `${process.env.REACT_APP_URL}/employees`,
 
-
-
   async getEmployee(id?: string) {
     const urlWithId = id ? `${this.url}/${id}` : this.url;
     const resp = await http(urlWithId);
@@ -45,15 +43,6 @@ export const EmployeeFetch = {
     skillId: ISkill["_id"],
     level: Partial<IEmployeeSkill>
   ) {
-    console.log(
-      "::EmployeeFetch SVC::editSkillLevel::",
-      "::level::",
-      level,
-      "::emp ID::",
-      employeeId,
-      "::skill ID::",
-      skillId
-    );
     const resp: any = await http(
       `${this.url}/${employeeId}/skills/${skillId}`,
       {
@@ -75,4 +64,3 @@ export const EmployeeFetch = {
     return resp;
   },
 };
-

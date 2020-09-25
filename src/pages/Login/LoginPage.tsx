@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./LoginPage.module.scss";
-import {Form, Input, Button, notification} from "antd";
+import { Form, Input, Button, notification } from "antd";
 import { Authentication as LoginSvc } from "../../services/Authentication";
 import { Consumer } from "../../components/AuthContext/AuthContext";
 import { useHistory } from "react-router-dom";
@@ -26,23 +26,20 @@ const Login: React.FC = () => {
 
   const onSuccess = async (values: any, setAuth: (value: boolean) => void) => {
     const isValid = await LoginSvc.login(values);
-    if(isValid) {
+    if (isValid) {
       setAuth(isValid!);
       history.push("/home");
-      notification['success']({
-        message: 'Success',
-        description:
-          'logged in successfully'
+      notification["success"]({
+        message: "Success",
+        description: "logged in successfully",
       });
     } else {
       setAuth(isValid!);
-      notification['error']({
-        message: 'Error',
-        description:
-          'Credentials invalid'
+      notification["error"]({
+        message: "Error",
+        description: "Credentials invalid",
       });
     }
-
   };
 
   const onFailed = (errorInfo: any) => {

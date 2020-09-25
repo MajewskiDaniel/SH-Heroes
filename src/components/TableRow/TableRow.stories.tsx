@@ -1,17 +1,17 @@
-import React, {PropsWithChildren} from 'react';
-import {Meta, Story} from '@storybook/react/types-6-0';
+import React, { PropsWithChildren } from "react";
+import { Meta, Story } from "@storybook/react/types-6-0";
 
-import {TableRow, ITableRowProps} from './TableRow';
-import {SkillLevel} from "../../models/employee";
+import { TableRow, ITableRowProps } from "./TableRow";
+import { SkillLevel } from "../../models/employee";
 
 export default {
-  title: 'Storybook/TableRow',
+  title: "Storybook/TableRow",
   component: TableRow,
 } as Meta;
 
 const Template: Story<PropsWithChildren<ITableRowProps>> = (args) => (
   <table>
-    <TableRow {...args}/>
+    <TableRow {...args} />
   </table>
 );
 
@@ -19,10 +19,7 @@ export const Table1Row = Template.bind({});
 Table1Row.args = {
   employee: {
     disable: false,
-    tags: [
-      "love",
-      "science"
-    ],
+    tags: ["love", "science"],
     _id: "5f58da8d1d3dbb43e82764ed",
     firstName: "Morty",
     lastName: "Sanchez",
@@ -35,12 +32,13 @@ Table1Row.args = {
     skills: [
       {
         skill: "5f608c5098a547765440bc5a",
-        skillLevel: SkillLevel.FOUR
+        skillLevel: SkillLevel.FOUR,
       },
       {
         skill: "5f608c8e98a547765440bc5b",
-        skillLevel: SkillLevel.ONE
-      }]
+        skillLevel: SkillLevel.ONE,
+      },
+    ],
   },
   skills: [
     {
@@ -78,15 +76,8 @@ Table1Row.args = {
       skillName: "Git",
       skillCategory: "Devops",
       skillWeight: 2,
-    }
+    },
   ],
-  reload: ()=> {
-    console.log('aaaaaaaa')
-  },
-  toggleEnable: (id) => {
-    console.log('aaaaaaaa')
-  }
+  reload: () => {},
+  toggleEnable: (id) => {},
 };
-
-
-

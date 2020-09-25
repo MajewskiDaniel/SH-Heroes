@@ -1,5 +1,11 @@
 import mongoose from "mongoose";
-import { ILoginDB, loginSchema, ILogin, ITokenDB, tokenSchema } from "../models";
+import {
+  ILoginDB,
+  loginSchema,
+  ILogin,
+  ITokenDB,
+  tokenSchema,
+} from "../models";
 
 export class LoginService {
   static Login = mongoose.model<ILoginDB>("Login", loginSchema);
@@ -12,14 +18,13 @@ export class LoginService {
   }
 
   async findUser(login: string, password: string) {
-    return LoginService.Login.findOne({login: login, password: password});
+    return LoginService.Login.findOne({ login: login, password: password });
   }
 
   async authorize(login: string, password: string) {
     const user = await this.findUser(login, password);
-    if(user) {
+    if (user) {
       const resp = await this.addToken(login);
-      console.log(resp)
       return resp;
     } else {
       throw new Error("Not authorized");
@@ -31,22 +36,22 @@ export class LoginService {
     return employeeModel.save();
   }
 
-  async getTokens(){
-    return LoginService.Token.find()
+  async getTokens() {
+    return LoginService.Token.find();
   }
 
   async getToken(token: string) {
-    return LoginService.Token.findOne({token: token})
+    return LoginService.Token.findOne({ token: token });
   }
 
   async addToken(user: string) {
     const token = this.generateToken();
-    const authUserModel = new LoginService.Token({user: user, token: token});
+    const authUserModel = new LoginService.Token({ user: user, token: token });
     return authUserModel.save();
   }
 
   async deleteToken(token: string) {
-    return LoginService.Token.findOneAndDelete({token: token});
+    return LoginService.Token.findOneAndDelete({ token: token });
   }
 
   generateToken() {
