@@ -1,21 +1,23 @@
-import React, { Component, PropsWithChildren } from "react";
+import React from "react";
 import { Route, Redirect } from "react-router-dom";
 
 interface IGuardedRouteProps {
-  component: Component;
+  component: React.FC;
   auth: boolean;
+  path: string;
+  exact?: boolean;
 }
 
-const GuardedRoute: React.FC<PropsWithChildren<IGuardedRouteProps>> = ({
+const GuardedRoute: React.FC<IGuardedRouteProps> = ({
   component: Component,
   auth,
-  ...rest
+  path,
+  exact,
 }) => (
   <Route
-    {...rest}
-    render={(props) =>
-      auth === true ? <Component {...props} /> : <Redirect to="/" />
-    }
+    path={path}
+    exact={exact}
+    render={() => (auth ? <Component /> : <Redirect to="/" />)}
   />
 );
 
