@@ -1,0 +1,15 @@
+.container {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  span.ant-input-password.ant-input-affix-wrapper {
+    margin-left: 0px !important;
+    background-color: green;
+  }
+  .instruction {
+    height: 100px;
+    line-height: 100px;
+  }
+}
