@@ -16,12 +16,11 @@ router.get("/", async (req: Request, res: Response) => {
 
 router.post("/", async (req: Request, res: Response) => {
   try {
-    const {login, password} = req.body;
+    const { login, password } = req.body;
     const token = await loginService.authorize(login, password);
     // const employee = await loginService.addUser(req.body);
     res.status(200).send(token);
   } catch (e) {
-    console.log(e.message)
     res.status(401).send("error: not autorized");
   }
 });
@@ -31,9 +30,8 @@ router.get("/token", async (req: Request, res: Response) => {
     const tokens = await loginService.getTokens();
     res.status(200).send(tokens);
   } catch (e) {
-    console.log(e.message);
     res.status(404).send("not found");
   }
-})
+});
 
 export { router };

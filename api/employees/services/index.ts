@@ -43,7 +43,6 @@ export class EmployeesService {
   }
 
   async checkSkill(idE: string, idS: string) {
-    console.log("::checkSkill::", "checking skill");
     return EmployeesService.Employee.findOne({ _id: idE, "skills.skill": idS });
   }
 

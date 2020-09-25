@@ -12,7 +12,6 @@ const SkillListPage: React.FC = () => {
     currentPage: 1,
     totalRecords: 11,
   });
-  console.log("::skills::", skills);
   const fetchSkills = useCallback(
     async (
       limit?: number,
@@ -22,18 +21,14 @@ const SkillListPage: React.FC = () => {
     ) => {
       let sortingOrder = criteria === "descend" ? "desc" : "asc";
       try {
-        // console.log("::SkillListPage::fetchSkills::criteria::", criteria);
         const skillData = await Skills.getSkills(
           limit,
           current,
           sortBy,
           sortingOrder
         );
-        console.log("::skillData::", skillData);
         setSkills(skillData);
-      } catch (e) {
-        console.log("fetchSkills:: error::", e);
-      }
+      } catch (e) {}
     },
     [skills]
   );

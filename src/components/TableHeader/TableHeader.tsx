@@ -17,9 +17,7 @@ export const TableHeader: React.FC<{
     try {
       const categories: string[] = await Skills.getCategories();
       setCategories(categories);
-    } catch (e) {
-      console.log("::TableHeader::fetchCategories::error::", e.message);
-    }
+    } catch (e) {}
   };
 
   const cellWidth = 40;
@@ -29,7 +27,6 @@ export const TableHeader: React.FC<{
     for (const skillLevel in totalSkillLevel) {
       coverageArr.push(totalSkillLevel[skillLevel]);
     }
-    console.log("::TableHeader::coverageArray::", coverageArr);
     if (coverageArr.length !== 0) {
       return Math.round(
         (coverageArr.reduce((acc, currentVal) => acc + currentVal) /

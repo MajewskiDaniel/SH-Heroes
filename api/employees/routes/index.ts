@@ -53,7 +53,6 @@ router.patch("/:idE/skills/:idS", async (req: Request, res: Response) => {
   const isSkillInUser = await employeesService.checkSkill(idE, idS);
   if (isSkillInUser) {
     try {
-      console.log("::employees api::", skillLevel);
       await employeesService.updateSkill(idE, idS, skillLevel);
       res
         .status(200)
