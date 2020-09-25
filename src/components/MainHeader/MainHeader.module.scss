@@ -1,5 +1,10 @@
-//:global(.ant-layout-header) {
-//    background: white;
-//}
+.Header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
+.Button {
+  justify-self: flex-end;
+}
 

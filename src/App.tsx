@@ -23,7 +23,7 @@ export const App = () => {
     setCollapsed(!collapsed);
   };
 
-  const isAuthenticated = true;
+  const isAuthenticated = false;
 
   return (
     <Router>
