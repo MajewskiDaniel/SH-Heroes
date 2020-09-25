@@ -11,6 +11,7 @@ import { Sidenav } from "./components/Sidenav/Sidenav";
 import { MainHeader } from "./components/MainHeader/MainHeader";
 import { SkillFormPage } from "./pages/SkillForm/SkillFormPage";
 import { Layout } from "antd";
+import { Provider } from "./components/AuthContext/AuthContext";
 
 import "./App.scss";
 
@@ -18,15 +19,15 @@ const { Content } = Layout;
 
 export const App = () => {
   const [collapsed, setCollapsed] = useState<boolean>(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   const toggle = () => {
     setCollapsed(!collapsed);
   };
 
-  const isAuthenticated = false;
-
   return (
     <Router>
+      <Provider value={{auth: isAuthenticated, setAuth: setIsAuthenticated}}>
       <Layout className="app-container">
         <Sidenav collapsed={collapsed}></Sidenav>
         <Layout>
@@ -76,6 +77,7 @@ export const App = () => {
           </Content>
         </Layout>
       </Layout>
+      </Provider>
     </Router>
   );
 };
