@@ -1,6 +1,7 @@
 import { IEmployee, ISkill, IEmployeeSkill } from "../models/employee";
 import applyMock from "./employee.mock";
 import { checkForError } from "./Utils";
+import { http } from "./http";
 
 const MOCKED_DATA = false;
 if (MOCKED_DATA) {
@@ -10,21 +11,17 @@ if (MOCKED_DATA) {
 export const EmployeeFetch = {
   url: `${process.env.REACT_APP_URL}/employees`,
 
-  async getEmployees() {
-    const resp = await fetch(this.url);
-    checkForError(resp);
-    return await resp.json();
-  },
+
 
   async getEmployee(id?: string) {
     const urlWithId = id ? `${this.url}/${id}` : this.url;
-    const resp = await fetch(urlWithId);
+    const resp = await http(urlWithId);
     checkForError(resp);
     return await resp.json();
   },
 
   async addEmployee(employee: IEmployee) {
-    const resp = await fetch(this.url, {
+    const resp = await http(this.url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(employee),
@@ -34,7 +31,7 @@ export const EmployeeFetch = {
   },
 
   async editEmployee(employee: IEmployee, id?: string) {
-    const resp: any = await fetch(`${this.url}/${id}`, {
+    const resp: any = await http(`${this.url}/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(employee),
@@ -57,7 +54,7 @@ export const EmployeeFetch = {
       "::skill ID::",
       skillId
     );
-    const resp: any = await fetch(
+    const resp: any = await http(
       `${this.url}/${employeeId}/skills/${skillId}`,
       {
         method: "PATCH",
@@ -70,7 +67,7 @@ export const EmployeeFetch = {
   },
 
   async deleteEmployee(employee: IEmployee) {
-    const resp: any = await fetch(`${this.url}/${employee._id}`, {
+    const resp: any = await http(`${this.url}/${employee._id}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
     });
@@ -78,3 +75,4 @@ export const EmployeeFetch = {
     return resp;
   },
 };
+

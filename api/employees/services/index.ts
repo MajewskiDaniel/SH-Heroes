@@ -1,7 +1,6 @@
 import { IEmployee, IEmployeeDB, employeeSchema, SkillLevel } from "../models";
 import mongoose from "mongoose";
 import { ParamsDictionary } from "express-serve-static-core";
-import { skillSchema } from "../../skills/models";
 
 export class EmployeesService {
   static Employee = mongoose.model<IEmployeeDB>("Employee", employeeSchema);

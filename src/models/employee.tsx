@@ -38,6 +38,11 @@ export interface ISkillQuery {
   criteria?: string;
 }
 
+export interface ILogin {
+  login: string,
+  password: string
+}
+
 export enum EmployeePosition {
   SOFTWARE_DEV,
   PROJECT_MANAGER,

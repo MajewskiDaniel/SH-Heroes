@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./LoginPage.module.scss";
 import { Form, Input, Button } from "antd";
+import { Login as LoginSvc } from "../../services/Login";
 
 const Login: React.FC = () => {
   const [form] = Form.useForm();
@@ -20,9 +21,11 @@ const Login: React.FC = () => {
     wrapperCol: { offset: 8, span: 16 },
   };
 
-  const onSuccess = (values: any) => {
+  const onSuccess = async (values: any) => {
     console.log("Success:", values);
-    setIsAuthenticated(true);
+    const isValid = await LoginSvc.login(values);
+    console.log("isValid", isValid)
+    setIsAuthenticated(isValid!);
   };
 
   const onFailed = (errorInfo: any) => {

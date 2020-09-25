@@ -1,6 +1,7 @@
 import {ISkill} from "../models/employee";
 import { checkForError } from "./Utils";
 import applyMock from "./employee.mock";
+import { http } from "./http";
 
 const MOCKED_DATA = false;
 if (MOCKED_DATA) {
@@ -29,19 +30,19 @@ export const Skills = {
         url.searchParams.append(key, String(value));
       }
     });
-    const resp = await fetch(url.toString());
+    const resp = await http(url.toString());
     checkForError(resp);
     return await resp.json();
   },
 
   async getSkill(id: string) {
-    const resp = await fetch(`${this.skillsUrl}/${id}`);
+    const resp = await http(`${this.skillsUrl}/${id}`);
     checkForError(resp);
     return await resp.json();
   },
 
   async addSkill(skill: ISkill) {
-    const resp = await fetch(this.skillsUrl, {
+    const resp = await http(this.skillsUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(skill),
@@ -51,7 +52,7 @@ export const Skills = {
   },
 
   async editSkill(skill: ISkill) {
-    const resp = await fetch(`${this.skillsUrl}/${skill._id}`, {
+    const resp = await http(`${this.skillsUrl}/${skill._id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(skill),
@@ -61,7 +62,7 @@ export const Skills = {
   },
 
   async deleteSkill(skill: ISkill) {
-    const resp = await fetch(`${this.skillsUrl}/${skill._id}`, {
+    const resp = await http(`${this.skillsUrl}/${skill._id}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
     });
@@ -70,7 +71,7 @@ export const Skills = {
   },
 
   async getCategories() {
-    const resp = await fetch(`${this.skillsUrl}/categories`);
+    const resp = await http(`${this.skillsUrl}/categories`);
     checkForError(resp);
     return await resp.json();
   },
