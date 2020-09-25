@@ -142,7 +142,7 @@ import { Link } from "react-router-dom";
 //   },
 // ];
 
-const EmployeeListPage: React.FC<PropsWithChildren<IEmployee[]>> = (args) => {
+const EmployeeListPage: React.FC = () => {
   const [employees, setEmployees] = useState([]);
 
   const fetchEmployees = async () => {

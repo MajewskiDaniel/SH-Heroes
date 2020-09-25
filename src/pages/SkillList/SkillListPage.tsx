@@ -6,7 +6,7 @@ import { SkillList } from "../../components/SkillList/SkillList";
 import { ISkill, SkillWeight, ISkillPaginated } from "../../models/employee";
 import { Skills } from "../../services/SkillFetch";
 
-const SkillListPage: React.FC<ISkill[]> = () => {
+const SkillListPage: React.FC = () => {
   const [skills, setSkills] = useState<ISkillPaginated>({
     skills: [],
     currentPage: 1,
