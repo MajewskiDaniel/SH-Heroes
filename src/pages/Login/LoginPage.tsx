@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./LoginPage.module.scss";
 import { Form, Input, Button } from "antd";
-import { Login as LoginSvc } from "../../services/Login";
+import { Authentication as LoginSvc } from "../../services/Authentication";
 
 const Login: React.FC = () => {
   const [form] = Form.useForm();

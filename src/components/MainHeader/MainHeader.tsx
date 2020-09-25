@@ -1,6 +1,8 @@
 import React from 'react';
-import { Layout, Input } from 'antd';
+import {Layout, Input, Button} from 'antd';
 import { MenuUnfoldOutlined, MenuFoldOutlined, } from '@ant-design/icons';
+import { Authentication } from "../../services/Authentication";
+import styles from "./MainHeader.module.scss";
 
 const { Header } = Layout;
 const { Search } = Input;
@@ -11,15 +13,11 @@ export interface IHeader {
 }
 
 export const MainHeader: React.FC<IHeader> = ({collapsed, toggle}) => (
-  < Header className="ant-layout-header">
+  < Header className={styles.Header}>
     {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
       className: 'trigger',
       onClick: toggle
     })}
-    <Search
-      placeholder="Search employee"
-      onSearch={value => console.log(value)}
-      style={{ width: 200 }}
-    />
+    <Button className={styles.Button} onClick={()=>Authentication.logout()}>Log out</Button>
   </Header>
 );

@@ -1,7 +1,7 @@
 import { ILogin } from "../models/employee";
 import {checkForError} from "./Utils";
 
-export const Login = {
+export const Authentication = {
   url: `${process.env.REACT_APP_URL}/login`,
 
   async login(user: ILogin) {
@@ -13,13 +13,16 @@ export const Login = {
       });
       checkForError(resp);
       const u = await resp.json();
-      console.log("resp", u.token)
       await this.saveToken(u.token);
       return true;
     } catch (e) {
       return false;
       console.log(e)
     }
+  },
+
+  logout() {
+    localStorage.clear();
   },
 
   async saveToken(token: string) {
