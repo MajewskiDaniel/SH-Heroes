@@ -64,7 +64,7 @@ export const SkillMatrixTable: React.FC = () => {
   });
   const [filteredEmployees] = useFilter(employees, sortOptions);
   const [tags, setTags] = useState<string[]>([]);
-  const {totalEmployees, totalSkillLevel, employeesCoverage} = useCountSkills(skills, employees);
+  const {totalEmployees, totalSkillLevel, employeesCoverage} = useCountSkills(skills, employees, filteredEmployees);
   const [disabledIds, setDisabledIds] = useState<string[]>([])
 
   const fetchEmployees = async () => {
