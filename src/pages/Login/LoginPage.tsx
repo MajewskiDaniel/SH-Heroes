@@ -6,12 +6,14 @@ import { Consumer } from "../../components/AuthContext/AuthContext";
 import { useHistory } from "react-router-dom";
 
 const Login: React.FC = () => {
-  const [form] = Form.useForm();
-  const [, forceUpdate] = useState();
-  //   To disable submit button at the beginning.
-  useEffect(() => {
-    forceUpdate({});
-  }, []);
+  //   const [form] = Form.useForm();
+  //   const [, forceUpdate] = useState();
+
+  //   //   To disable submit button at the beginning.
+  //   useEffect(() => {
+  //     forceUpdate({});
+  //   }, []);
+
   const history = useHistory();
 
   const layout = {
@@ -86,8 +88,10 @@ const Login: React.FC = () => {
                 type="primary"
                 htmlType="submit"
                 // disabled={
-                //   !form.isFieldsTouched(true) ||
-                //   form.getFieldsError().filter(({ errors }) => errors.length).length
+                //   !form.isFieldsTouched(true)
+                //     ||
+                //     form.getFieldsError().filter(({ errors }) => errors.length)
+                //       .length
                 // }
               >
                 Log in
